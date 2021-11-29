@@ -1,5 +1,7 @@
 import re
 
+#Heavily inspired by https://github.com/zeckendorf/Python-MIPS-Assembler, however I implemented
+
 instruction_table = {
 	'addiu' : ['0x09','rs','rt','imm'],
 	'addu'  : ['0x00','rs','rt','rd','shamt','0x21'],
@@ -91,10 +93,14 @@ class assembly_parser(object):
 	default_mem_loc = 0
 	symbol_table = {}
 	current_location = 0
+	instr_table = {}
 	system_memory = {}
 	reg_table = {}
+
 	def init(self, default_memory_location, instruction_table, reg_table, pseudoinstruction_table, word_size):
 		self.default_mem_loc = default_memory_location
-		self.instruction_table = instruction_table
+		self.instr_table = instruction_table
 		self.reg_table = reg_table
-		self.ps
+		self.word_size = word_size
+	
+	def first_pass()
