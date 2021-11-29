@@ -2,18 +2,44 @@ module ALU(
     input logic [31:0] instruction,
     input logic [31:0] Rtdata,
     input logic [31:0] Rsdata,
+
+    input logic [15:0] immediate,
+    input logic [4:0] sa,
+    
+    input logic addiu,
+    input logic addu,
+    input logic andr,
+    input logic andi,
+    input logic div,
+    input logic divu,
+    input logic mult,
+    input logic multu,
+    input logic orr,
+    input logic ori,
+    input logic sll,
+    input logic sllv,
+    input logic slt,
+    input logic slti,
+    input logic sltiu,
+    input logic sltu,
+    input logic sra,
+    input logic srav,
+    input logic srl,
+    input logic srlv,
+    input logic subu,
+    input logic xorr,
+    input logic xori,
+    output logic data,
     output logic [31:0] datalo,
     output logic [31:0] datahi
 
 );
- logic [5:0] type;
+ logic [31:0] signim;
+ 
  logic [31:0] temp1;
  logic [31:0] temp2;
- logic [4:0] Rsadd;
- logic [4:0] Rtadd;
- logic [15:0] immediate;
- logic [4:0] Rmadd;
- logic [5:0] op;
+
+
  logic [31:0] addi;
  logic [31:0] add;
  logic [31:0] bitand;
@@ -42,16 +68,21 @@ module ALU(
 
 
 
- assign type = instruction[31:26];
- assign immediate = instruction[15:0];
- assign sa= instruction[10:6];
 
 
 always comb begin
-    addiout=Rsdata + immediate;
-    addout=Rtdata + Rsdata;
-    bitand= Rtdata & Rsdata;
-    bitandi= Rsdata & immediate;
+    if (addiu==1)begin
+      data=Rsdata + immediate;
+    end
+    if (addu==1) begin
+      data=Rtdata + Rsdata;
+    end
+    if (andr==1) begin
+     data= Rtdata & Rsdata;
+    end
+    if (andi==1)begin
+     data= Rsdata & immediate;
+    end
     divuhi= Rsdata/Rtdata;
     divulo=Rsdata%Rtdata;
 
