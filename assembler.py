@@ -1,6 +1,6 @@
 import re
 
-#Heavily inspired by https://github.com/zeckendorf/Python-MIPS-Assembler, however I implemented
+#Heavily inspired by https://github.com/zeckendorf/Python-MIPS-Assembler, however I implemented slightly different features with the same overall structure
 
 instruction_table = {
 	'addiu' : ['0x09','rs','rt','imm'],
@@ -103,4 +103,41 @@ class assembly_parser(object):
 		self.reg_table = reg_table
 		self.word_size = word_size
 	
-	def first_pass()
+	def first_pass(self, lines):
+		'''
+		Cleans up and prepares the lines for parsing
+		'''
+		self.current = self.default_mem_loc
+		for line in lines:
+			#remove comments and whitespace
+			if '#' in lines:
+				line = line[0:line.find('#')]
+			line = line.strip()
+			if not len(line):
+				continue
+
+			self.fix_current_location()
+
+			if '.end' in line:
+				continue
+
+			#make sure memory aligns with divisions of 4
+			self.fix_current_location()
+
+			#parse instruction and arguments separately
+			instruction = line[0:line.find(' ')]
+			args  = line[line.find(' ') + 1:].replace(' ', '').split(',')
+			if not instruction:
+				continue
+			
+			#convert numbers into decimal
+			argcount = 0
+			for arg in args:
+				if arg not in symbol_table.keys():
+					if arg[-1] == 'H':
+						args[argcount] = str(int(arg[:-1],16))
+					elif arg[argcount] == 'B':
+						args[argcount] = str(int(arg[:-1], 2))
+				argcount += 1
+	
+	
