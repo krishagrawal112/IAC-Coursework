@@ -43,7 +43,7 @@ initial begin
     $display("Current state %d and PC is: %d", state, (PC_out - 4));
     clk = 0;
     #1
-    
+    J = 0;
     clk = 1;
     #1
     $display("Current state %d and PC is: %d", state, (PC_out - 4));
