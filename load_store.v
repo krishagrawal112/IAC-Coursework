@@ -1,9 +1,10 @@
 module load_store(
 
     input logic clk,
-    input logic [31:0] instruction,
     input logic [31:0] reg0,
     input logic [31:0] reg1,
+    
+    
     
     input logic regfilewriteenable,
     output logic [3:0] regbyteenable,
@@ -29,24 +30,10 @@ module load_store(
 
     always_comb begin
 
-    // Decode Logic
-        case(opcode)
-            6'h20: ;//Load byte
-            6'h24: ;//Load byte unsigned 
-            6'h21: ;//Load halfword
-            6'h25: ;//Load halfword
-            6'h
-
-
-
-
     end
 
     always_ff @ (posedge clk) begin
         
-
-
-
     end
 
 
