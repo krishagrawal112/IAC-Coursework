@@ -25,7 +25,8 @@ module next_instruction(
 logic jump;
 logic[31:0] jump_amount;
 assign PC_out = PC + 4;
-reg PC;
+reg[31:0] PC;
+
 initial begin 
     PC = 0;
     state = 0;
