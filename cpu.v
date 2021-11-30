@@ -10,7 +10,10 @@ module control_path(
     logic[5:0] funct;
     logic[1:0] ExtSel;
     logic[1:0] OpSel;
-
+    reg[31:0] PC;
+    logic[31:0] WBMuxOut;
+    logic[31:0] RefFileOut1;
+    logic[31:0] RefFileOut2;
 
     initial begin
         state = 0;
@@ -56,11 +59,42 @@ module control_path(
     assign UnsignedOps = ((opcode == 6'b001001)||((rType == 1) && (funct == 6'b100001))||((rType == 1) && (funct == 6'b011011))||(opcode == 6'b100100)||(opcode == 6'b100101)||((rType == 1) && (funct == 6'b011001))||(opcode == 6'b001011)||( (rType == 1) && (funct == 6'b101011) )||( (rType == 1) && (funct == 6'b100011) ));
     assign ExtSel[1] = (JType);
     assign ExtSel[0] = (UnsignedOps); 
-    assign OpSel[1:0] = (RType) ? 2'b10 :  (BRANCHType ?  2'b01 : 2'b00);
+    assign OpSel = (RType) ? 2'b10 :  (BRANCHType ?  2'b01 : 2'b00);
     //2'b00 if load/store must fix
-    assign BSrc = RType;
+    assign BSrc = (RType);
     //if BSrc is 1(RType), rd2 goes through multiplexer, if its 0(IType) ImmExt goes through)
 
 
+    /*
+    TO-DO:
+        Please figure out and write the logic for the RegWrite, MemWrite and WBSrc enable signals
+    */
+    assign RegWrite;
+    assign MemWrite;
+    assign WBSrc; //writeback selector as 3 input multiplexer
 
+    always_ff @(PCEn) begin
+        PC <= output_of_muxPC1;
+    end
+
+    assign PCNext;
+
+    always @() begin
+        case(PCSrc2)
+            1'b0 : mux2_output <= rd1;
+            1'b1 : mux2_output <= mux3_output;
+        endcase
+    end 
+
+    always @() begin
+        PCNext <= PC + 4;
+        case(PCSrc1)
+            1'b0 : mux1_output <= PCNext;
+            1'b1 : mux1_output <= mux2_output;
+        endcase
+    end
+
+
+    regfile regfile(clk, reset, rs, rt, RegWrite, rd, WBMuxOut, RegFileOut1, RefFileOut2);
+    
 endmodule
