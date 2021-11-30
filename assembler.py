@@ -140,4 +140,5 @@ class assembly_parser(object):
 						args[argcount] = str(int(arg[:-1], 2))
 				argcount += 1
 	
-	
+	def second_pass(self, lines):
+		self.current_location = self.default_mem_loc

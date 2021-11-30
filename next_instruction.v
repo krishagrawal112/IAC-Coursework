@@ -1,12 +1,9 @@
 module next_instruction(
     input logic[31:0] r_s,
-    input logic[31:0] r_t,
+    input logic[31:0] r_d,
     input logic[15:0] I_intermidiete,
     input logic[25:0] J_intermidiete,
-    output logic[31:0] PC_out,
     input logic STALL,
-    output logic link,
-    output logic state,
     input logic clk,
     input logic rst,
     input logic J,
@@ -20,7 +17,11 @@ module next_instruction(
     input logic BLEZ,
     input logic BLTZ,
     input logic BLTZAL,
-    input logic BNE
+    input logic BNE,
+    output logic link,
+    output logic state,
+    output logic[4:0] link_reg,
+    output logic[31:0] PC_out
 );
 logic jump;
 logic[31:0] jump_amount;
@@ -51,7 +52,7 @@ always_comb begin
         jump = 1;
         link = 1;
     end
-    else if(BEQ == 1 && r_s == r_t)begin
+    else if(BEQ == 1 && r_s == r_d)begin
         jump_amount = {16'h0000, I_intermidiete} * 4;
         jump =1;
     end
@@ -81,7 +82,7 @@ always_comb begin
         jump =1;
         link = 1;
     end
-    else if(BNE == 1 && r_s != r_t)begin
+    else if(BNE == 1 && r_s != r_d)begin
         jump_amount = {16'h0000, I_intermidiete} * 4;
         jump =1;
     end
