@@ -240,7 +240,16 @@ always comb begin
         data=0;
     end
     end
-    //do Sltui
+    
+    if (sltiu==1) begin
+        if (Rsdata<signim) begin
+            data=1;
+        end
+        else begin
+
+            data=0;
+        end
+    end
 
 end
 endmodule
