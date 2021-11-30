@@ -29,7 +29,7 @@ module ALU(
     input logic subu,
     input logic xorr,
     input logic xori,
-    output logic data,
+    output logic [31:0] data ,
     output logic [31:0] datalo,
     output logic [31:0] datahi,
     output logic [63:0] mult
