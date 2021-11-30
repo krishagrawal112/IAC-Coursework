@@ -29,13 +29,14 @@ module ALU(
     input logic subu,
     input logic xorr,
     input logic xori,
-    output logic [31:0] data ,
+    output logic [31:0] data,
     output logic [31:0] datalo,
     output logic [31:0] datahi,
     output logic [63:0] mult
 
 );
  logic [31:0] signim;
+ logic[31:0] zeroim;
  
  logic [31:0] temp1;
  logic [31:0] temp2;
@@ -47,10 +48,19 @@ module ALU(
     logic[63:0] mult_temp, multu_temp;
     assign mult_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULT))) ? (regs[rs]*regs[rt]) : 0;
     assign multu_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULTU))) ? ($unsigned(regs[rs])*$unsigned(regs[rt])) : 0;
-
+    assign zeroim[31:16] =0;
+    assign zeroim[15:0]=immediate;
+    assign signim[15:0]=immediate;
+    
 
 
 always comb begin
+    if(immediate[15]==1) begin
+        signim[31:16]= 16x0b1111111111111111;
+    end
+    else begin
+        signim[31:16]=0;
+    end
 
     if (addiu==1)begin
       data=Rsdata + immediate;
@@ -65,7 +75,7 @@ always comb begin
     end
 
     if (andi==1)begin
-     data= Rsdata & immediate;
+     data= Rsdata & zeroim;
     end
 
     if (divu==1)begin
@@ -121,36 +131,47 @@ always comb begin
         mult=Rsdata*Rtdata;
     end
     end
+
     if (orr==1) begin
     data= Rtdata | Rsdata;
     end
+
     if (ori-==1) begin
-    data= Rsdata | immediate;
+    data= Rsdata | zeroim;
     end
+
     if(sll==1) begin
      data= Rtdata<<sa;
     end
+
     if (sllv==1)begin
      data= Rtdata<<Rsdata;
     end
+
     if (subu==1) begin
      data= Rsdata-Rtdata;
     end
+
     if (xorr==1) begin
      data= Rsdata^Rtdata;
     end
+
     if (xori==1) begin
-     data=Rsdata^imediade;
+     data=Rsdata^zeroim;
     end
+
     if (sra==1) begin
      data=Rtdata>>>sa;
     end
+
     if (srav==1) begin
      srav=Rtdata>>>Rsdata;
     end
+
     if(srl==1) begin
      srl=Rtdata>>sa;
     end
+
     if (srlv==1)begin
      srlv=Rtdata>>Rsdata;
     end
@@ -184,8 +205,8 @@ always comb begin
     end
 
     if (slti==1) begin
-    if ((immediate[31]==1) && (Rsdata[31]==1)) begin
-        temp1=~(immediate) +1;
+    if ((signim[31]==1) && (Rsdata[31]==1)) begin
+        temp1=~(signim) +1;
         temp2=~(Rsdata) +1;
         if(temp1>temp2) begin
             data=0
@@ -195,14 +216,14 @@ always comb begin
         end
 
     end
-    else if (immediate[31]==1))begin
+    else if (signim[31]==1))begin
         data=0;
     end
     else if (Rsdata[31]==1) begin
         data=1;
     end
     else begin
-        if (Rsdata<immediate) begin
+        if (Rsdata<signim) begin
             data=1;
         end
         else begin
