@@ -40,34 +40,6 @@ module ALU(
  logic [31:0] temp1;
  logic [31:0] temp2;
 
-
-    logic [31:0] addi;
-    logic [31:0] add;
-    logic [31:0] bitand;
-    logic [31:0] bitandi;
-    logic [31:0] divlo;
-    logic [31:0] divhi;
-    logic [31:0] divulo;
-    logic [31:0] divuhi;
-    logic [63:0] mult;
-    logic [63:0] multu;
-    logic [31:0] bitor;
-    logic [31:0] bitori;
-    logic [31:0] sll;
-    logic [31:0] sllv;
-    logic [31:0] sra;
-    logic [31:0] srav;
-    logic [31:0] srl;
-    logic [31:0] srlv;
-    logic [31:0] subu;
-    logic [31:0] exor;
-    logic [31:0] exori;
-    logic [31:0] slt;
-    logic [31:0] slti;
-    logic [31:0] sltui;
-    logic [31:0] sltu;
-
-
     //Create non GPR HI and LO registers
     logic[31:0] HI;
     logic[31:0] LO;
@@ -247,7 +219,7 @@ always comb begin
         data=0;
     end
     end
-    #do Sltui
+    //do Sltui
 
 end
 endmodule
