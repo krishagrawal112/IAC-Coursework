@@ -31,7 +31,8 @@ module ALU(
     input logic xori,
     output logic data,
     output logic [31:0] datalo,
-    output logic [31:0] datahi
+    output logic [31:0] datahi,
+    output logic [63:0] mult
 
 );
  logic [31:0] signim;
@@ -71,27 +72,35 @@ module ALU(
 
 
 always comb begin
+
     if (addiu==1)begin
       data=Rsdata + immediate;
     end
+
     if (addu==1) begin
       data=Rtdata + Rsdata;
     end
+
     if (andr==1) begin
      data= Rtdata & Rsdata;
     end
+
     if (andi==1)begin
      data= Rsdata & immediate;
     end
-    divuhi= Rsdata/Rtdata;
-    divulo=Rsdata%Rtdata;
 
+    if (divu==1)begin
+      divuhi= Rsdata/Rtdata;
+      divulo=Rsdata%Rtdata;
+    end
+
+
+    if (div==1) begin
     if ((Rsdata[31]==1) && (Rtdata[31]==1)) begin
         temp1= ~(Rsdata)+1;
         temp2= ~(Rtdata)+1;
         divlo= temp1/temp2;
         divhi= (temp1 % temp2)*(-1);
-
     end
     else if (Rsdata[31]==1)begin
         temp1= ~(Rsdata)+1;
@@ -107,9 +116,13 @@ always comb begin
         divlo= Rsdata/Rtdata;
         divhi= Rsdata%Rtdata;
     end
+    end
 
-    multu= Rsdata*Rddata;
-    
+    if (multu==1) begin
+     data= Rsdata*Rddata;
+    end
+
+    if (mult==1) begin
     if ((Rsdata[31]==1) && (Rtdata[31]==1)) begin
         temp1= ~(Rsdata)+1;
         temp2= ~(Rtdata)+1;
@@ -128,78 +141,106 @@ always comb begin
     else begin
         mult=Rsdata*Rtdata;
     end
-
-    bitor= Rtdata | Rsdata;
-    bitori= Rsdata | immediate;
-    sll= Rtdata<<sa;
-    sllv= Rtdata<<Rsdata;
-    subu= Rsdata-Rtdata;
-    exor= Rsdata^Rtdata;
-    exori=Rsdata^imediade;
-    sra=Rtdata>>>sa;
-    srav=Rtdata>>>Rsdata;
-    srl=Rtdata>>sa;
-    srlv=Rtdata>>Rsdata;
-
+    end
+    if (orr==1) begin
+    data= Rtdata | Rsdata;
+    end
+    if (ori-==1) begin
+    data= Rsdata | immediate;
+    end
+    if(sll==1) begin
+     data= Rtdata<<sa;
+    end
+    if (sllv==1)begin
+     data= Rtdata<<Rsdata;
+    end
+    if (subu==1) begin
+     data= Rsdata-Rtdata;
+    end
+    if (xorr==1) begin
+     data= Rsdata^Rtdata;
+    end
+    if (xori==1) begin
+     data=Rsdata^imediade;
+    end
+    if (sra==1) begin
+     data=Rtdata>>>sa;
+    end
+    if (srav==1) begin
+     srav=Rtdata>>>Rsdata;
+    end
+    if(srl==1) begin
+     srl=Rtdata>>sa;
+    end
+    if (srlv==1)begin
+     srlv=Rtdata>>Rsdata;
+    end
+    
+    if (slt==1) begin
     if ((Rtdata[31]==1) && (Rsdata[31]==1)) begin
         temp1=~(Rtdata) +1;
         temp2=~(Rsdata) +1;
         if(temp1>temp2)begin
-            slt=0;
+            data=0;
         end
         else begin
-            slt=1
+            data=1
         end
 
     end
     else if ((Rtdata[31]==1))begin
-        slt=0;
+        data=0;
     end
     else if (Rsdata[31]==1) begin
-        slt=1;
+        data=1;
     end
     else begin
         if (Rsdata<Rtdata) begin
-            slt=1;
+            data=1;
         end
         else begin
-            slt=0;
+            data=0;
         end
     end
+    end
 
-
+    if (slti==1) begin
     if ((immediate[31]==1) && (Rsdata[31]==1)) begin
         temp1=~(immediate) +1;
         temp2=~(Rsdata) +1;
         if(temp1>temp2) begin
-            slti=0
+            data=0
         end
         else begin
-            slti=1;
+            data=1;
         end
 
     end
     else if (immediate[31]==1))begin
-        slti=0;
+        data=0;
     end
     else if (Rsdata[31]==1) begin
-        slti=1;
+        data=1;
     end
     else begin
         if (Rsdata<immediate) begin
-            slti=1;
+            data=1;
         end
         else begin
-            slti=0;
+            data=0;
         end
     end
+    end
 
+    if (sltu==1) begin
     if (Rsdata<Rtdata)begin
-        sltu=1;
+        data=1;
     end
     else begin
-        sltu=0;
+        data=0;
     end
+    end
+    #do Sltui
 
 end
 endmodule
