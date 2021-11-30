@@ -35,11 +35,15 @@ module control_path(
 
     end
 
-    assign funct = instruction[5:0];
     assign Opcode = instruction[31:26];
+    assign rs = instruction[25:21];
+    assign rt = instruction[20:16];
+    assign rd = instruction[15:11];
+    assign immediate = instruction[15:0];
+    assign funct = instruction[5:0];
     assign JType = (Opcode[5:1] == 5'b00001);
     assign RType = (Opcode = 6'b000000);
-    assign IType = (!JType && !RType);
+    assign IType = ((!JType) && (!RType));
     assign JUMPType = ((JType) || (RType ==1) && (funct == 6'b001000) || (RType == 1) && (funct == 6'b001001));
     assign BRANCHType = ((Opcode == 6'b000100) || ((opcode == 6'b000001) && (rt == 5'b00001)) || ((opcode == 6'b000001) && (rt == 5'b10001)) || ((opcode == 6'b000111) && (rt == 5'b00000)) || ((opcode == 6'b000110) && (rt == 5'b00000)) || ((opcode == 6'b000001) && (rt == 5'b00000)) || ((opcode == 6'b000001) && (rt == 5'b10000)) || (opcode == 6'b000101));
     assign PCEn = (state == EXEC);
@@ -48,5 +52,6 @@ module control_path(
     assign PCSrc1 = ((JumpAndBranchBool) == Jump || (JumpAndBranchBool == Branch));
     assign PCSrc2 = ((RType ==1) && (funct == 6'b001000) || (RType == 1) && (funct == 6'b001001));
     assign PCSrc3 = (JType);
+    assign RegDst = ;
 
 endmodule
