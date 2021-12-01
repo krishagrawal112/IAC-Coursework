@@ -29,9 +29,10 @@ module mips_cpu_bus(
     end
 
 
-    typedef enum logic{
-        FETCH = 1'b0;
-        EXEC = 1'b1;
+    typedef enum logic[1:0]{
+        FETCH = 2'b00;
+        EXEC_1 = 2'b01;
+        EXEC_2 = 2'b10;
     } state;
     
 
