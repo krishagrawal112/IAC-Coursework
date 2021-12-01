@@ -4,7 +4,6 @@ module load_store(
     input logic[1:0] state,
 
     // Instruction Inputs
-
     input logic lb,
     input logic lbu,
     input logic lh,
