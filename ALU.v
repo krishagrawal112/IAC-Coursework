@@ -1,19 +1,19 @@
 module ALU(
-    input logic [31:0] instruction,
+    input logic [15:0] immediate,
     input logic [31:0] Rtdata,
     input logic [31:0] Rsdata,
 
-    input logic [15:0] immediate,
+    
     input logic [4:0] sa,
     
     input logic addiu,
     input logic addu,
     input logic andr,
     input logic andi,
-    input logic div,
     input logic divu,
-    input logic mult,
+    input logic div,
     input logic multu,
+    input logic mult,
 
     //2 new instructions  to implement
     //input logic mthi
@@ -23,21 +23,22 @@ module ALU(
     input logic ori,
     input logic sll,
     input logic sllv,
-    input logic slt,
-    input logic slti,
-    input logic sltiu,
-    input logic sltu,
+    input logic subu,
+    input logic xorr,
+    input logic xori,
     input logic sra,
     input logic srav,
     input logic srl,
     input logic srlv,
-    input logic subu,
-    input logic xorr,
-    input logic xori,
+    input logic slt,
+    input logic slti,
+    input logic sltu,
+    input logic sltiu,
+    output logic reg_writeenable,
     output logic [31:0] data,
     output logic [31:0] datalo,
     output logic [31:0] datahi
-    output logic reg_writeenable = 1;
+    
     
 
 );
@@ -70,22 +71,22 @@ module ALU(
 always_comb begin
     if (addiu==1)begin
         data = Rsdata + zeroim; //* Don't you need "+ signim" instead of "immediate"?
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (addu==1) begin
         data = Rtdata + Rsdata;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (andr==1) begin
         data = Rtdata & Rsdata;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (andi==1)begin
         data = Rsdata & zeroim;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (divu==1)begin
@@ -98,22 +99,22 @@ always_comb begin
     if ((Rsdata[31]==1) && (Rtdata[31]==1)) begin
         temp1= ~(Rsdata)+1;
         temp2= ~(Rtdata)+1;
-        divlo= temp1/temp2;
-        divhi= (temp1 % temp2)*(-1);
+        datalo= temp1/temp2;
+        datahi= (temp1 % temp2)*(-1);
     end
     else if (Rsdata[31]==1)begin
         temp1= ~(Rsdata)+1;
-        divlo=(temp1/Rtdata)*(-1);
-        divhi=(temp1% Rtdata)*(-1);
+        datalo=(temp1/Rtdata)*(-1);
+        datahi=(temp1% Rtdata)*(-1);
     end
     else if(Rtdata[31]==1)begin
         temp2= ~(Rtdata) +1;
-        divlo=(Rsdata/temp2)*(-1);
-        divhi= Rsdata%temp2;
+        datalo=(Rsdata/temp2)*(-1);
+        datahi= Rsdata%temp2;
     end
     else begin
-        divlo= Rsdata/Rtdata;
-        divhi= Rsdata%Rtdata;
+        datalo= Rsdata/Rtdata;
+        datahi= Rsdata%Rtdata;
     end
     end
 
@@ -154,57 +155,57 @@ always_comb begin
 
     if (orr==1) begin
         data= Rtdata | Rsdata;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (ori==1) begin
         data= Rsdata | zeroim;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if(sll==1) begin
         data= Rtdata<<sa;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (sllv==1)begin
         data= Rtdata<<Rsdata;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (subu==1) begin
         data= Rsdata-Rtdata;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (xorr==1) begin
         data= Rsdata^Rtdata;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (xori==1) begin
         data=Rsdata^zeroim;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (sra==1) begin
         data=Rtdata>>>sa;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (srav==1) begin
         data=Rtdata>>>Rsdata;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if(srl==1) begin
         data=Rtdata>>sa;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (srlv==1)begin
         data=Rtdata>>Rsdata;
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
     
     if (slt==1) begin //We spoke about how this can be done simpler. Same for slti. Maybe you can change it to save 15-20 lines of code
@@ -220,7 +221,7 @@ always_comb begin
         if ((Rtdata[31]==1) && (Rsdata[31]==0))begin
             data=0;
         end
-        else if (Rtdata[31]==0) && (Rsdata[31]==1) begin
+        else if ((Rtdata[31]==0) && (Rsdata[31]==1)) begin
             data=32'b00000000000000000000000000000001;
         end
         else begin
@@ -231,7 +232,7 @@ always_comb begin
                 data=0;
             end
         end
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (slti==1) begin
@@ -246,7 +247,7 @@ always_comb begin
         //     end
 
         // end
-        if (signim[31]==1 && Rsdata[31] == 0))begin
+        if ((signim[31]==1) && (Rsdata[31] == 0))begin
             data=0;
         end
         else if (Rsdata[31]==1 && signim[31] == 0) begin
@@ -260,7 +261,7 @@ always_comb begin
                 data=0;
             end
         end
-        reg_writeenable = 1
+        reg_writeenable = 1;
     end
 
     if (sltu==1) begin
@@ -270,6 +271,7 @@ always_comb begin
         else begin
             data=0;
         end
+        reg_writeenable = 1;
     end
     
     if (sltiu==1) begin
@@ -280,7 +282,8 @@ always_comb begin
 
             data=0;
         end
+        reg_writeenable = 1;
     end
-    reg_writeenable = 1
+    
 end
 endmodule
