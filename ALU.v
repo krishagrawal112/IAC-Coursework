@@ -58,20 +58,14 @@ module ALU(
     //assign multu_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULTU))) ? ($unsigned(regs[rs])*$unsigned(regs[rt])) : 0;
     //These 2 statements don't make sense to me. What is regs[rs] and regs[rt]? I Think you wrote this earlier and forgot to change things
     
-    assign zeroim[31:16] =0;
-    assign zeroim[15:0]=immediate;
-    assign signim[15:0]=immediate;
+    assign signim = { {16{immediate[15]}}, immediate };
+    assign zeroim = { 16'b0000000000000000, immediate };
+
+
     
 
 
 always comb begin
-    if(immediate[15]==1) begin
-        signim[31:16]= 16x0b1111111111111111;
-    end
-    else begin
-        signim[31:16]=0;
-    end
-
     if (addiu==1)begin
       data = Rsdata + zeroim; //* Don't you need "+ signim" instead of "immediate"?
     end
