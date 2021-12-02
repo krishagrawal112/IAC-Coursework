@@ -68,7 +68,7 @@ module ALU(
     
 
 
-always_comb begin
+always @* begin
     if (addiu==1)begin
         data = Rsdata + zeroim; //* Don't you need "+ signim" instead of "immediate"?
         reg_writeenable = 1;
