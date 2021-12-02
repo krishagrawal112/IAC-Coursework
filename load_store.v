@@ -123,18 +123,18 @@ module load_store(
                 else if (sw == 1) begin //EXEC1 Store Word
                     //mem_address = rs_data + (offset_sign_extended*4);  
                     mem_writeenable = 1;
-                    mem_writedata = rt;
+                    mem_writedata = rt_data;
                     mem_byteenable = 4'b1111;
                 end
                 else if (sb == 1) begin //EXEC1 Store Byte
                     //mem_address = {rs_data[31:2], 2'b00} + (offset_sign_extended<<2)
                     mem_writeenable = 1;
-                    mem_writedata = {24'h000000, rt[7:0]};
+                    mem_writedata = {24'h000000, rt_data[7:0]};
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0001 : (actual_address[1:0] == 2'b01) ? : 4'b0010 : (actual_address[1:0] == 2'b10) ? 4'b0100 : 4'b1000;
                 end
                 else if (sh == 1) begin //EXEC1 Stgore Halfword
                     mem_writeenable = 1; 
-                    mem_writedata = {16'h0000, rt[15:0]};
+                    mem_writedata = {16'h0000, rt_data[15:0]};
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0011 : 4'b1100;
             end
 
@@ -242,15 +242,15 @@ module load_store(
                 else if (lwl == 1) begin
                     case(actual_address[1:0]):
                     2'b00: reg_writedata = mem_readdata;
-                    2'b01: reg_writedata = {mem_readdata[23:0], rt[7:0]};
-                    2'b10: reg_writedata = {mem_readdata[15:0], rt[15:0]};
-                    2'b11: reg_writedata = {mem_readdata[7:0], rt[23:0]};
+                    2'b01: reg_writedata = {mem_readdata[23:0], rt_data[7:0]};
+                    2'b10: reg_writedata = {mem_readdata[15:0], rt_data[15:0]};
+                    2'b11: reg_writedata = {mem_readdata[7:0], rt_data[23:0]};
                 end
                 else if (lwr == 1) begin
                     2'b00: reg_writedata = mem_readdata;
-                    2'b01: reg_writedata = {rt[31:8], mem_readdata[31:24]};
-                    2'b10: reg_writedata = {rt[31:16], mem_readdata[31:16]};
-                    2'b11: reg_writedata = {rt[31:24], mem_readdata[31:8]};
+                    2'b01: reg_writedata = {rt_data[31:8], mem_readdata[31:24]};
+                    2'b10: reg_writedata = {rt_data[31:16], mem_readdata[31:16]};
+                    2'b11: reg_writedata = {rt_data[31:24], mem_readdata[31:8]};
                 end
                 //else if (sw == 1) begin
                 //
