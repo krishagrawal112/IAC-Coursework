@@ -4,34 +4,34 @@ module load_store(
     input logic[1:0] state,
 
     // Instruction Inputs
-    input logic lb,
-    input logic lbu,
-    input logic lh,
-    input logic lhu,
-    input logic lui,
-    input logic lw,
-    input logic lwl,
-    input logic lwr,
-    input logic sb,
-    input logic sh,
-    input logic sw,
+    input logic lb, // Load Byte
+    input logic lbu, // Load Byte Unsigned
+    input logic lh, // Load Half-Word
+    input logic lhu, // Load Half-Word Unsigned
+    input logic lui, // Load Upper Immediate
+    input logic lw, // Load Word
+    input logic lwl, // Load Word Left
+    input logic lwr, // Load Word Right
+    input logic sb, // Store Byte
+    input logic sh, // Store Half-Word
+    input logic sw, // Store Word
     
-    input logic[15:0] offset;
-    input logic [31:0] rs_data,
-    input logic [31:0] rt_data,
-    input logic[4:0] rt; //***Needed for loads***
+    input logic[15:0] offset, // Immediate Offset
+    input logic [31:0] rs_data, // Base Register (Register containing the address)
+    input logic [31:0] rt_data, // Target Register (To store the value in)
+    input logic[4:0] rt; //***Needed for loads*** WHY?
 
-    output logic [3:0] reg_byteenable,
-    output logic reg_writeenable,
-    output logic [4:0] reg_address,
-    output logic [31:0] reg_writedata,
+    output logic [3:0] reg_byteenable, // Byteenable for the Register file (For selective storing)
+    output logic reg_writeenable, // Allow register file to be written to
+    output logic [4:0] reg_address, // Address of the register to write to
+    output logic [31:0] reg_writedata, // Data to write to register file
 
-    output logic [31:0] instruction_out,
-    input logic [31:0] PC_in,
+    output logic [31:0] instruction_out, // Instruction value output
+    input logic [31:0] PC_in, // Current PC Value input
 
     // Avalon Bus Interface
 
-    input logic [31:0] mem_readdata,
+    input logic [31:0] mem_readdata, 
     output logic [3:0] mem_byteenable
     output logic [31:0] mem_writedata,
     output logic [31:0] mem_address,
@@ -42,9 +42,14 @@ module load_store(
 
 );
 
-    logic[31:0] word_address;
-    logic[31:0] actual_address
+    logic [31:0] word_address;
+    logic [31:0] actual_address;
+    logic [31:0] offset_sign_extended;
+    logic [31:0] outputData;
+
     initial begin
+
+        // Init Output Variables
         
        reg_byteenable = 4'b1111;
        reg_writeenable = 0;
@@ -57,20 +62,30 @@ module load_store(
        mem_writeenable = 0;
        mem_readenable = 1;
 
+        // Init Internal Variables
+
+        word_address = 0;
+        actual_address = 0;
+        offset_sign_extended = 0;
+        outputData = 0;
+
     end
 
-    assign instruction_out = mem_readdata; // Both output the same stuff each time, this just makes it easier to get the outputs
-    //***Can't assign reg_writedata to mem_readdata directly because lb,lh,lui,lwl,lwr need more work***
-    //assign reg_writedata = mem_readdata; // Same as above /\
+    assign instruction_out = mem_readdata; // Will only be read during EXEC1
+    assign reg_writedata = outputData; // Read during EXEC2 (OutputData can be modified)
 
-    //***Some changes, I don't thinh immediate is multiplied by 4***
+    //***Can't assign reg_writedata to mem_readdata directly because lb,lh,lui,lwl,lwr need more work***
+
+    //***Some changes, I don't thinh immediate is multiplied by 4*** <-- Have to discuss
+
     //assign mem_address = (state == 2'b00) ? PC_in : {rs_data[31:2], 2'b00} + (offset_sign_extended<<2);
     assign actual_address = rs_data + offset_sign_extended; //***Can't use offset_sign_extended before assignment***
     assign word_address = (state == 2'b00) ? PC_in : {actual_address[31:2], 00};
 
-    logic [31:0] offset_sign_extended;
-
     always_comb begin
+
+        // Can this not be put into an assign statement? \/
+
         if (offset[15] == 1) begin
             offset_sign_extended = {16'hffff, offset}
         end
