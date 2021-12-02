@@ -14,6 +14,11 @@ module ALU(
     input logic divu,
     input logic mult,
     input logic multu,
+
+    //2 new instructions  to implement
+    //input logic mthi
+    //input logic mtlo
+
     input logic orr,
     input logic ori,
     input logic sll,
@@ -46,8 +51,11 @@ module ALU(
     logic[31:0] LO;
     //Intermediary logic for mult operations
     logic[63:0] mult_temp, multu_temp;
+
     assign mult_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULT))) ? (regs[rs]*regs[rt]) : 0;
     assign multu_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULTU))) ? ($unsigned(regs[rs])*$unsigned(regs[rt])) : 0;
+    //These 2 statements don't make sense to me. What is regs[rs] and regs[rt]? I Think you wrote this earlier and forgot to change things
+    
     assign zeroim[31:16] =0;
     assign zeroim[15:0]=immediate;
     assign signim[15:0]=immediate;
@@ -63,23 +71,23 @@ always comb begin
     end
 
     if (addiu==1)begin
-      data=Rsdata + immediate;
+      data = Rsdata + immediate; //* Don't you need "+ signim" instead of "immediate"?
     end
 
     if (addu==1) begin
-      data=Rtdata + Rsdata;
+      data = Rtdata + Rsdata;
     end
 
     if (andr==1) begin
-     data= Rtdata & Rsdata;
+     data = Rtdata & Rsdata;
     end
 
     if (andi==1)begin
-     data= Rsdata & zeroim;
+     data = Rsdata & zeroim;
     end
 
     if (divu==1)begin
-      divuhi= Rsdata/Rtdata;
+      divuhi= Rsdata/Rtdata; //*Logic divulo and divuhi referenced before assignment. Same for divhi and divlo. I think you mean datalo and datahi? 
       divulo=Rsdata%Rtdata;
     end
 
@@ -108,14 +116,16 @@ always comb begin
     end
 
     if (multu==1) begin
-     data= Rsdata*Rddata;
+     data= Rsdata*Rddata; //Doesn't work because the multiplication can give 64bit number and data is 32 bits.
+     //probably want to use datahi and datalo from what I see in the MIPS specs 
     end
 
     if (mult==1) begin
     if ((Rsdata[31]==1) && (Rtdata[31]==1)) begin
         temp1= ~(Rsdata)+1;
         temp2= ~(Rtdata)+1;
-        mult=temp1*temp2;
+        mult=temp1*temp2; //Firstly I think you mean mult_temp. Mult is 1-bit logic
+        //Secondly, don't think mult is supposed to do this. The MIPS Spec says that the top 32 bits go into hi and lower 32 bits into lo
 
     end
     else if (Rsdata[31]==1)begin
@@ -176,69 +186,68 @@ always comb begin
      srlv=Rtdata>>Rsdata;
     end
     
-    if (slt==1) begin
-    if ((Rtdata[31]==1) && (Rsdata[31]==1)) begin
-        temp1=~(Rtdata) +1;
-        temp2=~(Rsdata) +1;
-        if(temp1>temp2)begin
+    if (slt==1) begin //We spoke about how this can be done simpler. Same for slti. Maybe you can change it to save 15-20 lines of code
+        if ((Rtdata[31]==1) && (Rsdata[31]==1)) begin
+            temp1=~(Rtdata) +1;
+            temp2=~(Rsdata) +1;
+            if(temp1>temp2)begin
+                data=0;
+            end
+            else begin
+                data=1; //I'm not sure if an assignment like this is allowed for 16-bit numbers. Shouldn't it be 16'b0000000000000001? You know better so just figure.
+            end
+        end
+        else if ((Rtdata[31]==1))begin
             data=0;
         end
-        else begin
-            data=1
-        end
-
-    end
-    else if ((Rtdata[31]==1))begin
-        data=0;
-    end
-    else if (Rsdata[31]==1) begin
-        data=1;
-    end
-    else begin
-        if (Rsdata<Rtdata) begin
+        else if (Rsdata[31]==1) begin
             data=1;
         end
         else begin
-            data=0;
+            if (Rsdata<Rtdata) begin
+                data=1;
+            end
+            else begin
+                data=0;
+            end
         end
-    end
     end
 
     if (slti==1) begin
-    if ((signim[31]==1) && (Rsdata[31]==1)) begin
-        temp1=~(signim) +1;
-        temp2=~(Rsdata) +1;
-        if(temp1>temp2) begin
-            data=0
+        if ((signim[31]==1) && (Rsdata[31]==1)) begin
+            temp1=~(signim) +1;
+            temp2=~(Rsdata) +1;
+            if(temp1>temp2) begin
+                data=0;
+            end
+            else begin
+                data=1;
+            end
+
         end
-        else begin
+        else if (signim[31]==1))begin
+            data=0;
+        end
+        else if (Rsdata[31]==1) begin
             data=1;
         end
+        else begin
+            if (Rsdata<signim) begin
+                data=1;
+            end
+            else begin
+                data=0;
+            end
+        end
+    end
 
-    end
-    else if (signim[31]==1))begin
-        data=0;
-    end
-    else if (Rsdata[31]==1) begin
-        data=1;
-    end
-    else begin
-        if (Rsdata<signim) begin
+    if (sltu==1) begin
+        if (Rsdata<Rtdata)begin
             data=1;
         end
         else begin
             data=0;
         end
-    end
-    end
-
-    if (sltu==1) begin
-    if (Rsdata<Rtdata)begin
-        data=1;
-    end
-    else begin
-        data=0;
-    end
     end
     
     if (sltiu==1) begin
