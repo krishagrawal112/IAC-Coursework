@@ -37,6 +37,7 @@ module ALU(
     output logic [31:0] data,
     output logic [31:0] datalo,
     output logic [31:0] datahi
+    output logic reg_writeenable = 1;
     
 
 );
@@ -57,34 +58,39 @@ module ALU(
     //assign mult_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULT))) ? (regs[rs]*regs[rt]) : 0;
     //assign multu_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULTU))) ? ($unsigned(regs[rs])*$unsigned(regs[rt])) : 0;
     //These 2 statements don't make sense to me. What is regs[rs] and regs[rt]? I Think you wrote this earlier and forgot to change things
-    
-    assign signim = { {16{immediate[15]}}, immediate };
-    assign zeroim = { 16'b0000000000000000, immediate };
-
-
+    initial begin
+        reg_writeenable = 0;
+    end
+    assign zeroim[31:16] =0;
+    assign zeroim[15:0]=immediate;
+    assign signim[15:0]=immediate;
     
 
 
 always comb begin
     if (addiu==1)begin
-      data = Rsdata + zeroim; //* Don't you need "+ signim" instead of "immediate"?
+        data = Rsdata + zeroim; //* Don't you need "+ signim" instead of "immediate"?
+        reg_writeenable = 1
     end
 
     if (addu==1) begin
-      data = Rtdata + Rsdata;
+        data = Rtdata + Rsdata;
+        reg_writeenable = 1
     end
 
     if (andr==1) begin
-     data = Rtdata & Rsdata;
+        data = Rtdata & Rsdata;
+        reg_writeenable = 1
     end
 
     if (andi==1)begin
-     data = Rsdata & zeroim;
+        data = Rsdata & zeroim;
+        reg_writeenable = 1
     end
 
     if (divu==1)begin
-      datahi= Rsdata/Rtdata; //*Logic divulo and divuhi referenced before assignment. Same for divhi and divlo. I think you mean datalo and datahi? 
-      datalo=Rsdata%Rtdata;
+        datahi= Rsdata/Rtdata; //*Logic divulo and divuhi referenced before assignment. Same for divhi and divlo. I think you mean datalo and datahi? 
+        datalo=Rsdata%Rtdata;
     end
 
 
@@ -112,10 +118,10 @@ always comb begin
     end
 
     if (multu==1) begin
-     multi= Rsdata*Rtdata; //Doesn't work because the multiplication can give 64bit number and data is 32 bits.
-     //probably want to use datahi and datalo from what I see in the MIPS specs
-     datalo=multi[31:0];
-     datahi=multi[63:32];
+        multi= Rsdata*Rtdata; //Doesn't work because the multiplication can give 64bit number and data is 32 bits.
+        //probably want to use datahi and datalo from what I see in the MIPS specs
+        datalo=multi[31:0];
+        datahi=multi[63:32];
     end
 
     if (mult==1) begin
@@ -141,47 +147,58 @@ always comb begin
     end
 
     if (orr==1) begin
-    data= Rtdata | Rsdata;
+        data= Rtdata | Rsdata;
+        reg_writeenable = 1
     end
 
     if (ori-==1) begin
-    data= Rsdata | zeroim;
+        data= Rsdata | zeroim;
+        reg_writeenable = 1
     end
 
     if(sll==1) begin
-     data= Rtdata<<sa;
+        data= Rtdata<<sa;
+        reg_writeenable = 1
     end
 
     if (sllv==1)begin
-     data= Rtdata<<Rsdata;
+        data= Rtdata<<Rsdata;
+        reg_writeenable = 1
     end
 
     if (subu==1) begin
-     data= Rsdata-Rtdata;
+        data= Rsdata-Rtdata;
+        reg_writeenable = 1
     end
 
     if (xorr==1) begin
-     data= Rsdata^Rtdata;
+        data= Rsdata^Rtdata;
+        reg_writeenable = 1
     end
 
     if (xori==1) begin
-     data=Rsdata^zeroim;
+        data=Rsdata^zeroim;
+        reg_writeenable = 1
     end
 
     if (sra==1) begin
-     data=Rtdata>>>sa;
+        data=Rtdata>>>sa;
+        reg_writeenable = 1
     end
 
     if (srav==1) begin
-     srav=Rtdata>>>Rsdata;
+        data=Rtdata>>>Rsdata;
+        reg_writeenable = 1
     end
 
     if(srl==1) begin
-     srl=Rtdata>>sa;
+        data=Rtdata>>sa;
+        reg_writeenable = 1
     end
 
     if (srlv==1)begin
-     srlv=Rtdata>>Rsdata;
+        data=Rtdata>>Rsdata;
+        reg_writeenable = 1
     end
     
     if (slt==1) begin //We spoke about how this can be done simpler. Same for slti. Maybe you can change it to save 15-20 lines of code
@@ -208,6 +225,7 @@ always comb begin
                 data=0;
             end
         end
+        reg_writeenable = 1
     end
 
     if (slti==1) begin
@@ -236,6 +254,7 @@ always comb begin
                 data=0;
             end
         end
+        reg_writeenable = 1
     end
 
     if (sltu==1) begin
@@ -256,6 +275,6 @@ always comb begin
             data=0;
         end
     end
-
+    reg_writeenable = 1
 end
 endmodule
