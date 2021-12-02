@@ -61,9 +61,9 @@ module ALU(
     initial begin
         reg_writeenable = 0;
     end
-    assign zeroim[31:16] =0;
-    assign zeroim[15:0]=immediate;
-    assign signim[15:0]=immediate;
+    
+    assign signim = { {16{immediate[15]}}, immediate };
+    assign zeroim = { 16'b0000000000000000, immediate };
     
 
 
