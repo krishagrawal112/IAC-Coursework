@@ -36,15 +36,17 @@ module ALU(
     input logic xori,
     output logic [31:0] data,
     output logic [31:0] datalo,
-    output logic [31:0] datahi,
-    output logic [63:0] mult
+    output logic [31:0] datahi
+    
 
 );
  logic [31:0] signim;
- logic[31:0] zeroim;
+ logic [31:0] zeroim;
  
  logic [31:0] temp1;
  logic [31:0] temp2;
+
+ logic [63:0] multi;
 
     //Create non GPR HI and LO registers
     logic[31:0] HI;
@@ -52,8 +54,8 @@ module ALU(
     //Intermediary logic for mult operations
     logic[63:0] mult_temp, multu_temp;
 
-    assign mult_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULT))) ? (regs[rs]*regs[rt]) : 0;
-    assign multu_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULTU))) ? ($unsigned(regs[rs])*$unsigned(regs[rt])) : 0;
+    //assign mult_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULT))) ? (regs[rs]*regs[rt]) : 0;
+    //assign multu_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULTU))) ? ($unsigned(regs[rs])*$unsigned(regs[rt])) : 0;
     //These 2 statements don't make sense to me. What is regs[rs] and regs[rt]? I Think you wrote this earlier and forgot to change things
     
     assign zeroim[31:16] =0;
@@ -71,7 +73,7 @@ always comb begin
     end
 
     if (addiu==1)begin
-      data = Rsdata + immediate; //* Don't you need "+ signim" instead of "immediate"?
+      data = Rsdata + zeroim; //* Don't you need "+ signim" instead of "immediate"?
     end
 
     if (addu==1) begin
@@ -87,8 +89,8 @@ always comb begin
     end
 
     if (divu==1)begin
-      divuhi= Rsdata/Rtdata; //*Logic divulo and divuhi referenced before assignment. Same for divhi and divlo. I think you mean datalo and datahi? 
-      divulo=Rsdata%Rtdata;
+      datahi= Rsdata/Rtdata; //*Logic divulo and divuhi referenced before assignment. Same for divhi and divlo. I think you mean datalo and datahi? 
+      datalo=Rsdata%Rtdata;
     end
 
 
@@ -116,15 +118,17 @@ always comb begin
     end
 
     if (multu==1) begin
-     data= Rsdata*Rddata; //Doesn't work because the multiplication can give 64bit number and data is 32 bits.
-     //probably want to use datahi and datalo from what I see in the MIPS specs 
+     multi= Rsdata*Rtdata; //Doesn't work because the multiplication can give 64bit number and data is 32 bits.
+     //probably want to use datahi and datalo from what I see in the MIPS specs
+     datalo=multi[31:0];
+     datahi=multi[63:32];
     end
 
     if (mult==1) begin
     if ((Rsdata[31]==1) && (Rtdata[31]==1)) begin
         temp1= ~(Rsdata)+1;
         temp2= ~(Rtdata)+1;
-        mult=temp1*temp2; //Firstly I think you mean mult_temp. Mult is 1-bit logic
+        multi=temp1*temp2; //Firstly I think you mean mult_temp. Mult is 1-bit logic
         //Secondly, don't think mult is supposed to do this. The MIPS Spec says that the top 32 bits go into hi and lower 32 bits into lo
 
     end
@@ -135,10 +139,10 @@ always comb begin
     end
     else if(Rtdata[31]==1)begin
         temp2= ~(Rtdata) +1;
-        mult=(temp2*Rsdata)*(-1);
+        multi=(temp2*Rsdata)*(-1);
     end
     else begin
-        mult=Rsdata*Rtdata;
+        multi=Rsdata*Rtdata;
     end
     end
 
@@ -187,25 +191,24 @@ always comb begin
     end
     
     if (slt==1) begin //We spoke about how this can be done simpler. Same for slti. Maybe you can change it to save 15-20 lines of code
-        if ((Rtdata[31]==1) && (Rsdata[31]==1)) begin
-            temp1=~(Rtdata) +1;
-            temp2=~(Rsdata) +1;
-            if(temp1>temp2)begin
-                data=0;
-            end
-            else begin
-                data=1; //I'm not sure if an assignment like this is allowed for 16-bit numbers. Shouldn't it be 16'b0000000000000001? You know better so just figure.
-            end
-        end
-        else if ((Rtdata[31]==1))begin
+        // if ((Rtdata[31]==1) && (Rsdata[31]==1)) begin
+        //     temp1=~(Rtdata) +1;
+        //     temp2=~(Rsdata) +1;
+        //     if(temp1>temp2)begin
+        //         data=0;
+        //     end
+        //     else begin
+        //         data=1; 
+        // end
+        if ((Rtdata[31]==1 && Rsdata[31]==0))begin
             data=0;
         end
-        else if (Rsdata[31]==1) begin
-            data=1;
+        else if (Rtdata[31]==0 && Rsdata[31]==1) begin
+            data=32'hx00000001;
         end
         else begin
             if (Rsdata<Rtdata) begin
-                data=1;
+                data=32'hx00000001;
             end
             else begin
                 data=0;
@@ -214,26 +217,26 @@ always comb begin
     end
 
     if (slti==1) begin
-        if ((signim[31]==1) && (Rsdata[31]==1)) begin
-            temp1=~(signim) +1;
-            temp2=~(Rsdata) +1;
-            if(temp1>temp2) begin
-                data=0;
-            end
-            else begin
-                data=1;
-            end
+        // if ((signim[31]==1) && (Rsdata[31]==1)) begin
+        //     temp1=~(signim) +1;
+        //     temp2=~(Rsdata) +1;
+        //     if(temp1>temp2) begin
+        //         data=0;
+        //     end
+        //     else begin
+        //         data=1;
+        //     end
 
-        end
-        else if (signim[31]==1))begin
+        // end
+        if (signim[31]==1 && Rsdata[31] == 0))begin
             data=0;
         end
-        else if (Rsdata[31]==1) begin
-            data=1;
+        else if (Rsdata[31]==1 && signim[31] == 0) begin
+            data=32'hx00000001;
         end
         else begin
             if (Rsdata<signim) begin
-                data=1;
+                data=32'hx00000001;
             end
             else begin
                 data=0;
@@ -243,7 +246,7 @@ always comb begin
 
     if (sltu==1) begin
         if (Rsdata<Rtdata)begin
-            data=1;
+            data=32'hx00000001;
         end
         else begin
             data=0;
@@ -252,7 +255,7 @@ always comb begin
     
     if (sltiu==1) begin
         if (Rsdata<signim) begin
-            data=1;
+            data=32'hx00000001;
         end
         else begin
 
