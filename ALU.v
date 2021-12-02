@@ -128,22 +128,28 @@ always_comb begin
     if ((Rsdata[31]==1) && (Rtdata[31]==1)) begin
         temp1= ~(Rsdata)+1;
         temp2= ~(Rtdata)+1;
-        multi=temp1*temp2; //Firstly I think you mean mult_temp. Mult is 1-bit logic
+        multi=temp1*temp2;
+        //Firstly I think you mean mult_temp. Mult is 1-bit logic
         //Secondly, don't think mult is supposed to do this. The MIPS Spec says that the top 32 bits go into hi and lower 32 bits into lo
 
     end
     else if (Rsdata[31]==1)begin
         temp1= ~(Rsdata)+1;
-        mult= (temp1*Rtdata)*(-1);
+        multi= (temp1*Rtdata)*(-1);
+      
         
     end
     else if(Rtdata[31]==1)begin
         temp2= ~(Rtdata) +1;
         multi=(temp2*Rsdata)*(-1);
+        
     end
     else begin
         multi=Rsdata*Rtdata;
+        
     end
+    datalo=multi[31:0];
+    datahi=multi[63:32];
     end
 
     if (orr==1) begin
@@ -151,7 +157,7 @@ always_comb begin
         reg_writeenable = 1
     end
 
-    if (ori-==1) begin
+    if (ori==1) begin
         data= Rsdata | zeroim;
         reg_writeenable = 1
     end
@@ -211,15 +217,15 @@ always_comb begin
         //     else begin
         //         data=1; 
         // end
-        if ((Rtdata[31]==1 && Rsdata[31]==0))begin
+        if ((Rtdata[31]==1) && (Rsdata[31]==0))begin
             data=0;
         end
-        else if (Rtdata[31]==0 && Rsdata[31]==1) begin
-            data=32'hx00000001;
+        else if (Rtdata[31]==0) && (Rsdata[31]==1) begin
+            data=32'b00000000000000000000000000000001;
         end
         else begin
             if (Rsdata<Rtdata) begin
-                data=32'hx00000001;
+                data=32'b00000000000000000000000000000001;
             end
             else begin
                 data=0;
@@ -244,11 +250,11 @@ always_comb begin
             data=0;
         end
         else if (Rsdata[31]==1 && signim[31] == 0) begin
-            data=32'hx00000001;
+            data=32'b00000000000000000000000000000001;
         end
         else begin
             if (Rsdata<signim) begin
-                data=32'hx00000001;
+                data=32'b00000000000000000000000000000001;
             end
             else begin
                 data=0;
@@ -259,7 +265,7 @@ always_comb begin
 
     if (sltu==1) begin
         if (Rsdata<Rtdata)begin
-            data=32'hx00000001;
+            data=32'b00000000000000000000000000000001;
         end
         else begin
             data=0;
@@ -268,7 +274,7 @@ always_comb begin
     
     if (sltiu==1) begin
         if (Rsdata<signim) begin
-            data=32'hx00000001;
+            data=32'b00000000000000000000000000000001;
         end
         else begin
 
