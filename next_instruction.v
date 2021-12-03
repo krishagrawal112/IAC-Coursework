@@ -18,10 +18,11 @@ module next_instruction(
     input logic BLTZ,
     input logic BLTZAL,
     input logic BNE,
+    output logic write_enable_PC,
     output logic link,
     output logic state,
     output logic[4:0] link_reg,
-    output logic[31:0] PC_out
+    output logic[31:0] write_data_PC
 );
 logic jump;
 logic[31:0] jump_amount;
@@ -50,7 +51,7 @@ always_comb begin
     else if(JALR == 1)begin
         jump_amount = r_s * 4;
         jump = 1;
-        link = 1;
+        link = 0;
     end
     else if(BEQ == 1 && r_s == r_d)begin
         jump_amount = {16'h0000, I_intermidiete} * 4;
@@ -91,6 +92,9 @@ always_comb begin
         jump = 0;
         link = 0;
     end
+    if(link == 1) write_enable_PC = 1;
+    else if(JALR == 1) write_enable_PC = 1;
+    else write_enable_PC = 0;
  
 end
 always_ff @(posedge clk) begin

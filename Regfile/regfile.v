@@ -3,19 +3,43 @@ module regfile (
     input logic rst,
     input logic[4:0] read_addr_1,
     input logic[4:0] read_addr_2,
-    input logic write_enable,
-    input logic[4:0] write_addr,
-    input logic[31:0] write_data,
+    input logic write_enable_ld,
+    input logic write_enable_ALU,
+    input logic write_enable_PC,
+    input logic link,
+    input logic[4:0] write_addr_rt,
+    input logic[4:0] write_addr_rd,
+    input logic[31:0] write_data_ld,
+    input logic[31:0] write_data_ALU,
+    input logic[31:0] write_data_PC,
     output logic[31:0] read_data_1,
     output logic[31:0] read_data_2,
     input logic[3:0] byteenable
 );
+logic[31:0] write_data;
+logic[4:0] write_addr;
+logic write_enable;
 
 reg[31:0] register[31:0];
 integer i;
 always_comb begin
     read_data_1 = read_addr_1 == 0 ? 0 : register[read_addr_1];
     read_data_2 = read_addr_2 == 0 ? 0 : register[read_addr_2];
+    if(write_enable_ALU == 1)begin
+        write_enable = 1;
+        write_addr = write_addr_rd;
+        write_data = write_data_ALU;
+    end
+    else if(write_enable_ld == 1)begin
+        write_enable = 1;
+        write_addr = write_addr_rt;
+        write_data = write_data_ld;
+    end
+    else if(write_enable_PC == 1)begin
+        write_enable = 1;
+        write_data = write_data_PC;
+        write_addr = link ? 31 : write_addr_rd;
+    end
 end
 always_ff @(posedge clk) begin
     if(write_addr != 0 && write_enable == 1) begin
