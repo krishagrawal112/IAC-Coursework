@@ -43,16 +43,61 @@ module ALU_tb();
         $dumpfile("ALU_tb.vcd");
         $dumpvars(0, ALU_tb);
 
+        addiu=1;Rtdata=5; immediate=1; Rsdata= 10;
+        #1;
+        assert(data==11);
+        assert(reg_writeenable==1);
+        addiu=0;
+
         addu=1; Rtdata=1; Rsdata=1;
         #1;
         assert(data==2);
         assert(reg_writeenable==1);
         addu=0;
 
+        andr=1; Rtdata=429496729;Rsdata=10; 
+        #1;
+        assert(data==8);
+        assert(reg_writeenable==1);
+        andr=0;
+
+        andi=1; Rsdata=11; immediate=3;
+        #1;
+        assert(data==3);
+        assert(reg_writeenable==1);
+        andi=0;
+
+        divu=1; Rsdata=32'h80000000; Rtdata= 3;
+        #1;
+        assert(datalo==32'h2AAAAAAA);
+        assert(datahi==2);
+        divu=0;
+
+        div=1; Rsdata=32'h80000000; Rtdata=3;
+        #1;
+        assert(datalo==32'hd5555556);
+        assert(datahi==32'hfffffffe);
+        div=0;
+
+        multu=1; Rsdata=32'hab3df781; Rtdata=32'hfb9a6c3d;
+        #1;
+        assert(datalo==32'h50C865BD);
+        assert(datahi==32'hA84D0D59);
+        multu=0;
+
+        mult=1; Rsdata=32'hf1a5b3c9; Rtdata=32'h1abffc7a;
+        #1;
+        assert(datalo==32'hD2E889CA);
+        assert(datahi==32'hFE8010BB);
+        mult=0;
+
         orr=1; Rtdata=9; Rsdata=10;
         #1;
         assert(data==11);
         assert(reg_writeenable==1);
+        orr=0;
+
+
 
         
     end
