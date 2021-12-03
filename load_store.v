@@ -42,7 +42,6 @@ module load_store(
 
 );
 
-    logic [31:0] word_address;
     logic [31:0] actual_address;
     logic [31:0] offset_sign_extended;
     logic [31:0] outputData;
@@ -63,8 +62,6 @@ module load_store(
        mem_readenable = 1;
 
         // Init Internal Variables
-
-        word_address = 0;
         actual_address = 0;
         offset_sign_extended = 0;
 
@@ -73,7 +70,7 @@ module load_store(
     assign instruction_out = mem_readdata; // Will only be read during EXEC1
 
     assign actual_address = rs_data + offset_sign_extended; //***Can't use offset_sign_extended before assignment***
-    assign word_address = (state == 2'b00) ? PC_in : {actual_address[31:2], 00};
+    assign mem_address = (state == 2'b00) ? PC_in : {actual_address[31:2], 00};
 
     always_comb begin
 
@@ -110,10 +107,6 @@ module load_store(
                 else if (lhu == 1) begin //EXEC1 Load Halfword Unsigned
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0011 : 4'b1100;
                 end
-                else if (lui == 1) begin //EXEC1 Load Upper Immediate
-                    reg_writeenable = 1;
-                    reg_writedata = offset << 16;
-                end
                 else if (lwl == 1) begin //EXEC1 Load Word Left
                     case(actual_address[1:0]):
                     2'b00: mem_byteenable = 4'b1111;
@@ -129,13 +122,11 @@ module load_store(
                         2'b11: mem_byteenable = 4'b1111;
                     end
                 else if (sw == 1) begin //EXEC1 Store Word
-                    //mem_address = rs_data + (offset_sign_extended*4);  
                     mem_writeenable = 1;
                     mem_writedata = rt_data;
                     mem_byteenable = 4'b1111;
                 end
                 else if (sb == 1) begin //EXEC1 Store Byte
-                    //mem_address = {rs_data[31:2], 2'b00} + (offset_sign_extended<<2)
                     mem_writeenable = 1;
                     mem_writedata = {24'h000000, rt_data[7:0]};
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0001 : (actual_address[1:0] == 2'b01) ? : 4'b0010 : (actual_address[1:0] == 2'b10) ? 4'b0100 : 4'b1000;
@@ -244,9 +235,10 @@ module load_store(
                     endcase
                     
                 end
-                //else if (lui == 1) begin
-                //
-                //end
+                else if (lui == 1) begin //EXEC2 Load Upper Immediate
+                    reg_writeenable = 1;
+                    reg_writedata = offset << 16;
+                end
                 else if (lwl == 1) begin
                     case(actual_address[1:0]):
                     2'b00: reg_writedata = mem_readdata;
@@ -260,15 +252,6 @@ module load_store(
                     2'b10: reg_writedata = {rt_data[31:16], mem_readdata[31:16]};
                     2'b11: reg_writedata = {rt_data[31:24], mem_readdata[31:8]};
                 end
-                //else if (sw == 1) begin
-                //
-                //end
-                //else if (sb == 1) begin
-                //
-                //end
-                //else if (sh == 1) begin
-                //
-                //end
             end
 
             default: 
