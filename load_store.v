@@ -23,7 +23,7 @@ module load_store(
 
     output logic [3:0] reg_byteenable, // Byteenable for the Register file (For selective storing)
     output logic reg_writeenable, // Allow register file to be written to
-    output logic [4:0] reg_address, // Address of the register to write to
+    //output logic [4:0] //reg_address, // Address of the register to write to
     output logic [31:0] reg_writedata, // Data to write to register file
 
     output logic [31:0] instruction_out, // Instruction value output
@@ -51,7 +51,7 @@ module load_store(
         
        reg_byteenable = 4'b1111;
        reg_writeenable = 0;
-       reg_address = 0;
+       //reg_address = 0;
        reg_writedata = 0;
        mem_byteenable = 0;
        mem_writedata = 0;
@@ -160,13 +160,13 @@ module load_store(
 
                     if (lw == 1) begin //EXEC2 Load Word
                         reg_writeenable = 1;
-                        reg_address = rt;
+                        //reg_address = rt;
                         reg_byteenable = 4'b1111;
                         reg_writedata = mem_readdata;
                     end
                     else if (lb == 1) begin //EXEC2 Load Byte
                         reg_writeenable = 1;
-                        reg_address = rt;
+                        //reg_address = rt;
                         reg_byteenable = 4'b1111;
                         //Sign extended value of the required byte from mem_readdata
                         case (actual_address[1:0])
@@ -207,7 +207,7 @@ module load_store(
                     end
                     else if (lbu == 1) begin //EXEC2 Load Byte Unsigned
                         reg_writeenable = 1;
-                        reg_address = rt;
+                        //reg_address = rt;
                         reg_byteenable = 4'b1111;
                         //Zero extended value of the required byte from mem_readdata
                         case (actual_address[1:0])
@@ -219,7 +219,7 @@ module load_store(
                     end
                     else if (lh == 1) begin //EXEC2 Load Halfword 
                         reg_writeenable = 1;
-                        reg_address = rt;
+                        //reg_address = rt;
                         reg_byteenable = 4'b1111;
                         //Sign extended value of the required halfword from mem_readdata
                         case (actual_address[1:0])
@@ -243,7 +243,7 @@ module load_store(
                     end
                     else if (lhu == 1) begin //EXEC2 Load Halfword Unsigned
                         reg_writeenable = 1;
-                        reg_address = rt;
+                        //reg_address = rt;
                         reg_byteenable = 4'b1111;
                         //Zero extended value of the required byte from mem_readdata
                         case (actual_address[1:0])
