@@ -167,4 +167,124 @@ class assembly_parser(object):
 						args[argcount] = str(int(arg[:-1], 2))
 				argcount += 1
 		self.print_memory_map()
+	
+	def parse_instruction(self, instruction, raw_args):
+		#parses instructions into hex
+
+		machine_code = self.instr_table = instr_table[instruction]
+
+		arg_count = 0
+		offset = 'not_valid'
+		args = raw_args[:]
+		for arg in args:
+			if '(' in arg:
+				#parse offset from known syntax
+				offset = hex(int(arg[0:arg.find('(')]))
+				register = re.search('\((.*)\)',arg)
+
+				#deal with offsets
+				location = self.reg_table[register.group(1)]
+				register = location
+
+				#process args
+				args[arg_count] = register
+
+			elif arg in self.reg_table.keys():
+				#replace reg symbol with value in table
+				args[arg_count] = int(self.reg_table[arg])
+			elif arg in self.symbol_table:
+				#replace label with value
+				args[arg_count] = self.symbol_table[arg]
+			arg_count += 1
+
+		#memory parsing for branch and jump instructions
+		if (instruction == 'beq' or instruction == 'bgez' or instruction == 'bgezal' or instruction == 'bgtz' or instruction == 'blez' or instruction == 'bltz' or instruction == 'bltzal' or instruction  == 'bne'):
+			args[2] = (int(args[2])-self.current_location-4)/4
+		if (instruction == 'j' or instruction == 'jal' or instruction == 'jalr' or instruction == 'jr'):
+			args[0] = str(int(args[0])/4)
+		for i in range(0,len(args)):
+			args[i] = str(hex(int(args[i])))
 		
+		#R-type instruction
+		if len(machine_code) == 6:
+			#initial r values
+			rs = '0'
+			rt = '0'
+			rd = '0'
+
+			#if jr type instruction
+			if len(args) == 1:
+				rs = args[0]
+			else:
+				rs = args[1]
+				rt = args[2]
+				rd = args[0]
+			
+			machine_code[1] = rs
+			machine_code[2] = rt
+			machine_code[3] = rd
+			machine_code[4] = '0'
+
+			#get binary of machine code
+			op_bin = self.hex2bin(machine_code[0],6)
+			rs_bin = self.hex2bin(machine_code[1],5)
+			rt_bin = self.hex2bin(machine_code[2],5)
+			rd_bin = self.hex2bin(machine_code[3],5)
+			shamt_bin = self.hex2bin(machine_code[5],6)
+
+			#32 bit string
+			bit_string = op_binary + rs_binary + rt_binary + rd_binary + shamt_bin + funct_bin
+
+			self.store_bit_string(bit_string,instruction,raw_args)
+
+			return
+		
+		#I-type instruction
+		if len(machine_code) == 4:
+			#set rs, rt, imm in the machine_code
+			rs = args[1]
+			rt = args[0]
+			imm = offset
+
+			#is this one of the andi/addi no offset immediate syntaxes
+			if len(args) == 3:
+				imm = hex(int(args[2],16))
+
+			elif imm is 'not_valid':
+				imm = args[1]
+				rs = '0'
+
+			machine_code[1] = rs
+			machine_code[2] = rt
+			machine_code[3] = imm
+
+			#get binaries again
+			op_bin = self.hex2bin(machine_code[0],6)
+			rs_bin = self.hex2bin(machine_code[1],5)
+			rt_bin = self.hex2bin(machine_code[2],5)
+			im_bin = self.hex2bin(machine_code[3],16)
+
+			#32 bit string
+			bit_string = op_bin + rs_bin + rt_bin + im_bin
+
+			self.store_bit_string(bit_string,instruction,raw_args)
+			return
+		
+		#J-type instruction
+		if len(machine_code) == 2:
+
+			#create hex code
+			address = args[9]
+			machine_code[1] = hex(int(address,16))
+
+			#produce bit string
+			op_bin = self.hex2bin(machine_code[0],6)
+			address_bin = self.hex2bin(machine_code[2], 26)
+
+			#store bit string in memory
+			self.store_bit_string(bit_string, instruction, raw_args)
+			return
+		
+		return
+	
+	def calculate_instruction_size
