@@ -44,6 +44,7 @@ module load_store(
 
     logic [31:0] actual_address;
     logic [31:0] offset_sign_extended;
+    logic [31:0] IR;
 
     initial begin
 
@@ -60,7 +61,7 @@ module load_store(
 
     end
 
-    assign instruction_out = mem_readdata; // Will only be read during EXEC1
+    assign instruction_out = IR; // Will only be read during EXEC1
 
     assign offset_sign_extended = (offset[15] == 1) ? {16'hffff, offset} : {16'h0000, offset};
 
@@ -84,6 +85,8 @@ module load_store(
             end
 
             2'b01: begin // EXEC1
+
+                IR = mem_readdata;
 
                 // RESET VARS
 
