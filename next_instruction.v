@@ -20,13 +20,13 @@ module next_instruction(
     input logic BNE,
     output logic write_enable_PC,
     output logic link,
-    output logic state,
+    output logic[1:0] state,
     output logic[4:0] link_reg,
     output logic[31:0] write_data_PC
 );
 logic jump;
 logic[31:0] jump_amount;
-assign PC_out = PC + 4;
+assign write_data_PC = PC + 4;
 reg[31:0] PC;
 
 initial begin 
@@ -34,6 +34,7 @@ initial begin
     state = 0;
 end
 always_comb begin
+    //Determining whether to jump or not and how much
     if(J == 1) begin
         jump_amount = {6'b0, J_intermidiete}*4;
         jump = 1;
@@ -98,7 +99,8 @@ always_comb begin
  
 end
 always_ff @(posedge clk) begin
-    if(state == 1)begin
+    if(state == 2)begin
+        //EXEC 2:  JUMP or PC+4
         if(jump == 0)begin
             PC <= PC + 4;
         end
@@ -106,7 +108,10 @@ always_ff @(posedge clk) begin
             PC <= PC + 4 + jump_amount ;
         end
     end
-    if(STALL == 0) state <= !state;
+    if(STALL == 0) begin
+        //State logic: If stall != 0, FETCH -> EXEC1 -> EXEC2 -> FETCH
+       state = (state == 0) ? 1 : (state == 1) ? 2 : 0; 
+    end
     else state <= 0;
 end
 endmodule

@@ -1,3 +1,9 @@
+/* INSTRUCTION FOR ALU AND LOADSTORE BLOCK PEOPLE:
+ALU: -----------------------------------------------
+When you want to write you need to input write_data_ALU, and make write_enable_ALU high
+LOADSTORE: -----------------------------------------------------------------------------
+When you want to write something you need to input write_data_ld, byteeenable and write_enable_ld
+*/
 module regfile (
     input logic clk,
     input logic rst,
@@ -16,6 +22,7 @@ module regfile (
     output logic[31:0] read_data_2,
     input logic[3:0] byteenable
 );
+
 logic[31:0] write_data;
 logic[4:0] write_addr;
 logic write_enable;
@@ -23,8 +30,11 @@ logic write_enable;
 reg[31:0] register[31:0];
 integer i;
 always_comb begin
+    //Read data:
     read_data_1 = read_addr_1 == 0 ? 0 : register[read_addr_1];
     read_data_2 = read_addr_2 == 0 ? 0 : register[read_addr_2];
+
+    //Determining where to write, and what to write
     if(write_enable_ALU == 1)begin
         write_enable = 1;
         write_addr = write_addr_rd;
@@ -43,6 +53,7 @@ always_comb begin
     else write_enable = 0;
 end
 always_ff @(posedge clk) begin
+    //Bit writes handled
     if(write_addr != 0 && write_enable == 1) begin
         case(byteenable) 
         4'b0001: register[write_addr][7:0] <= write_data[7:0];
