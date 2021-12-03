@@ -40,6 +40,7 @@ always_comb begin
         write_data = write_data_PC;
         write_addr = link ? 31 : write_addr_rd;
     end
+    else write_enable = 0;
 end
 always_ff @(posedge clk) begin
     if(write_addr != 0 && write_enable == 1) begin
