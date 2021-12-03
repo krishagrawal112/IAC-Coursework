@@ -59,7 +59,7 @@ module load_store(
        mem_writedata = 0;
        mem_address = 0;
        mem_writeenable = 0;
-       mem_readenable = 1;
+       mem_readenable = 0;
 
         // Init Internal Variables
         actual_address = 0;
@@ -69,58 +69,75 @@ module load_store(
 
     assign instruction_out = mem_readdata; // Will only be read during EXEC1
 
-    assign actual_address = rs_data + offset_sign_extended; //***Can't use offset_sign_extended before assignment***
+    assign offset_sign_extended = (offset[15] == 1) ? {16'hffff, offset}, {16'h0000, offset};
+
+    assign actual_address = rs_data + offset_sign_extended;
     assign mem_address = (state == 2'b00) ? PC_in : {actual_address[31:2], 00};
 
     always_comb begin
-
-        // Can this not be put into an assign statement? \/
-
-        if (offset[15] == 1) begin
-            offset_sign_extended = {16'hffff, offset}
-        end
-        else begin
-            offset_sign_extended = {16'h0000, offset}
-        end
         
         case (state)
             2'b00: begin // FETCH
                 
+                // RESET VARS
+
                 mem_byteenable = 4'b1111;
+                mem_writeenable = 0;
+                reg_writeenable = 0;
+                reg_byteenable = 4'b1111;
+
+                mem_readenable = 1;
 
             end
 
             2'b01: begin // EXEC1
 
+                // RESET VARS
+
+                mem_byteenable = 4'b1111;
+                mem_writeenable = 0;
+                reg_writeenable = 0;
+                reg_byteenable = 4'b1111;
+                mem_readenable = 0;
+
                 if (lw == 1) begin //EXEC1 Load Word
                     mem_byteenable = 4'b1111;
+                    mem_readenable = 1;
                 end
                 else if (lb == 1) begin //EXEC1 Load Byte
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0001 : (actual_address[1:0] == 2'b01) ? : 4'b0010 : (actual_address[1:0] == 2'b10) ? 4'b0100 : 4'b1000;
+                    mem_readenable = 1;
                 end
                 else if (lbu == 1) begin //EXEC1 Load Byte Unsigned
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0001 : (actual_address[1:0] == 2'b01) ? : 4'b0010 : (actual_address[1:0] == 2'b10) ? 4'b0100 : 4'b1000;
+                    mem_readenable = 1;
                 end
                 else if (lh == 1) begin //EXEC1 Load Halfword
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0011 : 4'b1100;
+                    mem_readenable = 1;
                 end
                 else if (lhu == 1) begin //EXEC1 Load Halfword Unsigned
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0011 : 4'b1100;
+                    mem_readenable = 1;
                 end
                 else if (lwl == 1) begin //EXEC1 Load Word Left
+                    mem_readenable = 1;
                     case(actual_address[1:0]):
-                    2'b00: mem_byteenable = 4'b1111;
-                    2'b01: mem_byteenable = 4'b0111;
-                    2'b10: mem_byteenable = 4'b0011;
-                    2'b11: mem_byteenable = 4'b0001;
+                        2'b00: mem_byteenable = 4'b1111;
+                        2'b01: mem_byteenable = 4'b0111;
+                        2'b10: mem_byteenable = 4'b0011;
+                        2'b11: mem_byteenable = 4'b0001;
+                    endcase
                 end
                 else if (lwr == 1) begin //EXEC1 Load Word Right
+                    mem_readenable = 1;
                     case(actual_address[1:0]):
                         2'b00: mem_byteenable = 4'b1000;
                         2'b01: mem_byteenable = 4'b1100;
                         2'b10: mem_byteenable = 4'b1110;
                         2'b11: mem_byteenable = 4'b1111;
-                    end
+                    endcase 
+                end
                 else if (sw == 1) begin //EXEC1 Store Word
                     mem_writeenable = 1;
                     mem_writedata = rt_data;
@@ -139,7 +156,13 @@ module load_store(
 
             2'b10: begin //EXEC2
 
-                instruction_out = 0
+                // RESET VARS
+
+                mem_byteenable = 4'b1111;
+                mem_writeenable = 0;
+                reg_writeenable = 0;
+                mem_readenable = 0;
+                reg_byteenable = 4'b1111;
 
                 if (lw == 1) begin //EXEC2 Load Word
                     reg_writeenable = 1;
@@ -258,10 +281,5 @@ module load_store(
         
         endcase
     end
-
-    always_ff @ (posedge clk) begin
-        
-    end
-
 
 endmodule
