@@ -47,14 +47,14 @@ always_comb begin
         jump_addition = 0;
     end
     else if(JR == 1)begin
-        jump_amount = r_s * 4;
+        jump_amount = r_s ;
         jump = 1;
         jump_addition = 0;
         
         
     end
     else if(JALR == 1)begin
-        jump_amount = r_s * 4;
+        jump_amount = r_s;
         jump = 1;
         link = 0;
         jump_addition = 0;

@@ -113,7 +113,8 @@ initial begin
     //0
     $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
     #1
-    
+    JR = 1;
+    r_s = 2560;
     clk = 0;
     
     #1
@@ -133,7 +134,9 @@ initial begin
     #1
     clk = 1;
     #1
+
     //0
+    JR = 0;
     $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
     clk = 0;
     #1
