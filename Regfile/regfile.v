@@ -19,15 +19,18 @@ module regfile (
     input logic[31:0] write_data_PC,
     output logic[31:0] read_data_1,
     output logic[31:0] read_data_2,
-    input logic[3:0] byteenable_ld
+    input logic[3:0] byteenable_ld,
+    output logic[31:0] v0
 );
 logic[3:0] byteenable;
 logic[31:0] write_data;
 logic[4:0] write_addr;
 logic write_enable;
 
+
 reg[31:0] register[31:0];
 integer i;
+assign v0 = register[2];
 always_comb begin
     //Read data:
     read_data_1 = read_addr_1 == 0 ? 0 : register[addr_rs];

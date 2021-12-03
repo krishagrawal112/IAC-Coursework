@@ -236,7 +236,8 @@ regfile r1(
     .write_data_ld(write_data_ld),
     .write_data_PC(write_data_PC),
     .link(link),
-    .byteeenable_ld(byteeenable_ld)
+    .byteeenable_ld(byteeenable_ld),
+    .v0(register_v0)
 );
 
 //NEXTINSTRUCTION------------------------------------------------------------------------------------------------------------------------

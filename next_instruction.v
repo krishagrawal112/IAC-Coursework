@@ -128,6 +128,6 @@ always_ff @(posedge clk) begin
         //State logic: If stall != 0, FETCH -> EXEC1 -> EXEC2 -> FETCH
        state <= (state == 0) ? 1 : (state == 1) ? 2 : 0; 
     end
-    else state <= 0;
+    else state <= state;
 end
 endmodule
