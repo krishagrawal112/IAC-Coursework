@@ -2,7 +2,7 @@
 ALU: -----------------------------------------------
 When you want to write you need to input write_data_ALU, and make write_enable_ALU high
 LOADSTORE: -----------------------------------------------------------------------------
-When you want to write something you need to input write_data_ld, byteeenable and write_enable_ld
+When you want to write something you need to input write_data_ld, byteeenable_ld and write_enable_ld
 */
 module regfile (
     input logic clk,
@@ -19,9 +19,9 @@ module regfile (
     input logic[31:0] write_data_PC,
     output logic[31:0] read_data_1,
     output logic[31:0] read_data_2,
-    input logic[3:0] byteenable
+    input logic[3:0] byteenable_ld
 );
-
+logic[3:0] byteenable;
 logic[31:0] write_data;
 logic[4:0] write_addr;
 logic write_enable;
@@ -44,6 +44,7 @@ always_comb begin
         write_enable = 1;
         write_addr = addr_rt;
         write_data = write_data_ld;
+        byteenable = byteenable_ld;
     end
     else if(write_enable_PC == 1)begin
         write_enable = 1;
