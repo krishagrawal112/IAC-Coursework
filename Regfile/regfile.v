@@ -7,14 +7,13 @@ When you want to write something you need to input write_data_ld, byteeenable an
 module regfile (
     input logic clk,
     input logic rst,
-    input logic[4:0] read_addr_1,
-    input logic[4:0] read_addr_2,
+    input logic[4:0] addr_rs,
+    input logic[4:0] addr_rt,
     input logic write_enable_ld,
     input logic write_enable_ALU,
     input logic write_enable_PC,
     input logic link,
-    input logic[4:0] write_addr_rt,
-    input logic[4:0] write_addr_rd,
+    input logic[4:0] addr_rd,
     input logic[31:0] write_data_ld,
     input logic[31:0] write_data_ALU,
     input logic[31:0] write_data_PC,
@@ -31,24 +30,26 @@ reg[31:0] register[31:0];
 integer i;
 always_comb begin
     //Read data:
-    read_data_1 = read_addr_1 == 0 ? 0 : register[read_addr_1];
-    read_data_2 = read_addr_2 == 0 ? 0 : register[read_addr_2];
+    read_data_1 = read_addr_1 == 0 ? 0 : register[addr_rs];
+    read_data_2 = read_addr_2 == 0 ? 0 : register[addr_rt];
 
     //Determining where to write, and what to write
     if(write_enable_ALU == 1)begin
         write_enable = 1;
-        write_addr = write_addr_rd;
+        write_addr = addr_rd;
         write_data = write_data_ALU;
+        byteenable = 4'b1111;
     end
     else if(write_enable_ld == 1)begin
         write_enable = 1;
-        write_addr = write_addr_rt;
+        write_addr = addr_rt;
         write_data = write_data_ld;
     end
     else if(write_enable_PC == 1)begin
         write_enable = 1;
         write_data = write_data_PC;
-        write_addr = link ? 31 : write_addr_rd;
+        write_addr = link ? 31 : addr_rd;
+        byteenable = 4'b1111;
     end
     else write_enable = 0;
 end
