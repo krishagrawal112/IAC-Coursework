@@ -1,6 +1,7 @@
 module ALU(
     input logic [15:0] immediate,
     input logic [31:0] Rtdata,
+    input logic signed [31:0] Rtsigned,
     input logic [31:0] Rsdata,
 
     
@@ -50,6 +51,10 @@ module ALU(
 
  logic [63:0] multi;
 
+ 
+
+ 
+
     //Create non GPR HI and LO registers
     logic[31:0] HI;
     logic[31:0] LO;
@@ -90,22 +95,22 @@ always @* begin
     end
 
     if (divu==1)begin
-        datahi= Rsdata/Rtdata; //*Logic divulo and divuhi referenced before assignment. Same for divhi and divlo. I think you mean datalo and datahi? 
-        datalo=Rsdata%Rtdata;
+        datalo= Rsdata/Rtdata; //*Logic divulo and divuhi referenced before assignment. Same for divhi and divlo. I think you mean datalo and datahi? 
+        datahi=Rsdata%Rtdata;
     end
 
 
     if (div==1) begin
     if ((Rsdata[31]==1) && (Rtdata[31]==1)) begin
-        temp1= ~(Rsdata)+1;
-        temp2= ~(Rtdata)+1;
+        temp1= (Rsdata)*-1;
+        temp2= (Rtdata)*-1;
         datalo= temp1/temp2;
         datahi= (temp1 % temp2)*(-1);
     end
     else if (Rsdata[31]==1)begin
-        temp1= ~(Rsdata)+1;
-        datalo=(temp1/Rtdata)*(-1);
-        datahi=(temp1% Rtdata)*(-1);
+        temp1= ~(Rsdata) +1;
+        datalo=~(temp1/Rtdata)+1;
+        datahi=~(temp1% Rtdata)+1;
     end
     else if(Rtdata[31]==1)begin
         temp2= ~(Rtdata) +1;
@@ -119,8 +124,7 @@ always @* begin
     end
 
     if (multu==1) begin
-        multi= Rsdata*Rtdata; //Doesn't work because the multiplication can give 64bit number and data is 32 bits.
-        //probably want to use datahi and datalo from what I see in the MIPS specs
+        multi= Rsdata*Rtdata; 
         datalo=multi[31:0];
         datahi=multi[63:32];
     end
@@ -189,12 +193,12 @@ always @* begin
     end
 
     if (sra==1) begin
-        data=Rtdata>>>sa;
+        data=Rtsigned>>>sa;
         reg_writeenable = 1;
     end
 
     if (srav==1) begin
-        data=Rtdata>>>Rsdata;
+        data=Rtsigned>>>Rsdata;
         reg_writeenable = 1;
     end
 
