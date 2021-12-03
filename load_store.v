@@ -67,18 +67,11 @@ module load_store(
         word_address = 0;
         actual_address = 0;
         offset_sign_extended = 0;
-        outputData = 0;
 
     end
 
     assign instruction_out = mem_readdata; // Will only be read during EXEC1
-    assign reg_writedata = outputData; // Read during EXEC2 (OutputData can be modified)
 
-    //***Can't assign reg_writedata to mem_readdata directly because lb,lh,lui,lwl,lwr need more work***
-
-    //***Some changes, I don't thinh immediate is multiplied by 4*** <-- Have to discuss
-
-    //assign mem_address = (state == 2'b00) ? PC_in : {rs_data[31:2], 2'b00} + (offset_sign_extended<<2);
     assign actual_address = rs_data + offset_sign_extended; //***Can't use offset_sign_extended before assignment***
     assign word_address = (state == 2'b00) ? PC_in : {actual_address[31:2], 00};
 
@@ -96,7 +89,7 @@ module load_store(
         case (state)
             2'b00: begin // FETCH
                 
-                reg_byteenable = 4'b1111;
+                mem_byteenable = 4'b1111;
 
             end
 
