@@ -21,14 +21,16 @@ module next_instruction(
     output logic write_enable_PC,
     output logic link,
     output logic[1:0] state,
-    output logic[31:0] write_data_PC
+    output logic[31:0] write_data_PC,
+    output logic[31:0] PC_out
 );
 logic jump;
 logic[31:0] jump_amount;
 logic jump_addition;
 assign write_data_PC = PC + 4;
-reg[31:0] PC;
 
+reg[31:0] PC;
+assign PC_out = PC;
 initial begin 
     PC = 0;
     state = 0;
