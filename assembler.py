@@ -97,9 +97,9 @@ class assembly_parser(object):
 	system_memory = {}
 	reg_table = {}
 
-	def init(self, default_memory_location, instruction_table, reg_table, pseudoinstruction_table, word_size):
+	def init(self, default_memory_location, instr_table, reg_table, pseudoinstruction_table, word_size):
 		self.default_mem_loc = default_memory_location
-		self.instr_table = instruction_table
+		self.instr_table = instr_table
 		self.reg_table = reg_table
 		self.word_size = word_size
 	
@@ -142,3 +142,29 @@ class assembly_parser(object):
 	
 	def second_pass(self, lines):
 		self.current_location = self.default_mem_loc
+		for line in lines:
+			if '#' in lines:
+				line = line[0:line.find('#')]
+			line = line.strip()
+			if not(len(line)):
+				continue
+			self.fix_current_loc()
+			#align memory to word size
+
+			#parse line
+			instruction = line[0:line.find(' ')].strip()
+			args = line[line.find(' ') + 1:].replace(' ', '').split(',')
+			if not instruction:
+				continue
+
+			#convert numbers into decimal
+			argcount = 0
+			for arg in args:
+				if arg not in symbol_table.keys():
+					if arg[-1] == 'H':
+						args[argcount] = str(int(arg[:-1],16))
+					elif arg[argcount] == 'B':
+						args[argcount] = str(int(arg[:-1], 2))
+				argcount += 1
+		self.print_memory_map()
+		
