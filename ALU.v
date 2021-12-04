@@ -4,7 +4,7 @@ module ALU(
     input logic signed [31:0] Rtsigned,
     input logic signed [31:0] Rssigned,
     input logic [31:0] Rsdata,
-
+    
     
     input logic [4:0] sa,
     
@@ -38,16 +38,21 @@ module ALU(
     input logic sltiu,
     output logic reg_writeenable,
     output logic [31:0] data,
-    output logic [31:0] datalo,
-    output logic [31:0] datahi
+    output logic [31:0] data_lo,
+    output logic [31:0] data_hi
     
     
 
 );
+assign data_lo = lo;
+assign data_hi = hi;
  logic [31:0] signim;
  logic signed [31:0] signedim; 
  logic [31:0] zeroim;
- 
+ reg[31:0] lo;
+ reg[31:0] hi;
+ logic[31:0] datalo;
+ logic[31:0] datahi;
  logic [31:0] temp1;
  logic [31:0] temp2;
 
@@ -235,6 +240,9 @@ always @* begin
         end
         reg_writeenable = 1;
     end
-    
+    if(mult == 1 || div == 1 || divu == 1 || multu == 1)begin
+        lo = datalo;
+        hi = datahi;
+    end
 end
 endmodule

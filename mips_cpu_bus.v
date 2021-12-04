@@ -211,6 +211,7 @@ ALU a1(
     .Rsdata(data_rs),
     .Rtdata(data_rt),
     .Rtsigned(data_rt),
+    .Rssigned(data_rs),
     .sa(shamt),
     .addiu(addiu),
     .addu(addu),
