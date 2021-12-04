@@ -139,6 +139,8 @@ class assembly_parser(object):
 					elif arg[argcount] == 'B':
 						args[argcount] = str(int(arg[:-1], 2))
 				argcount += 1
+			
+			self.current_location += 4
 	
 	def second_pass(self, lines):
 		self.current_location = self.default_mem_loc
@@ -287,4 +289,65 @@ class assembly_parser(object):
 		
 		return
 	
-	def calculate_instruction_size
+	def hex2bin(self,hex_val,num_bits):
+		#return binary string of num_bits length of hex value (pos or neg)
+
+		#perform two's comp
+		tc = False
+		if '-' in hex_val:
+			tc = True
+			hex_val = hex_val.replace('-', '')
+		
+		bit_string = '0' * num_bits
+		bin_val = str(bin*int(hex_val,16))[2:]
+		bit_string = bit_string[0: num_bits - len(bin_val)] + bin_val + bit_string[num_bits:]
+
+		#2s comp if negative hex value
+		if tc:
+			tsubstring = bit_string[0:bit_string.rfind('1')]
+			rsubstring = bit_string[bit_string.rfind('1'):]
+			tsubstring = tsubstring.replace('1','X')
+			tsubstring = tsubstring.replace('0','1')
+			tsubstring = tsubstring.replace('X','0')
+			bit_string = tsubstring + rsubstring
+
+		return bit_string
+
+	def bin2hex(self, bit_string):
+		hex_string = str(hex(int(bit_string,2)))[2:].zfill(2)
+		return hex_string
+
+	def store_bit_string(self, bit_string, instruction, arguments):
+		#store bit string into current memory block, divided into bytes
+
+		if self.current_location % 4 == 0:
+			self.output_array.append(hex(self.current_location)+':		0x')
+		
+		for i in range(0, len(bit_string) - 1,8):
+			self.system_memory[self.current_location] = bit_string[i:i+8]
+
+			self.output_array[-1] += self.bin2hex(bit_string[i:i+8])
+
+			self.current_location += 1
+
+		if self.current_location % 4 == 0:
+			self.output_array[-1] += '		' + instruction.ljust(5) + ', '.join(arguments)
+
+	def print_memory_map(self):
+		#print memory
+		print("The memomry is:\n")
+		keylist = self.system_memory.keys()
+		keylist.sort()
+		for key in keylist:
+			print("%s: %s" % (key, self.system_memory[key]))
+		
+		print("\nThe label list is: " + str(self.symbol_table))
+		print("\n\n")
+		print('The memory in HEX:')
+		for output in self.output_array:
+			print(output)
+
+	def fix_current_location(self):
+		#align memory locations with word size
+		if self.current_location % self.word_size is not 0:
+			self.current_location += self.word_size - self.current_location % self.word_size
