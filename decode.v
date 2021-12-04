@@ -59,13 +59,12 @@ module decode (
     output logic sw,
     output logic xorr,
     output logic xori,
-    output lmtlo
+    output logic rType;
    
 );
 
 logic [5:0] opcode;
 logic [5:0] funct;
-logic rType;
 
 // Instruction Decomposition
 
