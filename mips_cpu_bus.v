@@ -86,6 +86,7 @@ module mips_cpu_bus(
      logic sw;
      logic xorr;
      logic xori;
+     
     
 //DECODE----------------------------------------------------------------------------------------
  
@@ -152,7 +153,6 @@ module mips_cpu_bus(
      .sw(sw),
      .xorr(xorr),
      .xori(xori)
-
      );
 // REGFILE ------------------------------------------------------------------------------------------------------------------------
      
@@ -240,8 +240,8 @@ ALU a1(
     .sltiu(sltiu),
     .reg_writeenable(write_enable_ALU),
     .data(write_data_ALU),
-    .data_lo(datalo),
-    .data_hi(datahi)
+    .mtlo(mtlo),
+    .mthi(mthi)
 );
 //LOADSTORE-------------------------------------------------------------------------------------------------------------------------------
 

@@ -37,7 +37,7 @@ always_comb begin
     read_data_2 = addr_rt == 0 ? 0 : register[addr_rt];
 
     //Determining where to write, and what to write
-    if(write_enable_ALU == 1 && state == 2)begin
+    if(write_enable_ALU == 1 )begin
         write_enable = 1;
         write_addr = addr_rd;
         write_data = write_data_ALU;
