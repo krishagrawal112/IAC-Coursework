@@ -20,7 +20,7 @@ module mips_cpu_bus(
     logic [4:0] rt;
     logic [4:0] rd;
     logic [15:0] immediate;
-    logic [25:0] address;
+    logic [25:0] J_address;
     logic [4:0] shamt;
     logic[31:0] PC;
     
@@ -99,7 +99,7 @@ module mips_cpu_bus(
      .rt(rt),
      .rd(rd),
      .immediate(immediate),
-     .address(address),
+     .address(J_address),
      .shamt(shamt),
     
      .addiu(addiu),
@@ -163,13 +163,13 @@ regfile r1(
     .write_enable_ALU(write_enable_ALU),
     .write_enable_ld(write_enable_ld),
     .write_enable_PC(write_enable_PC),
-    .read_addr_2(data_rt)
+    .read_data_2(data_rt),
     .read_data_1(data_rs),
     .write_data_ALU(write_data_ALU),
     .write_data_ld(write_data_ld),
     .write_data_PC(write_data_PC),
     .link(link),
-    .byteeenable_ld(byteeenable_ld),
+    .byteenable_ld(byteenable_ld),
     .v0(register_v0)
 );
 
@@ -179,7 +179,7 @@ next_instruction NXT(
     .r_s(data_rs),
     .r_t(data_rt),
     .I_intermidiete(immediate),
-    .J_intermidiete(address),
+    .J_intermidiete(J_address),
     .STALL(waitrequest),
     .clk(clk),
     .rst(reset),
@@ -189,13 +189,14 @@ next_instruction NXT(
     .JALR(jalr),
     .BEQ(beq),
     .BGEZ(bgez),
-    .BGEZAL(bgzal),
+    .BGEZAL(bgezal),
     .BGTZ(bgtz),
-    .BLEZ(blez)
-    .BLTZAL(bltzal)
-    .BNE(bne)
-    .write_enable_PC(write_enable_PC)
-    .link(link)
+    .BLEZ(blez),
+    .BLTZ(bltz),
+    .BLTZAL(bltzal),
+    .BNE(bne),
+    .write_enable_PC(write_enable_PC),
+    .link(link),
     .state(state),
     .write_data_PC(write_data_PC),
     .PC_out(PC)
@@ -256,7 +257,7 @@ load_store l1(
     .sh(sh),
     .sw(sw),
     .offset(immediate),
-    .rs_dat(data_rs),
+    .rs_data(data_rs),
     .rt_data(data_rt),
     .rt(rt),
     .reg_byteenable(byteenable_ld),
