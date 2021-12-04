@@ -6,17 +6,17 @@ module RAM(
     input logic write_enable
 );
 
-reg[31:0] memory [536870911:0];
+reg[31:0] memory [4999:0];
 integer i;
 initial begin
-    for(i = 0; i < 536870912; i++) memory[i] = 0;
-/*
-    $readmemh("test1.txt", memory);
-    for (i = 0; i < 100; i++) begin
+    for(i = 0; i < 5000; i++) memory[i] = 0;
+
+    $readmemb("test1.txt", memory);
+    for (i = 0; i < 24; i++) begin
         $display("%h: %h", (i*4), memory[i]);
     end
 
-*/
+
 end
 
 always_ff @(posedge clk)begin

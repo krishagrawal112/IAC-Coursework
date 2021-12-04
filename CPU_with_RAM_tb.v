@@ -1,7 +1,7 @@
 module CPU_with_RAM_tb ();
 
-logic clk,
-logic reset,
+logic clk;
+logic reset;
 logic active;
 logic[31:0] register_v0;
 
@@ -15,8 +15,10 @@ logic [3:0] byteenable;
 
 
 initial begin
-    clk = 0;
-    repeat(1000) begin
+    clk=0;
+    $dumpfile("CPU.vcd");
+    $dumpvars(0, CPU_with_RAM_tb);
+    repeat(30)begin
         #1
         clk = !clk;
     end
@@ -40,7 +42,7 @@ RAM r1(
     .clk(clk),
     .address(address),
     .read_data(readdata),
-    .wirte_data(writedata),
+    .write_data(writedata),
     .write_enable(write)
 
 );

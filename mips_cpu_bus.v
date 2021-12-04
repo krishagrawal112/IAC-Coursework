@@ -162,6 +162,7 @@ regfile r1(
     .addr_rs(rs),
     .addr_rt(rt),
     .addr_rd(rd),
+    .state(state),
     .write_enable_ALU(write_enable_ALU),
     .write_enable_ld(write_enable_ld),
     .write_enable_PC(write_enable_PC),
