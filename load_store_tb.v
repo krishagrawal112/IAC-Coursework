@@ -51,24 +51,6 @@ module load_store_tb();
 
     end
 
-    task runAsserts (input logic [3:0] er_byte_enable, 
-                    input logic er_writeenable, 
-                    input logic [31:0] er_writedata, 
-                    input logic [31:0] einstruction_out,
-                    input logic [31:0] em_readdata,
-                    input logic [31:0] em_byteenable,
-                    input logic [31:0] em_writedata,
-                    input logic em_writeenable,
-                    input logic em_readenable );
-        begin
-            
-            
-
-
-        end
-    endtask
-
-
     load_store LS( clk, 
                     state, 
                     lb, 
