@@ -21,6 +21,7 @@ module regfile (
     output logic[31:0] read_data_2,
     input logic[3:0] byteenable_ld,
     output logic[31:0] v0
+    input logic rType;
 );
 logic[3:0] byteenable;
 logic[31:0] write_data;
@@ -31,15 +32,16 @@ logic write_enable;
 reg[31:0] register[31:0];
 integer i;
 assign v0 = register[2];
+assign register[0] = 0;
 always_comb begin
     //Read data:
-    read_data_1 = addr_rs == 0 ? 0 : register[addr_rs];
-    read_data_2 = addr_rt == 0 ? 0 : register[addr_rt];
+    read_data_1 = register[addr_rs];
+    read_data_2 = register[addr_rt];
 
     //Determining where to write, and what to write
     if(write_enable_ALU == 1 )begin
         write_enable = 1;
-        write_addr = addr_rd;
+        write_addr = rType ? addr_rd : addr_rt;
         write_data = write_data_ALU;
         byteenable = 4'b1111;
     end
@@ -61,16 +63,16 @@ always_ff @(posedge clk) begin
     //Bit writes handled
     if(write_addr != 0 && write_enable == 1) begin
         case(byteenable) 
-        4'b0001: register[write_addr][7:0] <= write_data[7:0];
-        4'b0010: register[write_addr][15:8] <= write_data[15:8];
-        4'b0100: register[write_addr][23:16] <= write_data[23:16];
-        4'b1000: register[write_addr][31:24] <= write_data[31:24];
-        4'b1100: register[write_addr][31:16] <= write_data[31:16];
-        4'b1110: register[write_addr][31:8] <= write_data[31:8];
-        4'b0011: register[write_addr][15:0] <= write_data[15:0];
-        4'b0111: register[write_addr][23:0] <= write_data[23:0];
-        4'b1111: register[write_addr] <= write_data;
-        default: register[write_addr] <= 32'hxxxxxxxx;
+            4'b0001: register[write_addr][7:0] <= write_data[7:0];
+            4'b0010: register[write_addr][15:8] <= write_data[15:8];
+            4'b0100: register[write_addr][23:16] <= write_data[23:16];
+            4'b1000: register[write_addr][31:24] <= write_data[31:24];
+            4'b1100: register[write_addr][31:16] <= write_data[31:16];
+            4'b1110: register[write_addr][31:8] <= write_data[31:8];
+            4'b0011: register[write_addr][15:0] <= write_data[15:0];
+            4'b0111: register[write_addr][23:0] <= write_data[23:0];
+            4'b1111: register[write_addr] <= write_data;
+            default: register[write_addr] <= 32'hxxxxxxxx;
         endcase
             
         
@@ -80,9 +82,6 @@ always_ff @(posedge clk) begin
         for(i = 0; i < 32; i++) begin
             register[i] <= 0;
         end
-        
-
-        
     end
 end
 
