@@ -32,7 +32,7 @@ logic write_enable;
 
 reg[31:0] register[31:0];
 integer i;
-assign v0 = register[2];
+
 assign register[0] = 0;
 always_comb begin
     //Read data:
@@ -59,6 +59,7 @@ always_comb begin
         byteenable = 4'b1111;
     end
     else write_enable = 0;
+    register_v0 = register[2];
 end
 always_ff @(posedge clk) begin
     //Bit writes handled
