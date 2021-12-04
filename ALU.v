@@ -16,6 +16,8 @@ module ALU(
     input logic div,
     input logic multu,
     input logic mult,
+    input logic mthi,
+    input logic mtlo,
 
     //2 new instructions  to implement
     //input logic mthi
@@ -37,13 +39,13 @@ module ALU(
     input logic sltu,
     input logic sltiu,
     output logic reg_writeenable,
-    output logic [31:0] data,
-    output logic [31:0] data_lo,
-    output logic [31:0] data_hi
+    output logic [31:0] data
     
     
 
 );
+logic [31:0] data_lo;
+logic [31:0] data_hi;
 assign data_lo = lo;
 assign data_hi = hi;
  logic [31:0] signim;
@@ -87,100 +89,100 @@ always @* begin
         reg_writeenable = 1;
     end
 
-    if (addu==1) begin
+    else if (addu==1) begin
         data = Rtdata + Rsdata;
         reg_writeenable = 1;
     end
 
-    if (andr==1) begin
+    else if (andr==1) begin
         data = Rtdata & Rsdata;
         reg_writeenable = 1;
     end
 
-    if (andi==1)begin
+    else if (andi==1)begin
         data = Rsdata & zeroim;
         reg_writeenable = 1;
     end
 
-    if (divu==1)begin
+    else if (divu==1)begin
         datalo= Rsdata/Rtdata; //*Logic divulo and divuhi referenced before assignment. Same for divhi and divlo. I think you mean datalo and datahi? 
         datahi=Rsdata%Rtdata;
     end
 
 
-    if (div==1) begin
+    else if (div==1) begin
       datalo= Rssigned/Rtsigned;
       datahi= Rssigned%Rtsigned;
     end
 
-    if (multu==1) begin
+    else if (multu==1) begin
         multi= Rsdata*Rtdata; 
         datalo=multi[31:0];
         datahi=multi[63:32];
     end
 
-    if (mult==1) begin
+    else if (mult==1) begin
         multi= Rssigned*Rtsigned;
         datalo=multi[31:0];
         datahi=multi[63:32];
     end
 
-    if (orr==1) begin
+    else if (orr==1) begin
         data= Rtdata | Rsdata;
         reg_writeenable = 1;
     end
 
-    if (ori==1) begin
+    else if (ori==1) begin
         data= Rsdata | zeroim;
         reg_writeenable = 1;
     end
 
-    if(sll==1) begin
+    else if(sll==1) begin
         data= Rtdata<<sa;
         reg_writeenable = 1;
     end
 
-    if (sllv==1)begin
+    else if (sllv==1)begin
         data= Rtdata<<Rsdata;
         reg_writeenable = 1;
     end
 
-    if (subu==1) begin
+    else if (subu==1) begin
         data= Rsdata-Rtdata;
         reg_writeenable = 1;
     end
 
-    if (xorr==1) begin
+    else if (xorr==1) begin
         data= Rsdata^Rtdata;
         reg_writeenable = 1;
     end
 
-    if (xori==1) begin
+    else if (xori==1) begin
         data=Rsdata^zeroim;
         reg_writeenable = 1;
     end
 
-    if (sra==1) begin
+    else if (sra==1) begin
         data=Rtsigned>>>sa;
         reg_writeenable = 1;
     end
 
-    if (srav==1) begin
+    else if (srav==1) begin
         data=Rtsigned>>>Rsdata;
         reg_writeenable = 1;
     end
 
-    if(srl==1) begin
+    else if(srl==1) begin
         data=Rtdata>>sa;
         reg_writeenable = 1;
     end
 
-    if (srlv==1)begin
+    else if (srlv==1)begin
         data=Rtdata>>Rsdata;
         reg_writeenable = 1;
     end
     
-    if (slt==1) begin //We spoke about how this can be done simpler. Same for slti. Maybe you can change it to save 15-20 lines of code
+    else if (slt==1) begin //We spoke about how this can be done simpler. Same for slti. Maybe you can change it to save 15-20 lines of code
         // if ((Rtdata[31]==1) && (Rsdata[31]==1)) begin
         //     temp1=~(Rtdata) +1;
         //     temp2=~(Rsdata) +1;
@@ -199,7 +201,7 @@ always @* begin
         reg_writeenable = 1;
     end
 
-    if (slti==1) begin
+    else if (slti==1) begin
         // if ((signim[31]==1) && (Rsdata[31]==1)) begin
         //     temp1=~(signim) +1;
         //     temp2=~(Rsdata) +1;
@@ -220,7 +222,7 @@ always @* begin
         reg_writeenable = 1;
     end
 
-    if (sltu==1) begin
+    else if (sltu==1) begin
         if (Rsdata<Rtdata)begin
             data=1;
         end
@@ -230,7 +232,7 @@ always @* begin
         reg_writeenable = 1;
     end
     
-    if (sltiu==1) begin
+    else if (sltiu==1) begin
         if (Rsdata<signim) begin
             data=1;
         end
@@ -240,6 +242,19 @@ always @* begin
         end
         reg_writeenable = 1;
     end
+   
+    else if (mthi==1) begin
+        data=hi;
+        reg_writeenable=1;
+    end
+    else if (mtlo==1) begin
+        data=lo;
+        reg_writeenable=1;
+    end
+    else begin
+        reg_writeenable=0;
+    end
+
     if(mult == 1 || div == 1 || divu == 1 || multu == 1)begin
         lo = datalo;
         hi = datahi;

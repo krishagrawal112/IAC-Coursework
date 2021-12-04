@@ -23,6 +23,7 @@ module mips_cpu_bus(
     logic [25:0] J_address;
     logic [4:0] shamt;
     logic[31:0] PC;
+    logic STALL;
     
     logic write_enable_ld;
     logic write_enable_ALU;
@@ -85,6 +86,7 @@ module mips_cpu_bus(
      logic sw;
      logic xorr;
      logic xori;
+     
     
 //DECODE----------------------------------------------------------------------------------------
  
@@ -101,7 +103,8 @@ module mips_cpu_bus(
      .immediate(immediate),
      .address(J_address),
      .shamt(shamt),
-    
+     .waitrequest(waitrequest),
+     .STALL(STALL),
      .addiu(addiu),
      .addu(addu),
      .andr(andr),
@@ -150,7 +153,6 @@ module mips_cpu_bus(
      .sw(sw),
      .xorr(xorr),
      .xori(xori)
-
      );
 // REGFILE ------------------------------------------------------------------------------------------------------------------------
      
@@ -180,7 +182,7 @@ next_instruction NXT(
     .r_t(data_rt),
     .I_intermidiete(immediate),
     .J_intermidiete(J_address),
-    .STALL(waitrequest),
+    .STALL(STALL),
     .clk(clk),
     .rst(reset),
     .J(j),
@@ -238,8 +240,8 @@ ALU a1(
     .sltiu(sltiu),
     .reg_writeenable(write_enable_ALU),
     .data(write_data_ALU),
-    .datalo(datalo),
-    .datahi(datahi)
+    .mtlo(mtlo),
+    .mthi(mthi)
 );
 //LOADSTORE-------------------------------------------------------------------------------------------------------------------------------
 

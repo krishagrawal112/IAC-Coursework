@@ -31,6 +31,8 @@ assign write_data_PC = PC + 4;
 
 reg[31:0] PC;
 assign PC_out = PC;
+assign sign_I_im =  {{16{I_intermidiete[15]}}, I_intermidiete } << 2;
+//assign zero_I_im = {{16'h0000, I_intermidiete } << 2;
 initial begin 
     PC = 0;
     state = 0;
@@ -52,8 +54,6 @@ always_comb begin
         jump_amount = r_s ;
         jump = 1;
         jump_addition = 0;
-        
-        
     end
     else if(JALR == 1)begin
         jump_amount = r_s;
@@ -62,45 +62,45 @@ always_comb begin
         jump_addition = 0;
     end
     else if(BEQ == 1 && r_s == r_t)begin
-        jump_amount = {16'h0000, I_intermidiete} * 4;
-        jump =1;
+        jump_amount = sign_I_im;
+        jump = 1;
         jump_addition = 1;
     end
     else if(BGEZ == 1 && r_s >= 0)begin
-        jump_amount = {16'h0000, I_intermidiete} * 4;
-        jump =1;
+        jump_amount = sign_I_im;
+        jump = 1;
         jump_addition = 1;
     end
     else if(BGEZAL == 1 && r_s >= 0)begin
-        jump_amount = {16'h0000, I_intermidiete} * 4;
-        jump =1;
+        jump_amount = sign_I_im;
+        jump = 1;
         link = 1;
         jump_addition = 1;
     end
     else if(BGTZ == 1 && r_s > 0)begin
-        jump_amount = {16'h0000, I_intermidiete} * 4;
+        jump_amount = sign_I_im;
         jump =1;
         jump_addition = 1;
     end
     else if(BLEZ == 1 && r_s <= 0)begin
-        jump_amount = {16'h0000, I_intermidiete} * 4;
+        jump_amount = sign_I_im;
         jump =1;
         jump_addition = 1;
     end
     else if(BLTZ == 1 && r_s < 0)begin
-        jump_amount = {16'h0000, I_intermidiete} * 4;
+        jump_amount = sign_I_im;
         jump =1;
         jump_addition = 1;
     end
     else if(BLTZAL == 1 && r_s < 0)begin
-        jump_amount = {16'h0000, I_intermidiete} * 4;
-        jump =1;
+        jump_amount = sign_I_im;
+        jump = 1;
         link = 1;
         jump_addition = 1;
     end
     else if((BNE == 1) && (r_s != r_t))begin
-        jump_amount = {16'h0000, I_intermidiete} * 4;
-        jump =1;
+        jump_amount = sign_I_im;
+        jump = 1;
         jump_addition = 1;
     end
     else begin

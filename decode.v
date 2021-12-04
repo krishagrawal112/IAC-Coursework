@@ -1,6 +1,8 @@
 module decode (
 
     input logic [31:0] instruction,
+    input logic waitrequest,
+    output logic STALL,
 
     output logic [4:0] rs,
     output logic [4:0] rt,
@@ -56,7 +58,9 @@ module decode (
     output logic subu,
     output logic sw,
     output logic xorr,
-    output logic xori
+    output logic xori,
+    output lmtlo
+   
 );
 
 logic [5:0] opcode;
@@ -129,5 +133,10 @@ assign xorr = ((rType == 1) && (funct == 6'b100110) );
 assign xori = (opcode == 6'b001110);
 
 
-
+logic s;
+always_comb begin
+if ((waitrequest==1) && ((lb==1) || (lbu==1) || (lh==1) || (lhu==1) || (lui==1) || (lw==1) || (lwl==1) || (lwr==1) || (sw==1) || (sh==1) || (sw==1))) s = 1;
+else s = 0;
+end
+assign STALL = s;
 endmodule

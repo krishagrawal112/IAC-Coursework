@@ -1,4 +1,6 @@
 import re
+import sys
+import getopt
 
 #Heavily inspired by https://github.com/zeckendorf/Python-MIPS-Assembler, however I implemented slightly different features with the same overall structure
 
@@ -88,16 +90,16 @@ register_table = {
 	'$ra' : 31
 }
 
-class assembly_parser(object):
+class assembly_parser():
 	word_size = 4
 	default_mem_loc = 0
-	symbol_table = {}
 	current_location = 0
 	instr_table = {}
 	system_memory = {}
 	reg_table = {}
+	output_array = []
 
-	def init(self, default_memory_location, instr_table, reg_table, pseudoinstruction_table, word_size):
+	def __init__(self, default_memory_location, instr_table, reg_table, word_size):
 		self.default_mem_loc = default_memory_location
 		self.instr_table = instr_table
 		self.reg_table = reg_table
@@ -133,11 +135,10 @@ class assembly_parser(object):
 			#convert numbers into decimal
 			argcount = 0
 			for arg in args:
-				if arg not in symbol_table.keys():
-					if arg[-1] == 'H':
-						args[argcount] = str(int(arg[:-1],16))
-					elif arg[argcount] == 'B':
-						args[argcount] = str(int(arg[:-1], 2))
+				if arg[-1] == 'H':
+					args[argcount] = str(int(arg[:-1],16))
+				elif arg[argcount] == 'B':
+					args[argcount] = str(int(arg[:-1], 2))
 				argcount += 1
 			
 			self.current_location += 4
@@ -150,8 +151,14 @@ class assembly_parser(object):
 			line = line.strip()
 			if not(len(line)):
 				continue
-			self.fix_current_loc()
+			self.fix_current_location()
 			#align memory to word size
+
+			instruction = line[0:line.find(' ')].strip().split(',')
+			args = line[line.find(' ')+1:].replace(' ','')
+
+			if(instruction in self.instr_table.keys()):
+				self.parse_instruction(instruction,args)
 
 			#parse line
 			instruction = line[0:line.find(' ')].strip()
@@ -162,11 +169,10 @@ class assembly_parser(object):
 			#convert numbers into decimal
 			argcount = 0
 			for arg in args:
-				if arg not in symbol_table.keys():
-					if arg[-1] == 'H':
-						args[argcount] = str(int(arg[:-1],16))
-					elif arg[argcount] == 'B':
-						args[argcount] = str(int(arg[:-1], 2))
+				if arg[-1] == 'H':
+					args[argcount] = str(int(arg[:-1],16))
+				elif arg[argcount] == 'B':
+					args[argcount] = str(int(arg[:-1], 2))
 				argcount += 1
 		self.print_memory_map()
 	
@@ -194,9 +200,6 @@ class assembly_parser(object):
 			elif arg in self.reg_table.keys():
 				#replace reg symbol with value in table
 				args[arg_count] = int(self.reg_table[arg])
-			elif arg in self.symbol_table:
-				#replace label with value
-				args[arg_count] = self.symbol_table[arg]
 			arg_count += 1
 
 		#memory parsing for branch and jump instructions
@@ -335,13 +338,12 @@ class assembly_parser(object):
 
 	def print_memory_map(self):
 		#print memory
-		print("The memomry is:\n")
+		print("The memory is:\n")
 		keylist = self.system_memory.keys()
 		keylist.sort()
 		for key in keylist:
 			print("%s: %s" % (key, self.system_memory[key]))
 		
-		print("\nThe label list is: " + str(self.symbol_table))
 		print("\n\n")
 		print('The memory in HEX:')
 		for output in self.output_array:
@@ -351,3 +353,21 @@ class assembly_parser(object):
 		#align memory locations with word size
 		if self.current_location % self.word_size is not 0:
 			self.current_location += self.word_size - self.current_location % self.word_size
+
+def usage():
+	print("Usage: " + sys.argv[0] + " -i <file1>")
+	sys.exit(1)
+
+def main(argv):
+	files = argv
+	if len(files) is not 1:
+		usage()
+	for filename in files:
+		asm = open(filename)
+		lines = asm.readlines()
+		parser = assembly_parser(64, instruction_table, register_table,4)
+		parser.first_pass(lines)
+		parser.second_pass(lines)
+
+if(__name__ == '__main__'):
+	main(sys.argv[1:])
