@@ -35,17 +35,43 @@ module load_store_tb();
 
     // Avalon
 
-    logic [31:0] mem_readdata; // OUTPUT
+    logic [31:0] mem_readdata; 
     logic [31:0] mem_byteenable; // OUTPUT
     logic [31:0] mem_writedata; // OUTPUT
-    logic [31:0] mem_address;
+    logic [31:0] mem_address; // OUTPUT
 
     logic waitrequest;
     logic mem_writeenable; // OUTPUT
     logic mem_readenable; // OUTPUT
 
     initial begin
+        $dumpfile("load_store.vcd");
+        $dumpvars(0, load_store_tb);
+        clk = 0;
+
+        #5;
+
+        repeat (3600) begin
+            #10 clk = !clk;
+        end
+
+        $finish;
+    end
+    
+    initial begin
+
+        state = 2'b00;
         
+        repeat(1800) begin
+            
+            @ (posedge clk)
+            case (state) 
+                2'b00: state = 2'b01;
+                2'b01: state = 2'b10;
+                2'b10: state = 2'00;
+            endcase
+
+        end
 
 
 
