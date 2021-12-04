@@ -2,8 +2,9 @@ module ALU(
     input logic [15:0] immediate,
     input logic [31:0] Rtdata,
     input logic signed [31:0] Rtsigned,
+    input logic signed [31:0] Rssigned,
     input logic [31:0] Rsdata,
-
+    
     
     input logic [4:0] sa,
     
@@ -37,15 +38,21 @@ module ALU(
     input logic sltiu,
     output logic reg_writeenable,
     output logic [31:0] data,
-    output logic [31:0] datalo,
-    output logic [31:0] datahi
+    output logic [31:0] data_lo,
+    output logic [31:0] data_hi
     
     
 
 );
+assign data_lo = lo;
+assign data_hi = hi;
  logic [31:0] signim;
+ logic signed [31:0] signedim; 
  logic [31:0] zeroim;
- 
+ reg[31:0] lo;
+ reg[31:0] hi;
+ logic[31:0] datalo;
+ logic[31:0] datahi;
  logic [31:0] temp1;
  logic [31:0] temp2;
 
@@ -70,6 +77,7 @@ module ALU(
     
     assign signim = { {16{immediate[15]}}, immediate };
     assign zeroim = { 16'b0000000000000000, immediate };
+    assign signedim={ {16{immediate[15]}}, immediate };
     
 
 
@@ -101,26 +109,8 @@ always @* begin
 
 
     if (div==1) begin
-    if ((Rsdata[31]==1) && (Rtdata[31]==1)) begin
-        temp1= (Rsdata)*-1;
-        temp2= (Rtdata)*-1;
-        datalo= temp1/temp2;
-        datahi= (temp1 % temp2)*(-1);
-    end
-    else if (Rsdata[31]==1)begin
-        temp1= ~(Rsdata) +1;
-        datalo=~(temp1/Rtdata)+1;
-        datahi=~(temp1% Rtdata)+1;
-    end
-    else if(Rtdata[31]==1)begin
-        temp2= ~(Rtdata) +1;
-        datalo=(Rsdata/temp2)*(-1);
-        datahi= Rsdata%temp2;
-    end
-    else begin
-        datalo= Rsdata/Rtdata;
-        datahi= Rsdata%Rtdata;
-    end
+      datalo= Rssigned/Rtsigned;
+      datahi= Rssigned%Rtsigned;
     end
 
     if (multu==1) begin
@@ -130,31 +120,9 @@ always @* begin
     end
 
     if (mult==1) begin
-    if ((Rsdata[31]==1) && (Rtdata[31]==1)) begin
-        temp1= ~(Rsdata)+1;
-        temp2= ~(Rtdata)+1;
-        multi=temp1*temp2;
-        //Firstly I think you mean mult_temp. Mult is 1-bit logic
-        //Secondly, don't think mult is supposed to do this. The MIPS Spec says that the top 32 bits go into hi and lower 32 bits into lo
-
-    end
-    else if (Rsdata[31]==1)begin
-        temp1= ~(Rsdata)+1;
-        multi= (temp1*Rtdata)*(-1);
-      
-        
-    end
-    else if(Rtdata[31]==1)begin
-        temp2= ~(Rtdata) +1;
-        multi=(temp2*Rsdata)*(-1);
-        
-    end
-    else begin
-        multi=Rsdata*Rtdata;
-        
-    end
-    datalo=multi[31:0];
-    datahi=multi[63:32];
+        multi= Rssigned*Rtsigned;
+        datalo=multi[31:0];
+        datahi=multi[63:32];
     end
 
     if (orr==1) begin
@@ -222,19 +190,11 @@ always @* begin
         //     else begin
         //         data=1; 
         // end
-        if ((Rtdata[31]==1) && (Rsdata[31]==0))begin
-            data=0;
-        end
-        else if ((Rtdata[31]==0) && (Rsdata[31]==1)) begin
-            data=32'b00000000000000000000000000000001;
+        if(Rtsigned>Rssigned) begin
+            data=1;
         end
         else begin
-            if (Rsdata<Rtdata) begin
-                data=32'b00000000000000000000000000000001;
-            end
-            else begin
-                data=0;
-            end
+            data=0;
         end
         reg_writeenable = 1;
     end
@@ -251,26 +211,18 @@ always @* begin
         //     end
 
         // end
-        if ((signim[31]==1) && (Rsdata[31] == 0))begin
-            data=0;
-        end
-        else if (Rsdata[31]==1 && signim[31] == 0) begin
-            data=32'b00000000000000000000000000000001;
-        end
-        else begin
-            if (Rsdata<signim) begin
-                data=32'b00000000000000000000000000000001;
-            end
-            else begin
-                data=0;
-            end
-        end
+       if (Rssigned<signedim)begin
+           data=1;
+       end
+       else begin
+           data=0;
+       end
         reg_writeenable = 1;
     end
 
     if (sltu==1) begin
         if (Rsdata<Rtdata)begin
-            data=32'b00000000000000000000000000000001;
+            data=1;
         end
         else begin
             data=0;
@@ -280,7 +232,7 @@ always @* begin
     
     if (sltiu==1) begin
         if (Rsdata<signim) begin
-            data=32'b00000000000000000000000000000001;
+            data=1;
         end
         else begin
 
@@ -288,6 +240,9 @@ always @* begin
         end
         reg_writeenable = 1;
     end
-    
+    if(mult == 1 || div == 1 || divu == 1 || multu == 1)begin
+        lo = datalo;
+        hi = datahi;
+    end
 end
 endmodule
