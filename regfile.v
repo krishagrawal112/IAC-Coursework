@@ -4,8 +4,6 @@ When you want to write you need to input write_data_ALU, and make write_enable_A
 LOADSTORE: -----------------------------------------------------------------------------
 When you want to write something you need to input write_data_ld, byteeenable_ld and write_enable_ld
 */
-
-//THIS IS NOT VALID ANYMORE I COPIED IT TO THE NORMAL FOLDER
 module regfile (
     input logic clk,
     input logic rst,
@@ -35,8 +33,8 @@ integer i;
 assign v0 = register[2];
 always_comb begin
     //Read data:
-    read_data_1 = read_addr_1 == 0 ? 0 : register[addr_rs];
-    read_data_2 = read_addr_2 == 0 ? 0 : register[addr_rt];
+    read_data_1 = addr_rs == 0 ? 0 : register[addr_rs];
+    read_data_2 = addr_rt == 0 ? 0 : register[addr_rt];
 
     //Determining where to write, and what to write
     if(write_enable_ALU == 1)begin
