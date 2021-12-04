@@ -1,6 +1,8 @@
 module ALU_tb();
     logic [15:0] immediate;
     logic [31:0] Rtdata;
+    logic signed [31:0] Rtsigned;
+    logic signed [31:0] Rssigned;
     logic [31:0] Rsdata;
 
     
@@ -14,6 +16,8 @@ module ALU_tb();
     logic div;
     logic multu;
     logic mult;
+    logic mthi;
+    logic mtlo;
 
     //2 new instructions  to implement
     //input logic mthi
@@ -69,33 +73,136 @@ module ALU_tb();
 
         divu=1; Rsdata=32'h80000000; Rtdata= 3;
         #1;
-        assert(datalo==32'h2AAAAAAA);
-        assert(datahi==2);
         divu=0;
 
-        div=1; Rsdata=32'h80000000; Rtdata=3;
+        mtlo=1;
         #1;
-        assert(datalo==32'hd5555556);
-        assert(datahi==32'hfffffffe);
+        assert(data==32'h2AAAAAAA);
+        mtlo=0;
+
+        mthi=1;
+        #1;
+        assert(data==2);
+        mthi=0;
+
+        div=1; Rssigned=32'h80000000; Rtsigned=3;
+        #1;
         div=0;
+
+        mtlo=1;
+        #1;
+        assert(data==32'hd5555556);
+        mtlo=0;
+
+        mthi=1;
+        #1;
+        assert(data==32'hfffffffe);
+        mthi=0;
 
         multu=1; Rsdata=32'hab3df781; Rtdata=32'hfb9a6c3d;
         #1;
-        assert(datalo==32'h50C865BD);
-        assert(datahi==32'hA84D0D59);
         multu=0;
 
-        mult=1; Rsdata=32'hf1a5b3c9; Rtdata=32'h1abffc7a;
+        mtlo=1;
         #1;
-        assert(datalo==32'hD2E889CA);
-        assert(datahi==32'hFE8010BB);
+        assert(data==32'h50C865BD);
+        mtlo=0;
+
+        mthi=1;
+        #1;
+        assert(data==32'hA84D0D59);
+        mthi=0;
+
+        mult=1; Rssigned=32'hf1a5b3c9; Rtsigned=32'h1abffc7a;
+        #1;
         mult=0;
+
+        mtlo=1;
+        #1;
+        assert(data==32'hD2E889CA);
+        mtlo=0;
+
+        mthi=1;
+        #1;
+        assert(data==32'hFE8010BB);
+        mthi=0;
+
 
         orr=1; Rtdata=9; Rsdata=10;
         #1;
         assert(data==11);
         assert(reg_writeenable==1);
         orr=0;
+
+        ori=1;Rsdata=32'hffffff00;immediate=16'h0003;
+        #1;
+        assert(data==32'hffffff03);
+        ori=0;
+
+        sll=1;Rtdata=32'h00000001;sa=4;
+        #1;
+        assert(data==32'h00000010);
+        sll=0;
+
+        sllv=1;Rtdata=32'h00000001;Rsdata=8;
+        #1;
+        assert(data==32'h00000100);
+        sllv=0;
+
+        subu=1; Rsdata=2147483648; Rtdata=3;
+        #1;
+        assert(data==2147483645);
+        subu=0;
+
+        xorr=1; Rsdata=32'h00000001; Rtdata=32'h4afcab60;;
+        #1;
+        assert(data==32'h4afcab61);
+        xorr=0;
+
+        xori=1; Rsdata=32'h30ff0e15; immediate=16'h7f06;
+        #1;
+        assert(data==32'h30ff7113);
+        xori=0;
+
+        sra=1; Rtsigned=32'hf000000f; sa=4;
+        #1;
+        assert(data==32'hff000000);
+        sra=0;
+
+        srav=1; Rtsigned=32'hf0000000; Rsdata=8;
+        #1;
+        assert(data==32'hfff00000);
+        srav=0;
+
+        srl=1; Rtdata=32'hf0000000; sa=4;
+        #1;
+        assert(data==32'h0f000000);
+        srl=0;
+
+        srlv=1; Rtdata=32'hf0000000; Rsdata=8;
+        #1;
+        assert(data==32'h00f00000);
+        srlv=0;
+
+        slt=1; Rssigned=32'hf1100123; Rtsigned=32'h73ff0981;
+        #1;
+        assert(data==1);
+        slt=0;
+
+        slti=1; Rssigned=32'h0119cdaf; immediate=16'hf001;
+        #1;
+        assert(data==0);
+        slti=0;
+
+        sltu=1; Rtdata=32'hfa012201; Rsdata=32'hea81fa09;
+        #1;
+        assert(data==1);
+        sltu=0;
+
+        sltiu=1; Rsdata=32'h0119cdaf; immediate=16'hf001;
+        #1;
+        assert(data==1);
+        sltiu=0;
 
 
 
@@ -105,6 +212,8 @@ module ALU_tb();
     ALU dut(
         .immediate(immediate),
         .Rtdata(Rtdata),
+        .Rtsigned(Rtsigned),
+        .Rssigned(Rssigned),
         .Rsdata(Rsdata),
         .sa(sa),
         .addiu(addiu),
@@ -115,6 +224,8 @@ module ALU_tb();
         .div(div),
         .multu(multu),
         .mult(mult),
+        .mthi(mthi),
+        .mtlo(mtlo),
         .orr(orr),
         .ori(ori),
         .sll(sll),
@@ -131,9 +242,7 @@ module ALU_tb();
         .sltu(sltu),
         .sltiu(sltiu),
         .reg_writeenable(reg_writeenable),
-        .data(data),
-        .datalo(datalo),
-        .datahi(datahi)
+        .data(data)
     );
           
 endmodule

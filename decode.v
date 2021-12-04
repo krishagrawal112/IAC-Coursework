@@ -1,6 +1,8 @@
 module decode (
 
     input logic [31:0] instruction,
+    input logic waitrequest,
+    output logic STALL,
 
     output logic [4:0] rs,
     output logic [4:0] rt,
@@ -128,6 +130,7 @@ assign sw = (opcode == 6'b101011);
 assign xorr = ((rType == 1) && (funct == 6'b100110) );
 assign xori = (opcode == 6'b001110);
 
-
+if(waitrequest && (lb || lbu || lh || lhu || lui || lw || lwl || lwr || sw || sh || sw)) STALL = 1;
+else STALL = 0;
 
 endmodule
