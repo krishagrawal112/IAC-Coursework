@@ -16,7 +16,7 @@ logic [3:0] byteenable;
 
 initial begin
     clk = 0;
-    repeat(100) begin
+    repeat(1000) begin
         #1
         clk = !clk;
     end
