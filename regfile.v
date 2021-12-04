@@ -20,8 +20,9 @@ module regfile (
     output logic[31:0] read_data_1,
     output logic[31:0] read_data_2,
     input logic[3:0] byteenable_ld,
-    output logic[31:0] v0
-    input logic rType;
+    input logic rType,
+    output logic[31:0] v0,
+    input logic[1:0] state
 );
 logic[3:0] byteenable;
 logic[31:0] write_data;
@@ -39,7 +40,7 @@ always_comb begin
     read_data_2 = register[addr_rt];
 
     //Determining where to write, and what to write
-    if(write_enable_ALU == 1 )begin
+    if(write_enable_ALU == 1 && state == 2)begin
         write_enable = 1;
         write_addr = rType ? addr_rd : addr_rt;
         write_data = write_data_ALU;
