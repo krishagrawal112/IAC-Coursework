@@ -71,11 +71,13 @@ module load_store_tb();
 
     initial begin 
 
+        // LW Test
+
         PC_in <= 20;
 
         @ (posedge clk); // 0->1
 
-        assert(mem_address == 20);
+        assert(mem_address == 20); // emem_addr0
         assert(mem_readenable == 1);
         mem_readdata <= 50;
         lw <= 1;
@@ -84,9 +86,9 @@ module load_store_tb();
 
         @ (posedge clk); // 1->2
 
-        assert(instruction_out == 50);
-        assert(mem_readenable == 1);
-        assert(mem_address == 12);
+        assert(instruction_out == 50); // einstout
+        assert(mem_readenable == 1); // emem_readen
+        assert(mem_address == 12); // emem_addr1
         
         mem_readdata <= 40;
 
@@ -95,10 +97,43 @@ module load_store_tb();
         assert(reg_writedata == 40);
         assert(reg_writeenable == 1);
 
+        resetVars();
+
+        @ (posedge clk); // BUFFER
+        @ (posedge clk); // BUFFER
+        @ (posedge clk); // BUFFER
+
         $display("All Tests Complete");
         $finish;
 
     end
+
+    task resetVars;
+         begin
+            
+            lb <= 0;
+            lbu <= 0;
+            lh <= 0;
+            lhu <= 0;
+            lui <= 0;
+            lw <= 0;
+            lwl <= 0;
+            lwr <= 0;
+            sb <= 0;
+            sh <= 0;
+            sw <= 0;
+
+            offset <= 0;
+            rs_data <= 0;
+            rt_data <= 0;
+            rt <= 0;
+
+            PC_in <= 0;
+            mem_readdata <= 0;
+            waitrequest <= 0;
+
+         end
+    endtask
 
     load_store LS( .clk(clk), 
                     .state(state), 
