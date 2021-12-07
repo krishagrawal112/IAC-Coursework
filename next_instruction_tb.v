@@ -42,13 +42,13 @@ initial begin
     clk = 1;
     #1
     //1
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     clk = 1;
     #1
     //2
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     J = 1;
     J_intermidiete = 10;
@@ -56,62 +56,62 @@ initial begin
     clk = 1;
     #1
     //0
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     J = 0;
     clk = 1;
     #1
     //1
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     clk = 1;
     #1
     //2
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     clk = 1;
     #1
     //0
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     clk = 1;
     #1
     //1
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     clk = 1;
     #1
     //2
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     clk = 1;
     #1
     //0
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     clk = 1;
     #1
     //1
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     clk = 1;
     #1
     //2
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     clk = 1;
     #1
     //0
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     #1
     JR = 1;
     r_s = 2560;
@@ -121,13 +121,13 @@ initial begin
     clk = 1;
     #1
     //1
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     clk = 1;
     #1
     //2
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     
@@ -137,7 +137,7 @@ initial begin
 
     //0
     JR = 0;
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     BEQ = 1;
@@ -148,13 +148,13 @@ initial begin
     clk = 1;
     #1
     //1
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     clk = 1;
     #1
     //2
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
     clk = 0;
     #1
     
@@ -163,7 +163,7 @@ initial begin
     
     //0
     BEQ = 0;
-    $display("Current state %d and PC is: %d", state, (write_data_PC - 4));
+    $display("Current state %d and PC is: %d", state, (write_data_PC - 8));
 
 end
 

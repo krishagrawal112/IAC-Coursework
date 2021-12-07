@@ -27,7 +27,9 @@ module next_instruction(
 logic jump;
 logic[31:0] jump_amount;
 logic jump_addition;
-assign write_data_PC = PC + 4;
+logic[31:0] PC_next;
+logic[31:0] PC_next_next;
+assign write_data_PC = PC + 8;
 
 reg[31:0] PC;
 assign PC_out = PC;
@@ -36,6 +38,8 @@ assign sign_I_im =  {{16{I_intermidiete[15]}}, I_intermidiete } << 2;
 initial begin 
     PC = 0;
     state = 0;
+    PC_next = 4;
+    PC_next_next = 8;
 end
 always_comb begin
     //Determining whether to jump or not and how much
@@ -112,17 +116,15 @@ always_comb begin
     if(link == 1) write_enable_PC = 1;
     else if(JALR == 1) write_enable_PC = 1;
     else write_enable_PC = 0;
+    if(jump == 1) PC_next_next = jump_addition ? PC + 4 + jump_amount : jump_amount;
+    else PC_next_next = PC_next + 4;
  
 end
 always_ff @(posedge clk) begin
     if(state == 2)begin
         //EXEC 2:  JUMP or PC+4
-        if(jump == 0)begin
-            PC <= PC + 4;
-        end
-        else begin
-            PC <= jump_addition ? PC + 4 + jump_amount : jump_amount;
-        end
+        PC<= PC_next;
+        PC_next <= PC_next_next;
     end
     if(STALL == 0) begin
         //State logic: If stall != 0, FETCH -> EXEC1 -> EXEC2 -> FETCH
