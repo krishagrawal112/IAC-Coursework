@@ -330,6 +330,13 @@ class assembly_parser():
 		print('The memory in HEX:')
 		for output in self.output_array:
 			print(output)
+	
+	def output_memory_txt(self,title):
+		txt_object = open(title,"w+")
+		keylist = self.system_memory.keys()
+		keylist.sort()
+		for key in keylist:
+			txt_object.write(str(self.system_memory[key])+"\n")
 
 	def fix_current_location(self):
 		#align memory locations with word size
@@ -350,6 +357,7 @@ def main(argv):
 		parser = assembly_parser(3217031168, instruction_table, register_table,4) #3217031168 is 0xBFC00000
 		parser.first_pass(lines)
 		parser.second_pass(lines)
+		parser.output_memory_txt("test1_binaries.txt")
 
 if(__name__ == '__main__'):
 	main(sys.argv[1:])
