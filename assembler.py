@@ -2,7 +2,7 @@ import re
 import sys
 import getopt
 
-#Heavily inspired by https://github.com/zeckendorf/Python-MIPS-Assembler, however I implemented slightly different features with the same overall structure
+#Memory map structure, and pass architecture inspired by https://github.com/zeckendorf/Python-MIPS-Assembler, however I implemented slightly different features with the same overall structure
 
 instruction_table = {
 	'addiu' : ['0x09','rs','rt','imm'],
@@ -125,21 +125,6 @@ class assembly_parser():
 
 			#make sure memory aligns with divisions of 4
 			self.fix_current_location()
-
-			#parse instruction and arguments separately
-			instruction = line[0:line.find(' ')]
-			args  = line[line.find(' ') + 1:].replace(' ', '').split(',')
-			if not instruction:
-				continue
-			
-			#convert numbers into decimal
-			argcount = 0
-			for arg in args:
-				if arg[-1] == 'H':
-					args[argcount] = str(int(arg[:-1],16))
-				elif arg[argcount] == 'B':
-					args[argcount] = str(int(arg[:-1], 2))
-				argcount += 1
 			
 			self.current_location += 4
 	
@@ -154,38 +139,37 @@ class assembly_parser():
 			self.fix_current_location()
 			#align memory to word size
 
-			instruction = line[0:line.find(' ')].strip().split(',')
-			args = line[line.find(' ')+1:].replace(' ','')
-
-			if(instruction in self.instr_table.keys()):
-				self.parse_instruction(instruction,args)
-
-			#parse line
-			instruction = line[0:line.find(' ')].strip()
+			instruction = line[0:line.find(' ')].strip().split(',')[0]
 			args = line[line.find(' ') + 1:].replace(' ', '').split(',')
-			if not instruction:
-				continue
 
 			#convert numbers into decimal
+			print(args)
 			argcount = 0
 			for arg in args:
 				if arg[-1] == 'H':
 					args[argcount] = str(int(arg[:-1],16))
-				elif arg[argcount] == 'B':
+				elif arg[-1] == 'B':
 					args[argcount] = str(int(arg[:-1], 2))
 				argcount += 1
+
+			if(instruction in self.instr_table.keys()):
+				self.parse_instruction(instruction,args)
+
+			#parse instructions to exit
+			instruction = line[0:line.find(' ')].strip()
+			if not instruction:
+				continue
+	
 		self.print_memory_map()
 	
 	def parse_instruction(self, instruction, raw_args):
 		#parses instructions into hex
-
-		machine_code = self.instr_table = instr_table[instruction]
-
+		machine_code = self.instr_table[instruction]
 		arg_count = 0
 		offset = 'not_valid'
-		args = raw_args[:]
+		args = raw_args
 		for arg in args:
-			if '(' in arg:
+			if ('(' in arg):
 				#parse offset from known syntax
 				offset = hex(int(arg[0:arg.find('(')]))
 				register = re.search('\((.*)\)',arg)
@@ -196,8 +180,7 @@ class assembly_parser():
 
 				#process args
 				args[arg_count] = register
-
-			elif arg in self.reg_table.keys():
+			if(arg in self.reg_table.keys()):
 				#replace reg symbol with value in table
 				args[arg_count] = int(self.reg_table[arg])
 			arg_count += 1
@@ -239,7 +222,6 @@ class assembly_parser():
 
 			#32 bit string
 			bit_string = op_binary + rs_binary + rt_binary + rd_binary + shamt_bin + funct_bin
-
 			self.store_bit_string(bit_string,instruction,raw_args)
 
 			return
@@ -271,7 +253,6 @@ class assembly_parser():
 
 			#32 bit string
 			bit_string = op_bin + rs_bin + rt_bin + im_bin
-
 			self.store_bit_string(bit_string,instruction,raw_args)
 			return
 		
@@ -279,15 +260,16 @@ class assembly_parser():
 		if len(machine_code) == 2:
 
 			#create hex code
-			address = args[9]
+			address = args[0]
 			machine_code[1] = hex(int(address,16))
 
 			#produce bit string
 			op_bin = self.hex2bin(machine_code[0],6)
-			address_bin = self.hex2bin(machine_code[2], 26)
-
+			address_bin = self.hex2bin(machine_code[1], 26)
 			#store bit string in memory
-			self.store_bit_string(bit_string, instruction, raw_args)
+			bit_string = op_bin + address_bin
+			self.store_bit_string(bit_string,instruction,raw_args)
+
 			return
 		
 		return
@@ -302,7 +284,7 @@ class assembly_parser():
 			hex_val = hex_val.replace('-', '')
 		
 		bit_string = '0' * num_bits
-		bin_val = str(bin*int(hex_val,16))[2:]
+		bin_val = str(bin(int(hex_val,16)))[2:]
 		bit_string = bit_string[0: num_bits - len(bin_val)] + bin_val + bit_string[num_bits:]
 
 		#2s comp if negative hex value
@@ -365,7 +347,7 @@ def main(argv):
 	for filename in files:
 		asm = open(filename)
 		lines = asm.readlines()
-		parser = assembly_parser(64, instruction_table, register_table,4)
+		parser = assembly_parser(3217031168, instruction_table, register_table,4) #3217031168 is 0xBFC00000
 		parser.first_pass(lines)
 		parser.second_pass(lines)
 
