@@ -131,5 +131,11 @@ always_ff @(posedge clk) begin
        state <= (state == 0) ? 1 : (state == 1) ? 2 : 0; 
     end
     else state <= state;
+    if(reset) begin
+        state <= 0;
+        PC <= 32'hBFC00000;
+        PC_next <= 32'hBFC00004;
+        PC_next_next <= 32'hBFC00008;
+    end
 end
 endmodule
