@@ -44,7 +44,7 @@ module load_store(
 
     logic [31:0] actual_address;
     logic [31:0] offset_sign_extended;
-    logic [31:0] IR;
+    reg [31:0] IR;
 
     initial begin
 
