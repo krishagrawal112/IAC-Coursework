@@ -44,74 +44,59 @@ module load_store_tb();
     logic mem_writeenable; // OUTPUT
     logic mem_readenable; // OUTPUT
 
+    parameter MAX_CYCLES = 1000;
+
     initial begin
+        
         $dumpfile("load_store.vcd");
         $dumpvars(0, load_store_tb);
+
         clk = 0;
-        state = 2;
+        state = 0;
 
-        #5;
-
-        repeat (3600) begin
-            #10 clk = 0;
-            #10 clk = 1;
-
-            case (state) 
+        repeat (MAX_CYCLES) begin
+            #10; clk = 1;
+            case(state)
                 2'b00: state = 2'b01;
                 2'b01: state = 2'b10;
                 2'b10: state = 2'b00;
-            endcase
-
+                default: state = 2'b00;
+            endcase 
+            #10; clk = 0;
         end
 
-        $finish;
+        $fatal(2, "Simulation Time-Out");
+
     end
 
-    initial begin
+    initial begin 
 
-        PC_in = 20;
+        PC_in <= 20;
 
-        @ (posedge clk) $display(state);
-        @ (posedge clk) $display(state);
-        @ (posedge clk) $display(state);
+        @ (posedge clk); // 0->1
+
+        assert(mem_address == 20);
+        assert(mem_readenable == 1);
+        mem_readdata <= 50;
+        lw <= 1;
+        rs_data <= 0;
+        offset <= 15;
+
+        @ (posedge clk); // 1->2
+
+        assert(instruction_out == 50);
+        assert(mem_readenable == 1);
+        assert(mem_address == 12);
         
-        @ (posedge clk) begin
+        mem_readdata <= 40;
 
-             // Fetch Instruction 20
+        @ (posedge clk); //2->0
 
-            $display("Current State: ");
-            $display(state);
-            $display("Value of mem_address: ");
-            $display(mem_address);
+        assert(reg_writedata == 40);
+        assert(reg_writeenable == 1);
 
-            assert(mem_address == 20);
-            assert(mem_readenable == 1);
-
-        end
-        @ (posedge clk) begin
-
-            mem_readdata = 50;
-            
-            lw = 1;
-            rs_data = 0;
-            offset = 15;
-            rt = 4;
-
-            assert(instruction_out == 50);
-            assert(mem_readenable == 1);
-            assert(mem_address == 15);
-
-
-        end
-        @ (posedge clk) begin
-            
-            mem_readdata = 40;
-
-            assert(reg_writedata == 40);
-            assert(reg_writeenable == 1);
-
-        end 
-
+        $display("All Tests Complete");
+        $finish;
 
     end
 
@@ -144,6 +129,5 @@ module load_store_tb();
                     .waitrequest(waitrequest),
                     .mem_writeenable(mem_writeenable),
                     .mem_readenable(mem_readenable));
-
 
 endmodule

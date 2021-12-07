@@ -90,33 +90,39 @@ module load_store(
 
                 // RESET VARS
 
-                mem_writeenable = 0;
+                
                 reg_writeenable = 0;
                 reg_byteenable = 4'b1111;
-                mem_readenable = 0;
+                
 
                 if (lw == 1) begin //EXEC1 Load Word
                     mem_byteenable = 4'b1111;
                     mem_readenable = 1;
+                    mem_writeenable = 0;
                 end
                 else if (lb == 1) begin //EXEC1 Load Byte
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0001 : ( (actual_address[1:0] == 2'b01) ? 4'b0010 : ( (actual_address[1:0] == 2'b10) ? 4'b0100 : 4'b1000 ) );
                     mem_readenable = 1;
+                    mem_writeenable = 0;
                 end
                 else if (lbu == 1) begin //EXEC1 Load Byte Unsigned
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0001 : (actual_address[1:0] == 2'b01) ? 4'b0010 : (actual_address[1:0] == 2'b10) ? 4'b0100 : 4'b1000;
                     mem_readenable = 1;
+                    mem_writeenable = 0;
                 end
                 else if (lh == 1) begin //EXEC1 Load Halfword
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0011 : 4'b1100;
                     mem_readenable = 1;
+                    mem_writeenable = 0;
                 end
                 else if (lhu == 1) begin //EXEC1 Load Halfword Unsigned
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0011 : 4'b1100;
                     mem_readenable = 1;
+                    mem_writeenable = 0;
                 end
                 else if (lwl == 1) begin //EXEC1 Load Word Left
                     mem_readenable = 1;
+                    mem_writeenable = 0;
                     case(actual_address[1:0])
                         2'b00: mem_byteenable = 4'b1111;
                         2'b01: mem_byteenable = 4'b0111;
@@ -126,6 +132,7 @@ module load_store(
                 end
                 else if (lwr == 1) begin //EXEC1 Load Word Right
                     mem_readenable = 1;
+                    mem_writeenable = 0;
                     case(actual_address[1:0])
                         2'b00: mem_byteenable = 4'b1000;
                         2'b01: mem_byteenable = 4'b1100;
@@ -135,16 +142,19 @@ module load_store(
                 end
                 else if (sw == 1) begin //EXEC1 Store Word
                     mem_writeenable = 1;
+                    mem_readenable = 0;
                     mem_writedata = rt_data;
                     mem_byteenable = 4'b1111;
                 end
                 else if (sb == 1) begin //EXEC1 Store Byte
                     mem_writeenable = 1;
+                    mem_readenable = 0;
                     mem_writedata = {24'h000000, rt_data[7:0]};
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0001 : (actual_address[1:0] == 2'b01) ? 4'b0010 : (actual_address[1:0] == 2'b10) ? 4'b0100 : 4'b1000;
                 end
                 else if (sh == 1) begin //EXEC1 Stgore Halfword
-                    mem_writeenable = 1; 
+                    mem_writeenable = 1;
+                    mem_readenable = 0; 
                     mem_writedata = {16'h0000, rt_data[15:0]};
                     mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0011 : 4'b1100;
                 end
