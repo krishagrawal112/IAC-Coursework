@@ -31,6 +31,9 @@ end
 */
 
 initial begin
+    $dumpfile("result.vcd");
+    $dumpvars(0, general_tb);
+
     clk = 0;
     #1
     clk = 1;
