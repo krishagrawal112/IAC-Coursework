@@ -352,15 +352,15 @@ def usage():
 
 def main(argv):
 	files = argv
-	if len(files) is not 1:
+	if len(files) is not 2:
 		usage()
-	for filename in files:
-		asm = open(filename)
-		lines = asm.readlines()
-		parser = assembly_parser(3217031168, instruction_table, register_table,4) #3217031168 is 0xBFC00000
-		parser.first_pass(lines)
-		parser.second_pass(lines)
-		parser.output_memory_txt("add_binaries.txt")
+	
+	asm = open(files[0])
+	lines = asm.readlines()
+	parser = assembly_parser(3217031168, instruction_table, register_table,4) #3217031168 is 0xBFC00000
+	parser.first_pass(lines)
+	parser.second_pass(lines)
+	parser.output_memory_txt(files[1])
 
 if(__name__ == '__main__'):
 	main(sys.argv[1:])
