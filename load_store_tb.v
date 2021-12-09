@@ -109,14 +109,14 @@ module load_store_tb();
         assert(mem_address == 21); // emem_addr0
         assert(mem_readenable == 1);
 
-        mem_readdata <= 32'b1000010000010000;
+        mem_readdata <= 32'b10000100000100000000000000000000;
         lh <= 1;
         rs_data <= 0;
         offset <= 18;
 
         @ (posedge clk); // 1->2
 
-        assert(instruction_out == 32'b1000010000010000); // einstout
+        assert(instruction_out == 32'b10000100000100000000000000000000); // einstout
         assert(mem_readenable == 1); // emem_readen
         assert(mem_address == 16); // emem_addr1
         
@@ -124,26 +124,28 @@ module load_store_tb();
 
         @ (posedge clk); //2->0
 
-        assert(reg_writedata == 32'hffff987);
+        assert(reg_writedata == 32'hfffff987);
         assert(reg_writeenable == 1);
+
+        resetVars();
 
         //LHU Test
 
-        PC_in <= 21;
+        PC_in <= 22;
 
         @ (posedge clk); // 0->1
 
-        assert(mem_address == 21); // emem_addr0
+        assert(mem_address == 22); // emem_addr0
         assert(mem_readenable == 1);
 
-        mem_readdata <= 32'b1001010000010000;
+        mem_readdata <= 32'b10010100000100000000000000000000;
         lhu <= 1;
         rs_data <= 0;
         offset <= 18;
 
         @ (posedge clk); // 1->2
 
-        assert(instruction_out == 32'b1001010000010000); // einstout
+        assert(instruction_out == 32'b10010100000100000000000000000000); // einstout
         assert(mem_readenable == 1); // emem_readen
         assert(mem_address == 16); // emem_addr1
         
@@ -154,23 +156,24 @@ module load_store_tb();
         assert(reg_writedata == 32'h0000f987);
         assert(reg_writeenable == 1); 
 
+        resetVars();
+
         //LB Test
 
-        PC_in <= 21;
+        PC_in <= 23;
 
         @ (posedge clk); // 0->1
 
-        assert(mem_address == 21); // emem_addr0
+        assert(mem_address == 23); // emem_addr0
         assert(mem_readenable == 1);
-
-        mem_readdata <= 32'b1000000000010000;
+        mem_readdata <= 32'b10000000000100000000000000000000;
         lb <= 1;
         rs_data <= 0;
         offset <= 17;
 
         @ (posedge clk); // 1->2
 
-        assert(instruction_out == 32'b1000000000010000); // einstout
+        assert(instruction_out == 32'b10000000000100000000000000000000); // einstout
         assert(mem_readenable == 1); // emem_readen
         assert(mem_address == 16); // emem_addr1
         
@@ -181,21 +184,214 @@ module load_store_tb();
         assert(reg_writedata == 32'hffffff95);
         assert(reg_writeenable == 1); 
 
+        resetVars();
+
         //LBU Test
 
+        PC_in <= 24;
 
+        @ (posedge clk); // 0->1
+
+        assert(mem_address == 24); // emem_addr0
+        assert(mem_readenable == 1);
+
+        mem_readdata <= 32'b10010000000100000000000000000000;
+        lbu <= 1;
+        rs_data <= 0;
+        offset <= 17;
+
+        @ (posedge clk); // 1->2
+
+        assert(instruction_out == 32'b10010000000100000000000000000000); // einstout
+        assert(mem_readenable == 1); // emem_readen
+        assert(mem_address == 16); // emem_addr1
+        
+        mem_readdata <= 32'hf9879563;
+
+        @ (posedge clk); //2->0
+
+        assert(reg_writedata == 32'h00000095);
+        assert(reg_writeenable == 1);
+
+        resetVars();
 
         //LWL Test
+        
+        PC_in <= 25;
+
+        @ (posedge clk); // 0->1
+
+        assert(mem_address == 25); // emem_addr0
+        assert(mem_readenable == 1);
+
+        mem_readdata <= 32'b10001000000100000000000000000000;
+        lwl <= 1;
+        rs_data <= 0;
+        rt_data <= 32'hfedcba98;
+        offset <= 17;
+
+        @ (posedge clk); // 1->2
+
+        assert(instruction_out == 32'b10001000000100000000000000000000); // einstout
+        assert(mem_readenable == 1); // emem_readen
+        assert(mem_address == 16); // emem_addr1
+        
+        mem_readdata <= 32'hf9879563;
+
+        @ (posedge clk); //2->0
+
+        assert(reg_writedata == 32'h9563ba98);
+        assert(reg_writeenable == 1);
+
+        resetVars();
 
         //LWR Test
+        
+        PC_in <= 26;
+
+        @ (posedge clk); // 0->1
+
+        assert(mem_address == 26); // emem_addr0
+        assert(mem_readenable == 1);
+
+        mem_readdata <= 32'b10011000000100000000000000000000;
+        lwr <= 1;
+        rs_data <= 0;
+        rt_data <= 32'hFF0000FF;
+        offset <= 19;
+
+        @ (posedge clk); // 1->2
+
+        assert(instruction_out == 32'b10011000000100000000000000000000); // einstout
+        assert(mem_readenable == 1); // emem_readen
+        assert(mem_address == 16); // emem_addr1
+        
+        mem_readdata <= 32'hf9879563;
+
+        @ (posedge clk); //2->0
+
+        assert(reg_writedata == 32'hff0000f9);
+        assert(reg_writeenable == 1);
+
+        resetVars();
 
         //LUI Test
 
+        PC_in <= 27;
+
+        @ (posedge clk); // 0->1
+
+        assert(mem_address == 27); // emem_addr0
+        assert(mem_readenable == 1);
+
+        mem_readdata <= 32'b10010000000100000000000000000000;
+        lui <= 1;
+        rs_data <= 0;
+        rt_data <= 32'hFF0000FF;
+        offset <= 16'hf1e2;
+
+        @ (posedge clk); // 1->2
+
+        assert(instruction_out == 32'b10010000000100000000000000000000); // einstout
+        assert(mem_readenable == 1); // emem_readen
+        //assert(mem_address == 16); // emem_addr1
+        
+        mem_readdata <= 32'hf9879563;
+
+        @ (posedge clk); //2->0
+
+        assert(reg_writedata == 32'hf1e20000);
+        assert(reg_writeenable == 1);
+
+        resetVars();
+        
         //SW Test
 
+        PC_in <= 28;
+
+        @ (posedge clk); // 0->1
+
+        assert(mem_address == 28); 
+        assert(mem_readenable == 1);
+
+        mem_readdata <= 50;
+        sw <= 1;
+        rs_data <= 4;
+        rt_data = 27;
+        offset <= 40;
+
+        @ (posedge clk); // 1->2
+
+        assert(instruction_out == 50); 
+        assert(mem_readenable == 0); 
+        assert(mem_writeenable == 1); 
+        assert(mem_address == 44); 
+        assert(mem_writedata == 27);
+
+        @ (posedge clk); //2->0
+
+        assert(reg_writeenable == 0);
+
+        resetVars();
+
+
         //SH Test
+        PC_in <= 29;
+
+        @ (posedge clk); // 0->1
+
+        assert(mem_address == 29); 
+        assert(mem_readenable == 1);
+
+        mem_readdata <= 50;
+        sh <= 1;
+        rs_data <= 6;
+        rt_data = 32'h12345678;
+        offset <= 40;
+
+        @ (posedge clk); // 1->2
+
+        assert(instruction_out == 50); 
+        assert(mem_readenable == 0); 
+        assert(mem_writeenable == 1); 
+        assert(mem_address == 44); 
+        assert(mem_writedata == 32'h56780000);
+        assert(mem_byteenable == 4'b1100);
+
+        @ (posedge clk); //2->0
+
+        assert(reg_writeenable == 0);
+
+        resetVars();
         
         //SB Test
+        PC_in <= 30;
+
+        @ (posedge clk); // 0->1
+
+        assert(mem_address == 30); 
+        assert(mem_readenable == 1);
+
+        mem_readdata <= 50;
+        sb <= 1;
+        rs_data <= 7;
+        rt_data = 32'h12345678;
+        offset <= 40;
+
+        @ (posedge clk); // 1->2
+
+        assert(instruction_out == 50); 
+        assert(mem_readenable == 0); 
+        assert(mem_writeenable == 1); 
+        assert(mem_address == 44); 
+        assert(mem_writedata == 32'h78000000);
+        assert(mem_byteenable == 4'h8);
+
+        @ (posedge clk); //2->0
+
+        assert(reg_writeenable == 0);
+
+        resetVars();
 
         @ (posedge clk); // BUFFER
         @ (posedge clk); // BUFFER
