@@ -33,11 +33,11 @@ logic write_enable;
 reg[31:0] register[31:0];
 integer i;
 
-assign register[0] = 0;
+assign v0 = register[2];
 always_comb begin
     //Read data:
-    read_data_1 = register[addr_rs];
-    read_data_2 = register[addr_rt];
+    read_data_1 = addr_rs == 0 ? 0 : register[addr_rs];
+    read_data_2 = addr_rt == 0 ? 0 : register[addr_rt];
 
     //Determining where to write, and what to write
     if(write_enable_ALU == 1 && state == 2)begin
@@ -59,7 +59,7 @@ always_comb begin
         byteenable = 4'b1111;
     end
     else write_enable = 0;
-    register_v0 = register[2];
+    
 end
 always_ff @(posedge clk) begin
     //Bit writes handled

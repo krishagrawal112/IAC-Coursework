@@ -77,7 +77,7 @@ module load_store_tb();
 
         @ (posedge clk); // 0->1
 
-        assert(mem_address == 20); // emem_addr0
+        assert(mem_address == 20); 
         assert(mem_readenable == 1);
 
         mem_readdata <= 50;
@@ -87,9 +87,9 @@ module load_store_tb();
 
         @ (posedge clk); // 1->2
 
-        assert(instruction_out == 50); // einstout
-        assert(mem_readenable == 1); // emem_readen
-        assert(mem_address == 12); // emem_addr1
+        assert(instruction_out == 50); 
+        assert(mem_readenable == 1); 
+        assert(mem_address == 12); 
         
         mem_readdata <= 40;
 

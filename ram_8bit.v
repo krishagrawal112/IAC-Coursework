@@ -4,7 +4,7 @@ module ram(
     output logic [31:0] read_data,
     input logic write_enable,
     inout logic read_enable,
-    input clk
+    input logic clk
 );
 
 reg[7:0] memory [4294967295:0];

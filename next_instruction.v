@@ -36,10 +36,10 @@ assign PC_out = PC;
 assign sign_I_im =  {{16{I_intermidiete[15]}}, I_intermidiete } << 2;
 //assign zero_I_im = {{16'h0000, I_intermidiete } << 2;
 initial begin 
-    PC = 0;
-    state = 0;
-    PC_next = 4;
-    PC_next_next = 8;
+    state <= 0;
+        PC <= 32'hBFC00000;
+        PC_next <= 32'hBFC00004;
+        PC_next_next <= 32'hBFC00008;
 end
 always_comb begin
     //Determining whether to jump or not and how much
@@ -131,7 +131,7 @@ always_ff @(posedge clk) begin
        state <= (state == 0) ? 1 : (state == 1) ? 2 : 0; 
     end
     else state <= state;
-    if(reset) begin
+    if(rst) begin
         state <= 0;
         PC <= 32'hBFC00000;
         PC_next <= 32'hBFC00004;
