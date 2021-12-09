@@ -59,7 +59,7 @@ module decode (
     output logic sw,
     output logic xorr,
     output logic xori,
-    output logic rType;
+    output logic rType
    
 );
 

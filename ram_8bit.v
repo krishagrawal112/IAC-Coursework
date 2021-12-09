@@ -13,7 +13,7 @@ initial begin
     for(i = 0; i < 4294967296; i++) begin
         memory[i] = 0;
     end
-    $readmemb("test.txt", memory);
+    $readmemb("test.txt", memory, 32'hBFC00000);
 end
 
 always_ff @(posedge clk)begin

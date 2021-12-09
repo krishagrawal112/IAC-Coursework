@@ -19,10 +19,6 @@ module ALU(
     input logic mthi,
     input logic mtlo,
 
-    //2 new instructions  to implement
-    //input logic mthi
-    //input logic mtlo
-
     input logic orr,
     input logic ori,
     input logic sll,
@@ -255,7 +251,7 @@ always @* begin
         reg_writeenable=0;
     end
 
-    if(mult == 1 || div == 1 || divu == 1 || multu == 1)begin
+    if((mult == 1)|| (div == 1) || (divu == 1) || (multu == 1))begin
         lo = datalo;
         hi = datahi;
     end
