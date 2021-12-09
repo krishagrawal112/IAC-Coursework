@@ -34,6 +34,7 @@ reg[31:0] register[31:0];
 integer i;
 
 assign v0 = register[2];
+
 always_comb begin
     //Read data:
     read_data_1 = addr_rs == 0 ? 0 : register[addr_rs];

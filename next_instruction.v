@@ -29,6 +29,9 @@ logic[31:0] jump_amount;
 logic jump_addition;
 logic[31:0] PC_next;
 logic[31:0] PC_next_next;
+logic[31:0] sign_I_im;
+
+
 assign write_data_PC = PC + 8;
 
 reg[31:0] PC;
