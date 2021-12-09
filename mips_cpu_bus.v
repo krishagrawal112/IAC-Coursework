@@ -86,7 +86,7 @@ module mips_cpu_bus(
      logic sw;
      logic xorr;
      logic xori;
-     
+     logic rType;
     
 //DECODE----------------------------------------------------------------------------------------
  
@@ -152,7 +152,8 @@ module mips_cpu_bus(
      .subu(subu),
      .sw(sw),
      .xorr(xorr),
-     .xori(xori)
+     .xori(xori),
+     .rType(rType)
      );
 // REGFILE ------------------------------------------------------------------------------------------------------------------------
      
@@ -173,7 +174,8 @@ regfile r1(
     .write_data_PC(write_data_PC),
     .link(link),
     .byteenable_ld(byteenable_ld),
-    .v0(register_v0)
+    .v0(register_v0),
+    .rType(rType)
 );
 
 //NEXTINSTRUCTION------------------------------------------------------------------------------------------------------------------------
@@ -209,6 +211,7 @@ next_instruction NXT(
 
     logic[31:0] datalo;
     logic[31:0] datahi;
+    
 ALU a1(
     .immediate(immediate),
     .Rsdata(data_rs),

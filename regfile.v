@@ -33,7 +33,13 @@ logic write_enable;
 reg[31:0] register[31:0];
 integer i;
 
-assign v0 = register[2];
+// initial begin
+//     for(i = 0; i < 32; i++) begin 
+//         memory[i] = 0;
+//     end
+// end
+
+//assign v0 = register[2];
 always_comb begin
     //Read data:
     read_data_1 = addr_rs == 0 ? 0 : register[addr_rs];
@@ -63,6 +69,7 @@ always_comb begin
 end
 always_ff @(posedge clk) begin
     //Bit writes handled
+    v0 <= register[2];
     if(write_addr != 0 && write_enable == 1) begin
         case(byteenable) 
             4'b0001: register[write_addr][7:0] <= write_data[7:0];
