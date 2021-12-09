@@ -187,7 +187,7 @@ class assembly_parser():
 
 		#memory parsing for branch and jump instructions
 		if (instruction == 'beq' or instruction == 'bgez' or instruction == 'bgezal' or instruction == 'bgtz' or instruction == 'blez' or instruction == 'bltz' or instruction == 'bltzal' or instruction  == 'bne'):
-			args[2] = (int(args[2])-self.current_location-4)/4
+			args[1] = (int(args[1])-self.current_location-4)/4
 		if (instruction == 'j' or instruction == 'jal' or instruction == 'jalr' or instruction == 'jr'):
 			args[0] = str(int(args[0])/4)
 		for i in range(0,len(args)):
@@ -218,10 +218,12 @@ class assembly_parser():
 			rs_bin = self.hex2bin(machine_code[1],5)
 			rt_bin = self.hex2bin(machine_code[2],5)
 			rd_bin = self.hex2bin(machine_code[3],5)
-			shamt_bin = self.hex2bin(machine_code[5],6)
+			shamt_bin = "00000"
+			funct_bin = self.hex2bin(machine_code[5],6)
+			print(machine_code)
 
 			#32 bit string
-			bit_string = op_binary + rs_binary + rt_binary + rd_binary + shamt_bin + funct_bin
+			bit_string = op_bin + rs_bin + rt_bin + rd_bin + shamt_bin + funct_bin
 			self.store_bit_string(bit_string,instruction,raw_args)
 
 			return
@@ -357,7 +359,7 @@ def main(argv):
 		parser = assembly_parser(3217031168, instruction_table, register_table,4) #3217031168 is 0xBFC00000
 		parser.first_pass(lines)
 		parser.second_pass(lines)
-		parser.output_memory_txt("test1_binaries.txt")
+		parser.output_memory_txt("add_binaries.txt")
 
 if(__name__ == '__main__'):
 	main(sys.argv[1:])
