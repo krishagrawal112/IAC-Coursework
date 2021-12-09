@@ -143,7 +143,6 @@ class assembly_parser():
 			args = line[line.find(' ') + 1:].replace(' ', '').split(',')
 
 			#convert numbers into decimal
-			print(args)
 			argcount = 0
 			for arg in args:
 				if arg[-1] == 'H':
@@ -159,8 +158,6 @@ class assembly_parser():
 			instruction = line[0:line.find(' ')].strip()
 			if not instruction:
 				continue
-	
-		self.print_memory_map()
 	
 	def parse_instruction(self, instruction, raw_args):
 		#parses instructions into hex
@@ -184,15 +181,13 @@ class assembly_parser():
 				#replace reg symbol with value in table
 				args[arg_count] = int(self.reg_table[arg])
 			arg_count += 1
-
+		
 		#memory parsing for branch and jump instructions
-		if (instruction == 'beq' or instruction == 'bgez' or instruction == 'bgezal' or instruction == 'bgtz' or instruction == 'blez' or instruction == 'bltz' or instruction == 'bltzal' or instruction  == 'bne'):
-			args[1] = (int(args[1])-self.current_location-4)/4
 		if (instruction == 'j' or instruction == 'jal' or instruction == 'jalr' or instruction == 'jr'):
 			args[0] = str(int(args[0])/4)
 		for i in range(0,len(args)):
 			args[i] = str(hex(int(args[i])))
-		
+
 		#R-type instruction
 		if len(machine_code) == 6:
 			#initial r values
@@ -220,7 +215,6 @@ class assembly_parser():
 			rd_bin = self.hex2bin(machine_code[3],5)
 			shamt_bin = "00000"
 			funct_bin = self.hex2bin(machine_code[5],6)
-			print(machine_code)
 
 			#32 bit string
 			bit_string = op_bin + rs_bin + rt_bin + rd_bin + shamt_bin + funct_bin
@@ -306,32 +300,18 @@ class assembly_parser():
 
 	def store_bit_string(self, bit_string, instruction, arguments):
 		#store bit string into current memory block, divided into bytes
-
+		
 		if self.current_location % 4 == 0:
 			self.output_array.append(hex(self.current_location)+':		0x')
 		
-		for i in range(0, len(bit_string) - 1,8):
-			self.system_memory[self.current_location] = bit_string[i:i+8]
+		self.system_memory[self.current_location] = bit_string
 
-			self.output_array[-1] += self.bin2hex(bit_string[i:i+8])
+		self.output_array[-1] += self.bin2hex(bit_string)
 
-			self.current_location += 1
+		self.current_location += 4
 
 		if self.current_location % 4 == 0:
 			self.output_array[-1] += '		' + instruction.ljust(5) + ', '.join(arguments)
-
-	def print_memory_map(self):
-		#print memory
-		print("The memory is:\n")
-		keylist = self.system_memory.keys()
-		keylist.sort()
-		for key in keylist:
-			print("%s: %s" % (key, self.system_memory[key]))
-		
-		print("\n\n")
-		print('The memory in HEX:')
-		for output in self.output_array:
-			print(output)
 	
 	def output_memory_txt(self,title):
 		txt_object = open(title,"w+")
@@ -346,20 +326,20 @@ class assembly_parser():
 			self.current_location += self.word_size - self.current_location % self.word_size
 
 def usage():
-	print("Usage: " + sys.argv[0] + " -i <file1>")
+	print("Usage: " + sys.argv[0] + " -i <file1> <file2>")
 	sys.exit(1)
 
 def main(argv):
 	files = argv
-	if len(files) is not 1:
+	if len(files) is not 2:
 		usage()
-	for filename in files:
-		asm = open(filename)
-		lines = asm.readlines()
-		parser = assembly_parser(3217031168, instruction_table, register_table,4) #3217031168 is 0xBFC00000
-		parser.first_pass(lines)
-		parser.second_pass(lines)
-		parser.output_memory_txt("add_binaries.txt")
+	
+	asm = open(files[0])
+	lines = asm.readlines()
+	parser = assembly_parser(3217031168, instruction_table, register_table,4) #3217031168 is 0xBFC00000
+	parser.first_pass(lines)
+	parser.second_pass(lines)
+	parser.output_memory_txt(files[1])
 
 if(__name__ == '__main__'):
 	main(sys.argv[1:])
