@@ -33,6 +33,12 @@ logic write_enable;
 reg[31:0] register[31:0];
 integer i;
 
+initial begin
+    for(i = 0; i<32; i++) begin
+        register[i]= 0;
+    end
+end
+
 assign v0 = register[2];
 
 always_comb begin
