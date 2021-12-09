@@ -102,7 +102,7 @@ module load_store_tb();
 
         //LH Test
 
-        PC_in <= 21
+        PC_in <= 21;
 
         @ (posedge clk); // 0->1
 
@@ -129,7 +129,7 @@ module load_store_tb();
 
         //LHU Test
 
-        PC_in <= 21
+        PC_in <= 21;
 
         @ (posedge clk); // 0->1
 
@@ -156,7 +156,7 @@ module load_store_tb();
 
         //LB Test
 
-        PC_in <= 21
+        PC_in <= 21;
 
         @ (posedge clk); // 0->1
 
@@ -174,14 +174,16 @@ module load_store_tb();
         assert(mem_readenable == 1); // emem_readen
         assert(mem_address == 16); // emem_addr1
         
-        mem_readdata <= 32'hf9876593;
+        mem_readdata <= 32'hf9879563;
 
         @ (posedge clk); //2->0
 
-        assert(reg_writedata == 32'hffffff93);
+        assert(reg_writedata == 32'hffffff95);
         assert(reg_writeenable == 1); 
 
         //LBU Test
+
+
 
         //LWL Test
 
