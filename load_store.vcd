@@ -1,5 +1,5 @@
 $date
-	Tue Dec  7 20:32:37 2021
+	Thu Dec  9 15:43:16 2021
 $end
 $version
 	Icarus Verilog
@@ -73,36 +73,10 @@ $var reg 1 ! reg_writeenable $end
 $upscope $end
 $scope task resetVars $end
 $upscope $end
-$scope task runTest $end
-$var reg 32 N einstout1 [31:0] $end
-$var reg 32 O emem_addr0 [31:0] $end
-$var reg 32 P emem_addr1 [31:0] $end
-$var reg 4 Q emem_byteen0 [3:0] $end
-$var reg 4 R emem_byteen1 [3:0] $end
-$var reg 1 S emem_readen0 $end
-$var reg 1 T emem_readen1 $end
-$var reg 32 U emem_writedat1 [31:0] $end
-$var reg 1 V emem_writeen1 $end
-$var reg 4 W ereg_byteen2 [3:0] $end
-$var reg 32 X ereg_writedat2 [31:0] $end
-$var reg 1 Y ereg_writeen2 $end
-$upscope $end
 $upscope $end
 $enddefinitions $end
 #0
 $dumpvars
-xY
-bx X
-bx W
-xV
-bx U
-xT
-xS
-bx R
-bx Q
-bx P
-bx O
-bx N
 b0 M
 b1111 L
 b0 K
@@ -164,18 +138,6 @@ b110010 4
 b110010 @
 b1100 (
 b1100 G
-0Y
-b0 X
-b1111 W
-b110010 N
-b1111 R
-b1111 Q
-b0 U
-1T
-1S
-0V
-b1100 P
-b10100 O
 b1 ;
 b1 E
 1+
