@@ -159,12 +159,9 @@ class assembly_parser():
 			if not instruction:
 				continue
 	
-		self.print_memory_map()
-	
 	def parse_instruction(self, instruction, raw_args):
 		#parses instructions into hex
 		machine_code = self.instr_table[instruction]
-		print(str(machine_code) + "this is machine code")
 		arg_count = 0
 		offset = 'not_valid'
 		args = raw_args
@@ -186,15 +183,10 @@ class assembly_parser():
 			arg_count += 1
 		
 		#memory parsing for branch and jump instructions
-		print(args)
 		if (instruction == 'j' or instruction == 'jal' or instruction == 'jalr' or instruction == 'jr'):
 			args[0] = str(int(args[0])/4)
-		print(args)
 		for i in range(0,len(args)):
 			args[i] = str(hex(int(args[i])))
-		
-		print(instruction)
-		print(args)
 
 		#R-type instruction
 		if len(machine_code) == 6:
@@ -320,19 +312,6 @@ class assembly_parser():
 
 		if self.current_location % 4 == 0:
 			self.output_array[-1] += '		' + instruction.ljust(5) + ', '.join(arguments)
-
-	def print_memory_map(self):
-		#print memory
-		print("The memory is:\n")
-		keylist = self.system_memory.keys()
-		keylist.sort()
-		for key in keylist:
-			print("%s: %s" % (key, self.system_memory[key]))
-		
-		print("\n\n")
-		print('The memory in HEX:')
-		for output in self.output_array:
-			print(output)
 	
 	def output_memory_txt(self,title):
 		txt_object = open(title,"w+")
@@ -347,7 +326,7 @@ class assembly_parser():
 			self.current_location += self.word_size - self.current_location % self.word_size
 
 def usage():
-	print("Usage: " + sys.argv[0] + " -i <file1>")
+	print("Usage: " + sys.argv[0] + " -i <file1> <file2>")
 	sys.exit(1)
 
 def main(argv):
