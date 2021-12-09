@@ -34,7 +34,6 @@ reg[31:0] register[31:0];
 integer i;
 
 initial begin
-<<<<<<< Updated upstream
     for(i = 0; i<32; i++) begin
         register[i]= 0;
     end
@@ -42,14 +41,6 @@ end
 
 assign v0 = register[2];
 
-=======
-    for(i = 0; i < 32; i++) begin 
-        register[i] = 0;
-    end
-end
-
-assign v0 = register[2];
->>>>>>> Stashed changes
 always_comb begin
     //Read data:
     read_data_1 = addr_rs == 0 ? 0 : register[addr_rs];
@@ -79,10 +70,6 @@ always_comb begin
 end
 always_ff @(posedge clk) begin
     //Bit writes handled
-<<<<<<< Updated upstream
-=======
-    //v0 <= register[2];
->>>>>>> Stashed changes
     if(write_addr != 0 && write_enable == 1) begin
         case(byteenable) 
             4'b0001: register[write_addr][7:0] <= write_data[7:0];
