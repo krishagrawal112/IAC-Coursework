@@ -1,5 +1,9 @@
 $date
+<<<<<<< Updated upstream
 	Thu Dec  9 19:53:15 2021
+=======
+	Thu Dec  9 19:38:16 2021
+>>>>>>> Stashed changes
 $end
 $version
 	Icarus Verilog
