@@ -142,7 +142,45 @@ initial begin
     clk = 1;
     #1
     //8th instruction
+    clk = 0;
+    #1
+    clk = 1;
+    #1
+    clk = 0;
+    #1
+    clk = 1;
+    #1
+    clk = 0;
+    #1
+    clk = 1;
+    #1
+    //9th intruction
     assert(register_v0 == 3);
+    clk = 0;
+    #1
+    clk = 1;
+    #1
+    clk = 0;
+    #1
+    clk = 1;
+    #1
+    clk = 0;
+    #1
+    clk = 1;
+    #1
+    //extra just to see
+    clk = 0;
+    #1
+    clk = 1;
+    #1
+    clk = 0;
+    #1
+    clk = 1;
+    #1
+    clk = 0;
+    #1
+    clk = 1;
+    #1
     clk = 0;
     #1
     clk = 1;
