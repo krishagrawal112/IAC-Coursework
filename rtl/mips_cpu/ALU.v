@@ -230,8 +230,6 @@ always @* begin
         reg_writeenable = 1;
     end
     else if ((mthi==1) || (mtlo==1) )begin
-        reg_writeenable=1;
-
     end
    
   
@@ -246,11 +244,13 @@ always_ff @(posedge clk) begin
         lo <= datalo;
         hi <= datahi;
     end
-      else if (mthi==1 && state == 2) begin
+      else if (mthi==1 && state == 1) begin
         data<=hi;
+        reg_writeenable<=1;
     end
-    else if ((mtlo==1) && (state == 2)) begin
+    else if ((mtlo==1) && (state == 1)) begin
         data<=lo;
+        reg_writeenable<=1;
     end
 end
 endmodule
