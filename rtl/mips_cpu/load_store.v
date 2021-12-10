@@ -101,22 +101,22 @@ module load_store(
                     mem_writeenable = 0;
                 end
                 else if (lb == 1) begin //EXEC1 Load Byte
-                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0001 : ( (actual_address[1:0] == 2'b01) ? 4'b0010 : ( (actual_address[1:0] == 2'b10) ? 4'b0100 : 4'b1000 ) );
+                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b1000 : ( (actual_address[1:0] == 2'b01) ? 4'b0100 : ( (actual_address[1:0] == 2'b10) ? 4'b0010 : 4'b0001 ) );
                     mem_readenable = 1;
                     mem_writeenable = 0;
                 end
                 else if (lbu == 1) begin //EXEC1 Load Byte Unsigned
-                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0001 : (actual_address[1:0] == 2'b01) ? 4'b0010 : (actual_address[1:0] == 2'b10) ? 4'b0100 : 4'b1000;
+                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b1000 : (actual_address[1:0] == 2'b01) ? 4'b0100 : (actual_address[1:0] == 2'b10) ? 4'b0010 : 4'b0001;
                     mem_readenable = 1;
                     mem_writeenable = 0;
                 end
                 else if (lh == 1) begin //EXEC1 Load Halfword
-                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0011 : 4'b1100;
+                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b1100 : 4'b0011;
                     mem_readenable = 1;
                     mem_writeenable = 0;
                 end
                 else if (lhu == 1) begin //EXEC1 Load Halfword Unsigned
-                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b0011 : 4'b1100;
+                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b1100 : 4'b0011;
                     mem_readenable = 1;
                     mem_writeenable = 0;
                 end
@@ -152,19 +152,19 @@ module load_store(
                     case (actual_address[1:0])
                         2'b00: begin 
                         mem_writedata = {rt_data[7:0], 24'h000000};
-                        mem_byteenable = 4'b0001;
+                        mem_byteenable = 4'b1000;
                         end
                         2'b01: begin 
                         mem_writedata = {8'h00, rt_data[7:0], 16'h0000};
-                        mem_byteenable = 4'b0010;
+                        mem_byteenable = 4'b0100;
                         end
                         2'b10: begin 
                         mem_writedata = {16'h0000, rt_data[7:0], 8'h00};
-                        mem_byteenable = 4'b0100;
+                        mem_byteenable = 4'b0010;
                         end
                         2'b11: begin 
                         mem_writedata = {24'h000000, rt_data[7:0]};
-                        mem_byteenable = 4'b1000;
+                        mem_byteenable = 4'b0001;
                         end
                     endcase
                 end
