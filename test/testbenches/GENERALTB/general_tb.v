@@ -12,30 +12,30 @@ logic read;
 logic [31:0] writedata;
 logic [3:0] byteenable;
 
-
-
-// FOR AUTO-CLOCKED UNCOMMENT THIS
-/*
-initial begin
-    clk = 0;
-
-
-    // FOR WAVEFORMS UNCOMMENT THIS:
-    //$dumpfile("result.vcd");
-    //$dumpvars(0, <insert_module_name_here>);
-
-
-    repeat(10000) clk = !clk;
-    
-end
-*/
+//RAM
+logic[31:0] shifted_address;
+assign shifted_address = address - 32'hBFC00000;
+reg[31:0] memory [1000:0];
 
 initial begin
-    //Write tb here
+    $dumpfile("result.vcd");
+    $dumpvars(0, general_tb);
+
+    $readmemb("ram.txt", memory);
+
+    while(active) begin
+
+       clk = !clk; #10;
+
+        if (clk) begin
+            if(write) memory[shifted_address/4] <= writedata;
+            readdata <= address == 0 ? 0 : memory[shifted_address/4];
+        end
+        
+    end
+    assert(register_v0 == 32'hBFC00020);
+    //9th instruction
 end
-
-
-
 
 mips_cpu_bus m1(
     .reset(reset),
@@ -50,38 +50,5 @@ mips_cpu_bus m1(
     .byteenable(byteenable),
     .clk
 );
-ram r1(
-    .address(address),
-    .write_data(writedata),
-    .read_data(readdata),
-    .write_enable(write),
-    .clk(clk)
-);
-
-endmodule
-
-
-module RAM(
-    input logic[31:0] address,
-    input logic clk,
-    output logic[31:0] read_data,
-    input logic[31:0] write_data,
-    input logic write_enable
-);
-
-reg[31:0] memory [1073741823:0];
-integer i;
-initial begin
-    for(i = 0; i < 1073741824; i++) memory[i] = 0;
-
-    $readmemb("ram.txt", memory);
-    
-
-end
-
-always_ff @(posedge clk)begin
-    if(write_enable) memory[address/4] <= write_data;
-    read_data <= memory[address/4];
-end
 
 endmodule

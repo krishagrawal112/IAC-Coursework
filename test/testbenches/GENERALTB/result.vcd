@@ -1,0 +1,300 @@
+$date
+	Fri Dec 10 17:58:38 2021
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module general_tb $end
+$var wire 32 ! writedata [31:0] $end
+$var wire 1 " write $end
+$var wire 32 # shifted_address [31:0] $end
+$var wire 32 $ register_v0 [31:0] $end
+$var wire 1 % read $end
+$var wire 4 & byteenable [3:0] $end
+$var wire 32 ' address [31:0] $end
+$var wire 1 ( active $end
+$var reg 1 ) clk $end
+$var reg 32 * readdata [31:0] $end
+$var reg 1 + reset $end
+$var reg 1 , waitrequest $end
+$scope module m1 $end
+$var wire 1 ) clk $end
+$var wire 32 - readdata [31:0] $end
+$var wire 1 + reset $end
+$var wire 1 , waitrequest $end
+$var wire 1 . xorr $end
+$var wire 1 / xori $end
+$var wire 32 0 writedata [31:0] $end
+$var wire 1 1 write_enable_ld $end
+$var wire 1 2 write_enable_PC $end
+$var wire 1 3 write_enable_ALU $end
+$var wire 32 4 write_data_ld [31:0] $end
+$var wire 32 5 write_data_PC [31:0] $end
+$var wire 32 6 write_data_ALU [31:0] $end
+$var wire 1 " write $end
+$var wire 1 7 sw $end
+$var wire 1 8 subu $end
+$var wire 2 9 state [1:0] $end
+$var wire 1 : srlv $end
+$var wire 1 ; srl $end
+$var wire 1 < srav $end
+$var wire 1 = sra $end
+$var wire 1 > sltu $end
+$var wire 1 ? sltiu $end
+$var wire 1 @ slti $end
+$var wire 1 A slt $end
+$var wire 1 B sllv $end
+$var wire 1 C sll $end
+$var wire 5 D shamt [4:0] $end
+$var wire 1 E sh $end
+$var wire 1 F sb $end
+$var wire 5 G rt [4:0] $end
+$var wire 5 H rs [4:0] $end
+$var wire 32 I register_v0 [31:0] $end
+$var wire 1 % read $end
+$var wire 5 J rd [4:0] $end
+$var wire 1 K rType $end
+$var wire 1 L orr $end
+$var wire 1 M ori $end
+$var wire 1 N multu $end
+$var wire 1 O mult $end
+$var wire 1 P mtlo $end
+$var wire 1 Q mthi $end
+$var wire 1 R lwr $end
+$var wire 1 S lwl $end
+$var wire 1 T lw $end
+$var wire 1 U lui $end
+$var wire 1 V link $end
+$var wire 1 W lhu $end
+$var wire 1 X lh $end
+$var wire 1 Y lbu $end
+$var wire 1 Z lb $end
+$var wire 1 [ jr $end
+$var wire 1 \ jalr $end
+$var wire 1 ] jal $end
+$var wire 1 ^ j $end
+$var wire 32 _ instruction [31:0] $end
+$var wire 16 ` immediate [15:0] $end
+$var wire 1 a divu $end
+$var wire 1 b div $end
+$var wire 32 c data_rt [31:0] $end
+$var wire 32 d data_rs [31:0] $end
+$var wire 4 e byteenable_ld [3:0] $end
+$var wire 4 f byteenable [3:0] $end
+$var wire 1 g bne $end
+$var wire 1 h bltzal $end
+$var wire 1 i bltz $end
+$var wire 1 j blez $end
+$var wire 1 k bgtz $end
+$var wire 1 l bgezal $end
+$var wire 1 m bgez $end
+$var wire 1 n beq $end
+$var wire 1 o andr $end
+$var wire 1 p andi $end
+$var wire 1 q addu $end
+$var wire 32 r address [31:0] $end
+$var wire 1 s addiu $end
+$var wire 1 ( active $end
+$var wire 1 t STALL $end
+$var wire 32 u PC [31:0] $end
+$var wire 26 v J_address [25:0] $end
+$scope module NXT $end
+$var wire 32 w PC_out [31:0] $end
+$var wire 1 ) clk $end
+$var wire 1 + rst $end
+$var wire 32 x write_data_PC [31:0] $end
+$var wire 32 y sign_I_im [31:0] $end
+$var wire 32 z r_t [31:0] $end
+$var wire 32 { r_s [31:0] $end
+$var wire 1 t STALL $end
+$var wire 26 | J_intermidiete [25:0] $end
+$var wire 1 [ JR $end
+$var wire 1 \ JALR $end
+$var wire 1 ] JAL $end
+$var wire 1 ^ J $end
+$var wire 16 } I_intermidiete [15:0] $end
+$var wire 1 g BNE $end
+$var wire 1 h BLTZAL $end
+$var wire 1 i BLTZ $end
+$var wire 1 j BLEZ $end
+$var wire 1 k BGTZ $end
+$var wire 1 l BGEZAL $end
+$var wire 1 m BGEZ $end
+$var wire 1 n BEQ $end
+$var reg 32 ~ PC [31:0] $end
+$var reg 32 !" PC_next [31:0] $end
+$var reg 32 "" PC_next_next [31:0] $end
+$var reg 1 ( active $end
+$var reg 1 #" jump $end
+$var reg 1 $" jump_addition $end
+$var reg 32 %" jump_amount [31:0] $end
+$var reg 1 V link $end
+$var reg 2 &" state [1:0] $end
+$var reg 1 2 write_enable_PC $end
+$upscope $end
+$scope module a1 $end
+$var wire 32 '" data_hi [31:0] $end
+$var wire 32 (" data_lo [31:0] $end
+$var wire 32 )" zeroim [31:0] $end
+$var wire 1 . xorr $end
+$var wire 1 / xori $end
+$var wire 1 8 subu $end
+$var wire 1 : srlv $end
+$var wire 1 ; srl $end
+$var wire 1 < srav $end
+$var wire 1 = sra $end
+$var wire 1 > sltu $end
+$var wire 1 ? sltiu $end
+$var wire 1 @ slti $end
+$var wire 1 A slt $end
+$var wire 1 B sllv $end
+$var wire 1 C sll $end
+$var wire 32 *" signim [31:0] $end
+$var wire 32 +" signedim [31:0] $end
+$var wire 5 ," sa [4:0] $end
+$var wire 1 L orr $end
+$var wire 1 M ori $end
+$var wire 1 N multu $end
+$var wire 1 O mult $end
+$var wire 1 P mtlo $end
+$var wire 1 Q mthi $end
+$var wire 16 -" immediate [15:0] $end
+$var wire 1 a divu $end
+$var wire 1 b div $end
+$var wire 1 o andr $end
+$var wire 1 p andi $end
+$var wire 1 q addu $end
+$var wire 1 s addiu $end
+$var wire 32 ." Rtsigned [31:0] $end
+$var wire 32 /" Rtdata [31:0] $end
+$var wire 32 0" Rssigned [31:0] $end
+$var wire 32 1" Rsdata [31:0] $end
+$var reg 32 2" data [31:0] $end
+$var reg 32 3" datahi [31:0] $end
+$var reg 32 4" datalo [31:0] $end
+$var reg 32 5" hi [31:0] $end
+$var reg 32 6" lo [31:0] $end
+$var reg 64 7" multi [63:0] $end
+$var reg 1 3 reg_writeenable $end
+$upscope $end
+$scope module d1 $end
+$var wire 1 t STALL $end
+$var wire 1 q addu $end
+$var wire 1 o andr $end
+$var wire 1 m bgez $end
+$var wire 1 l bgezal $end
+$var wire 1 k bgtz $end
+$var wire 1 j blez $end
+$var wire 1 i bltz $end
+$var wire 1 h bltzal $end
+$var wire 1 b div $end
+$var wire 1 a divu $end
+$var wire 1 \ jalr $end
+$var wire 1 [ jr $end
+$var wire 1 Q mthi $end
+$var wire 1 P mtlo $end
+$var wire 1 O mult $end
+$var wire 1 N multu $end
+$var wire 1 L orr $end
+$var wire 1 C sll $end
+$var wire 1 B sllv $end
+$var wire 1 A slt $end
+$var wire 1 > sltu $end
+$var wire 1 = sra $end
+$var wire 1 < srav $end
+$var wire 1 ; srl $end
+$var wire 1 : srlv $end
+$var wire 1 8 subu $end
+$var wire 1 , waitrequest $end
+$var wire 1 . xorr $end
+$var wire 1 / xori $end
+$var wire 1 7 sw $end
+$var wire 1 ? sltiu $end
+$var wire 1 @ slti $end
+$var wire 5 8" shamt [4:0] $end
+$var wire 1 E sh $end
+$var wire 1 F sb $end
+$var wire 5 9" rt [4:0] $end
+$var wire 5 :" rs [4:0] $end
+$var wire 5 ;" rd [4:0] $end
+$var wire 1 K rType $end
+$var wire 1 M ori $end
+$var wire 6 <" opcode [5:0] $end
+$var wire 1 R lwr $end
+$var wire 1 S lwl $end
+$var wire 1 T lw $end
+$var wire 1 U lui $end
+$var wire 1 W lhu $end
+$var wire 1 X lh $end
+$var wire 1 Y lbu $end
+$var wire 1 Z lb $end
+$var wire 1 ] jal $end
+$var wire 1 ^ j $end
+$var wire 32 =" instruction [31:0] $end
+$var wire 16 >" immediate [15:0] $end
+$var wire 6 ?" funct [5:0] $end
+$var wire 1 g bne $end
+$var wire 1 n beq $end
+$var wire 1 p andi $end
+$var wire 26 @" address [25:0] $end
+$var wire 1 s addiu $end
+$var reg 1 A" s $end
+$upscope $end
+$scope module l1 $end
+$var wire 32 B" PC_in [31:0] $end
+$var wire 1 ) clk $end
+$var wire 32 C" instruction_out [31:0] $end
+$var wire 1 Z lb $end
+$var wire 1 Y lbu $end
+$var wire 1 X lh $end
+$var wire 1 W lhu $end
+$var wire 1 U lui $end
+$var wire 1 T lw $end
+$var wire 1 S lwl $end
+$var wire 1 R lwr $end
+$var wire 32 D" mem_readdata [31:0] $end
+$var wire 16 E" offset [15:0] $end
+$var wire 5 F" rt [4:0] $end
+$var wire 1 F sb $end
+$var wire 1 E sh $end
+$var wire 2 G" state [1:0] $end
+$var wire 1 7 sw $end
+$var wire 1 , waitrequest $end
+$var wire 32 H" rt_data [31:0] $end
+$var wire 32 I" rs_data [31:0] $end
+$var wire 32 J" offset_sign_extended [31:0] $end
+$var wire 32 K" mem_address [31:0] $end
+$var wire 32 L" actual_address [31:0] $end
+$var reg 32 M" IR [31:0] $end
+$var reg 4 N" mem_byteenable [3:0] $end
+$var reg 1 % mem_readenable $end
+$var reg 32 O" mem_writedata [31:0] $end
+$var reg 1 " mem_writeenable $end
+$var reg 4 P" reg_byteenable [3:0] $end
+$var reg 32 Q" reg_writedata [31:0] $end
+$var reg 1 1 reg_writeenable $end
+$upscope $end
+$scope module r1 $end
+$var wire 5 R" addr_rd [4:0] $end
+$var wire 5 S" addr_rs [4:0] $end
+$var wire 5 T" addr_rt [4:0] $end
+$var wire 4 U" byteenable_ld [3:0] $end
+$var wire 1 ) clk $end
+$var wire 1 V link $end
+$var wire 1 K rType $end
+$var wire 1 + rst $end
+$var wire 2 V" state [1:0] $end
+$var wire 32 W" v0 [31:0] $end
+$var wire 32 X" write_data_ALU [31:0] $end
+$var wire 32 Y" write_data_PC [31:0] $end
+$var wire 32 Z" write_data_ld [31:0] $end
+$var wire 1 3 write_enable_ALU $end
+$var wire 1 2 write_enable_PC $end
+$var wire 1 1 write_enable_ld $end
+$var reg 4 [" byteenable [3:0] $end
+$var reg 32 \" read_data_1 [31:0] $end
+$var reg 32 ]" read_data_2 [31:0] $end
+$var reg 5 ^" writ

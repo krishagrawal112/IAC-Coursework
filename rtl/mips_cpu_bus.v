@@ -14,6 +14,7 @@ module mips_cpu_bus(
         
     );
 //Internal wires
+
     logic[1:0] state; 
     logic [31:0] instruction;
     logic [4:0] rs;
@@ -204,7 +205,8 @@ next_instruction NXT(
     .link(link),
     .state(state),
     .write_data_PC(write_data_PC),
-    .PC_out(PC)
+    .PC_out(PC),
+    .active(active)
 );
 
 //ALU------------------------------------------------------------------------------------------------------------------------------------
