@@ -22,7 +22,8 @@ module next_instruction(
     output logic link,
     output logic[1:0] state,
     output logic[31:0] write_data_PC,
-    output logic[31:0] PC_out
+    output logic[31:0] PC_out,
+    output logic active
 );
 logic jump;
 logic[31:0] jump_amount;
@@ -43,6 +44,7 @@ initial begin
         PC <= 32'hBFC00000;
         PC_next <= 32'hBFC00004;
         PC_next_next <= 32'hBFC00008;
+        active = 1;
 end
 always_comb begin
     //Determining whether to jump or not and how much
@@ -129,7 +131,11 @@ always_ff @(posedge clk) begin
         PC<= PC_next;
         PC_next <= PC_next_next;
     end
-    if(STALL == 0) begin
+    if(PC == 0)begin
+        active = 0;
+        state = 0;
+    end
+    else if(STALL == 0) begin
         //State logic: If stall != 0, FETCH -> EXEC1 -> EXEC2 -> FETCH
        state <= (state == 0) ? 1 : (state == 1) ? 2 : 0; 
     end
@@ -139,6 +145,7 @@ always_ff @(posedge clk) begin
         PC <= 32'hBFC00000;
         PC_next <= 32'hBFC00004;
         PC_next_next <= 32'hBFC00008;
+        active = 1;
     end
 end
 endmodule
