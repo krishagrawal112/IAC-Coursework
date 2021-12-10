@@ -36,10 +36,10 @@ initial begin
        clk = !clk; #10;
        
 
-        if (clk) begin
-            if(write) memory[shifted_address/4] = writedata;
-            readdata = address == 0 ? 0 : memory[shifted_address/4];
-        end
+        @(posedge clk);
+        if(write) memory[shifted_address/4] = writedata;
+        readdata = address == 0 ? 0 : memory[shifted_address/4];
+        
         
     end
     assert(register_v0 == 32'hBFC00020);

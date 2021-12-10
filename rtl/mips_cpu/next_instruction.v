@@ -143,8 +143,8 @@ always_ff @(posedge clk) begin
     if(rst) begin
         state <= 0;
         PC <= 32'hBFC00000;
-        PC_next <= 32'hBFC00000;
-        PC_next_next <= 32'hBFC00004;
+        PC_next <= 32'hBFC00004;
+        PC_next_next <= 32'hBFC00008;
         active <= 1;
     end
 end

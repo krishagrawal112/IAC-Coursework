@@ -34,6 +34,15 @@ initial begin
     $dumpfile("result.vcd");
     $dumpvars(0, mult_tb);
     clk = 0;
+    #1
+    reset = 1;
+    #1
+    clk = 1;
+    #1
+    clk = 0;
+    #1
+    reset = 0;
+    #1
     repeat(100)
     begin
         clk = !clk;

@@ -229,28 +229,28 @@ always @* begin
         end
         reg_writeenable = 1;
     end
+    else if ((mthi==1) || (mtlo==1) )begin
+        reg_writeenable=1;
+
+    end
    
-    else if (mthi==1) begin
-        data=hi;
-        reg_writeenable=1;
-    end
-    else if (mtlo==1) begin
-        data=lo;
-        reg_writeenable=1;
-    end
+  
     else begin
         reg_writeenable=0;
     end
 
-    if((mult == 1) || (div == 1) || (divu == 1) || (multu == 1))begin
-        lo = datalo;
-        hi = datahi;
-    end
+
 end
 always_ff @(posedge clk) begin
     if(((mult == 1) || (div == 1) || (divu == 1) || (multu == 1)) && (state == 2'b10))begin
-        lo = datalo;
-        hi = datahi;
+        lo <= datalo;
+        hi <= datahi;
+    end
+      else if (mthi==1 && state == 2) begin
+        data<=hi;
+    end
+    else if ((mtlo==1) && (state == 2)) begin
+        data<=lo;
     end
 end
 endmodule
