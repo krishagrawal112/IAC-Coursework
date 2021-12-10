@@ -118,13 +118,13 @@ class assembly_parser():
 			if not len(line):
 				continue
 
-			self.fix_current_location()
+			# self.fix_current_location()
 
 			if '.end' in line:
 				continue
 
 			#make sure memory aligns with divisions of 4
-			self.fix_current_location()
+			# self.fix_current_location()
 			
 			self.current_location += 4
 	
@@ -136,7 +136,7 @@ class assembly_parser():
 			line = line.strip()
 			if not(len(line)):
 				continue
-			self.fix_current_location()
+			# self.fix_current_location()
 			#align memory to word size
 
 			instruction = line[0:line.find(' ')].strip().split(',')[0]
@@ -183,8 +183,6 @@ class assembly_parser():
 			arg_count += 1
 		
 		#memory parsing for branch and jump instructions
-		if (instruction == 'j' or instruction == 'jal' or instruction == 'jalr' or instruction == 'jr'):
-			args[0] = str(int(args[0])/4)
 		for i in range(0,len(args)):
 			args[i] = str(hex(int(args[i])))
 
@@ -233,7 +231,7 @@ class assembly_parser():
 			if len(args) == 3:
 				imm = hex(int(args[2],16))
 
-			elif imm is 'not_valid':
+			elif imm == 'not_valid':
 				imm = args[1]
 				rs = '0'
 
@@ -246,7 +244,7 @@ class assembly_parser():
 			rs_bin = self.hex2bin(machine_code[1],5)
 			rt_bin = self.hex2bin(machine_code[2],5)
 			im_bin = self.hex2bin(machine_code[3],16)
-
+			
 			#32 bit string
 			bit_string = op_bin + rs_bin + rt_bin + im_bin
 			self.store_bit_string(bit_string,instruction,raw_args)
@@ -322,7 +320,7 @@ class assembly_parser():
 
 	def fix_current_location(self):
 		#align memory locations with word size
-		if self.current_location % self.word_size is not 0:
+		if self.current_location % self.word_size != 0:
 			self.current_location += self.word_size - self.current_location % self.word_size
 
 def usage():
@@ -331,7 +329,7 @@ def usage():
 
 def main(argv):
 	files = argv
-	if len(files) is not 2:
+	if len(files) != 2:
 		usage()
 	
 	asm = open(files[0])

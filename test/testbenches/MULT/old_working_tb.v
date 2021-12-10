@@ -18,13 +18,9 @@ logic [3:0] byteenable;
 /*
 initial begin
     clk = 0;
-
-
     // FOR WAVEFORMS UNCOMMENT THIS:
     //$dumpfile("result.vcd");
     //$dumpvars(0, <insert_module_name_here>);
-
-
     repeat(10000) clk = !clk;
     
 end
@@ -128,7 +124,7 @@ initial begin
     #1
     //7th instruction
     assert(register_v0 == 1);
-    
+
     clk = 0;
     #1
     clk = 1;
@@ -237,10 +233,10 @@ module RAM(
 reg[31:0] memory [1073741823:0];
 integer i;
 initial begin
-    
+
 
     $readmemb("ram.txt", memory);
-    
+
 
 end
 

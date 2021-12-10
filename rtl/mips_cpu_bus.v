@@ -247,7 +247,9 @@ ALU a1(
     .reg_writeenable(write_enable_ALU),
     .data(write_data_ALU),
     .mtlo(mtlo),
-    .mthi(mthi)
+    .mthi(mthi),
+    .state(state),
+    .clk(clk)
 );
 //LOADSTORE-------------------------------------------------------------------------------------------------------------------------------
 

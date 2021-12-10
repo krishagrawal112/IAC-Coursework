@@ -1,4 +1,4 @@
-module tb2 ();
+module mult_tb ();
 
 logic clk;
 logic reset;
@@ -31,11 +31,23 @@ end
 */
 
 initial begin
-    $dumpfile("result2.vcd");
-    $dumpvars(0, tb2);
-
-    
-
+    $dumpfile("result.vcd");
+    $dumpvars(0, mult_tb);
+    clk = 0;
+    #1
+    reset = 1;
+    #1
+    clk = 1;
+    #1
+    clk = 0;
+    #1
+    reset = 0;
+    #1
+    repeat(100)
+    begin
+        clk = !clk;
+        #1;
+    end
 end
 
 
@@ -74,8 +86,9 @@ module RAM(
     input logic[31:0] write_data,
     input logic write_enable
 );
-
-reg[31:0] memory [1073741823:0];
+logic[31:0] shifted_address ;
+assign shifted_address = address - 32'hBFC00000;
+reg[31:0] memory [1000:0];
 integer i;
 initial begin
     
@@ -86,8 +99,8 @@ initial begin
 end
 
 always_ff @(posedge clk)begin
-    if(write_enable) memory[address/4] <= write_data;
-    read_data <= memory[address/4];
+    if(write_enable) memory[shifted_address/4] <= write_data;
+    read_data <= address == 0 ? 0 : memory[shifted_address/4];
 end
 
 endmodule

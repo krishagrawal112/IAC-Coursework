@@ -7,7 +7,8 @@ module ALU(
     
     
     input logic [4:0] sa,
-    
+    input logic clk,
+    input logic[1:0]  state,
     input logic addiu,
     input logic addu,
     input logic andr,
@@ -18,6 +19,10 @@ module ALU(
     input logic mult,
     input logic mthi,
     input logic mtlo,
+
+    //2 new instructions  to implement
+    //input logic mthi
+    //input logic mtlo
 
     input logic orr,
     input logic ori,
@@ -40,10 +45,7 @@ module ALU(
     
 
 );
-logic [31:0] data_lo;
-logic [31:0] data_hi;
-assign data_lo = lo;
-assign data_hi = hi;
+
  logic [31:0] signim;
  logic signed [31:0] signedim; 
  logic [31:0] zeroim;
@@ -51,20 +53,9 @@ assign data_hi = hi;
  reg[31:0] hi;
  logic[31:0] datalo;
  logic[31:0] datahi;
- logic [31:0] temp1;
- logic [31:0] temp2;
-
  logic [63:0] multi;
 
  
-
- 
-
-    //Create non GPR HI and LO registers
-    logic[31:0] HI;
-    logic[31:0] LO;
-    //Intermediary logic for mult operations
-    logic[63:0] mult_temp, multu_temp;
 
     //assign mult_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULT))) ? (regs[rs]*regs[rt]) : 0;
     //assign multu_temp = ((state==EXEC)&&((instr_opcode==OPCODE_R)&&(instr_function==FUNCTION_MULTU))) ? ($unsigned(regs[rs])*$unsigned(regs[rt])) : 0;
@@ -238,22 +229,28 @@ always @* begin
         end
         reg_writeenable = 1;
     end
+    else if ((mthi==1) || (mtlo==1) )begin
+        reg_writeenable=1;
+
+    end
    
-    else if (mthi==1) begin
-        data=hi;
-        reg_writeenable=1;
-    end
-    else if (mtlo==1) begin
-        data=lo;
-        reg_writeenable=1;
-    end
+  
     else begin
         reg_writeenable=0;
     end
 
-    if((mult == 1)|| (div == 1) || (divu == 1) || (multu == 1))begin
-        lo = datalo;
-        hi = datahi;
+
+end
+always_ff @(posedge clk) begin
+    if(((mult == 1) || (div == 1) || (divu == 1) || (multu == 1)) && (state == 2'b10))begin
+        lo <= datalo;
+        hi <= datahi;
+    end
+      else if (mthi==1 && state == 2) begin
+        data<=hi;
+    end
+    else if ((mtlo==1) && (state == 2)) begin
+        data<=lo;
     end
 end
 endmodule
