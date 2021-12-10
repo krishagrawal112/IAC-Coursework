@@ -44,6 +44,8 @@ initial begin
         end
     end
 
+    // Test Cases 
+
     if (register_v0 == 16) begin
         $display("Test Passed");
         $finish;
