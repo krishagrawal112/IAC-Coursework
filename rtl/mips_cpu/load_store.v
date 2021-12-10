@@ -49,7 +49,7 @@ module load_store(
     initial begin
 
         // Init Output Variables
-        
+        IR = 0;
        reg_byteenable = 4'b1111;
        reg_writeenable = 0;
        //reg_address = 0;
@@ -307,5 +307,8 @@ module load_store(
         
         endcase
     end
+    // always_ff @(posedge clk)begin
+    //     if(state == 1) IR <= mem_readdata;
+    // end
 
 endmodule

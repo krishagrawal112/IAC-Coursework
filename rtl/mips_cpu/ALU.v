@@ -8,7 +8,7 @@ module ALU(
     
     input logic [4:0] sa,
     input logic clk,
-    input logic state,
+    input logic[1:0]  state,
     input logic addiu,
     input logic addu,
     input logic andr,
