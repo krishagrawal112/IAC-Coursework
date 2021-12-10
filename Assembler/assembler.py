@@ -185,8 +185,6 @@ class assembly_parser():
 		#memory parsing for branch and jump instructions
 		for i in range(0,len(args)):
 			args[i] = str(hex(int(args[i])))
-		
-		print(instruction, args)
 
 		#R-type instruction
 		if len(machine_code) == 6:
@@ -246,8 +244,7 @@ class assembly_parser():
 			rs_bin = self.hex2bin(machine_code[1],5)
 			rt_bin = self.hex2bin(machine_code[2],5)
 			im_bin = self.hex2bin(machine_code[3],16)
-			print(im_bin)
-
+			
 			#32 bit string
 			bit_string = op_bin + rs_bin + rt_bin + im_bin
 			self.store_bit_string(bit_string,instruction,raw_args)
