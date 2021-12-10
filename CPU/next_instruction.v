@@ -99,7 +99,7 @@ always_comb begin
         jump =1;
         jump_addition = 1;
     end
-    else if(BLTZAL == 1 && r_s < 0)begin
+    else if(BLTZAL == 1 && r_s > 2147483647)begin
         jump_amount = sign_I_im;
         jump = 1;
         link = 1;
