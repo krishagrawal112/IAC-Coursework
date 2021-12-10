@@ -20,16 +20,25 @@ reg[31:0] memory [1000:0];
 initial begin
     $dumpfile("result.vcd");
     $dumpvars(0, general_tb);
-
+    clk = 0;
+    reset = 1;
+    #1;
+    clk = 1;
+    #1
+    clk = 0;
+    #1
+    reset = 0;
+    #1
     $readmemb("ram.txt", memory);
 
-    while(active) begin
-
+    //while(active) begin
+    repeat(100) begin
        clk = !clk; #10;
+       
 
         if (clk) begin
-            if(write) memory[shifted_address/4] <= writedata;
-            readdata <= address == 0 ? 0 : memory[shifted_address/4];
+            if(write) memory[shifted_address/4] = writedata;
+            readdata = address == 0 ? 0 : memory[shifted_address/4];
         end
         
     end

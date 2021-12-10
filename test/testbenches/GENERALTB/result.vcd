@@ -297,4 +297,174 @@ $var wire 1 1 write_enable_ld $end
 $var reg 4 [" byteenable [3:0] $end
 $var reg 32 \" read_data_1 [31:0] $end
 $var reg 32 ]" read_data_2 [31:0] $end
-$var reg 5 ^" writ
+$var reg 5 ^" write_addr [4:0] $end
+$var reg 32 _" write_data [31:0] $end
+$var reg 1 `" write_enable $end
+$var integer 32 a" i [31:0] $end
+$upscope $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b100000 a"
+0`"
+bx _"
+bx ^"
+bx ]"
+bx \"
+bx ["
+b0 Z"
+b10111111110000000000000000001000 Y"
+bx X"
+b0 W"
+b0 V"
+b1111 U"
+bx T"
+bx S"
+bx R"
+b0 Q"
+b1111 P"
+b0 O"
+b1111 N"
+bx M"
+bx L"
+b10111111110000000000000000000000 K"
+bx J"
+bx I"
+bx H"
+b0 G"
+bx F"
+bx E"
+bx D"
+bx C"
+b10111111110000000000000000000000 B"
+0A"
+bx @"
+bx ?"
+bx >"
+bx ="
+bx <"
+bx ;"
+bx :"
+bx 9"
+bx 8"
+bx 7"
+bx 6"
+bx 5"
+bx 4"
+bx 3"
+bx 2"
+bx 1"
+bx 0"
+bx /"
+bx ."
+bx -"
+bx ,"
+bx +"
+bx *"
+b0xxxxxxxxxxxxxxxx )"
+bx ("
+bx '"
+b0 &"
+b0 %"
+0$"
+0#"
+b10111111110000000000000000001000 ""
+b10111111110000000000000000000100 !"
+b10111111110000000000000000000000 ~
+bx }
+bx |
+bx {
+bx z
+bx00 y
+b10111111110000000000000000001000 x
+b10111111110000000000000000000000 w
+bx v
+b10111111110000000000000000000000 u
+0t
+xs
+b10111111110000000000000000000000 r
+xq
+xp
+xo
+xn
+xm
+xl
+xk
+xj
+xi
+xh
+xg
+b1111 f
+b1111 e
+bx d
+bx c
+xb
+xa
+bx `
+bx _
+x^
+x]
+x\
+x[
+xZ
+xY
+xX
+xW
+0V
+xU
+xT
+xS
+xR
+xQ
+xP
+xO
+xN
+xM
+xL
+xK
+bx J
+b0 I
+bx H
+bx G
+xF
+xE
+bx D
+xC
+xB
+xA
+x@
+x?
+x>
+x=
+x<
+x;
+x:
+b0 9
+x8
+x7
+bx 6
+b10111111110000000000000000001000 5
+b0 4
+03
+02
+01
+b0 0
+x/
+x.
+bx -
+x,
+x+
+bx *
+x)
+1(
+b10111111110000000000000000000000 '
+b1111 &
+1%
+b0 $
+b0 #
+0"
+b0 !
+$end
+#55875964170

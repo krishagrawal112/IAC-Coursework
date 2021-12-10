@@ -40,10 +40,10 @@ assign PC_out = PC;
 assign sign_I_im =  {{16{I_intermidiete[15]}}, I_intermidiete } << 2;
 //assign zero_I_im = {{16'h0000, I_intermidiete } << 2;
 initial begin 
-    state <= 0;
-        PC <= 32'hBFC00000;
-        PC_next <= 32'hBFC00004;
-        PC_next_next <= 32'hBFC00008;
+    state = 0;
+        PC = 32'hBFC00000;
+        PC_next = 32'hBFC00004;
+        PC_next_next = 32'hBFC00008;
         active = 1;
 end
 always_comb begin
@@ -132,8 +132,8 @@ always_ff @(posedge clk) begin
         PC_next <= PC_next_next;
     end
     if(PC == 0)begin
-        active = 0;
-        state = 0;
+        active <= 0;
+        state <= 0;
     end
     else if(STALL == 0) begin
         //State logic: If stall != 0, FETCH -> EXEC1 -> EXEC2 -> FETCH
@@ -143,9 +143,9 @@ always_ff @(posedge clk) begin
     if(rst) begin
         state <= 0;
         PC <= 32'hBFC00000;
-        PC_next <= 32'hBFC00004;
-        PC_next_next <= 32'hBFC00008;
-        active = 1;
+        PC_next <= 32'hBFC00000;
+        PC_next_next <= 32'hBFC00004;
+        active <= 1;
     end
 end
 endmodule
