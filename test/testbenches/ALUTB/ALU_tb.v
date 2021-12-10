@@ -7,6 +7,8 @@ module ALU_tb();
 
     
     logic [4:0] sa;
+    logic clk;
+    logic [1:0] state;
     
     logic addiu;
     logic addu;
@@ -46,6 +48,22 @@ module ALU_tb();
     initial begin
         $dumpfile("ALU_tb.vcd");
         $dumpvars(0, ALU_tb);
+        clk=0;
+        state=0;
+
+        
+        repeat (1000) begin
+            #10; clk = 1;
+            case(state)
+                2'b00: state = 2'b01;
+                2'b01: state = 2'b10;
+                2'b10: state = 2'b00;
+                default: state = 2'b00;
+            endcase 
+            #10; clk = 0;
+        end
+    end
+    initial begin
 
         addiu=1;Rtdata=5; immediate=1; Rsdata= 10;
         #1;
@@ -209,6 +227,7 @@ module ALU_tb();
         
     end
 
+
     ALU dut(
         .immediate(immediate),
         .Rtdata(Rtdata),
@@ -216,6 +235,8 @@ module ALU_tb();
         .Rssigned(Rssigned),
         .Rsdata(Rsdata),
         .sa(sa),
+        .clk(clk),
+        .state(state),
         .addiu(addiu),
         .addu(addu),
         .andr(andr),

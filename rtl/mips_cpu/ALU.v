@@ -7,7 +7,8 @@ module ALU(
     
     
     input logic [4:0] sa,
-    
+    input logic clk,
+    input logic state,
     input logic addiu,
     input logic addu,
     input logic andr,
@@ -242,6 +243,12 @@ always @* begin
     end
 
     if((mult == 1) || (div == 1) || (divu == 1) || (multu == 1))begin
+        lo = datalo;
+        hi = datahi;
+    end
+end
+always_ff @(posedge clk) begin
+    if(((mult == 1) || (div == 1) || (divu == 1) || (multu == 1)) && (state == 2'b10))begin
         lo = datalo;
         hi = datahi;
     end
