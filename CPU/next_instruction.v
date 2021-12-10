@@ -73,28 +73,28 @@ always_comb begin
         jump = 1;
         jump_addition = 1;
     end
-    else if(BGEZ == 1 && r_s >= 0)begin
+    else if(BGEZ == 1 && r_s < 2147483648)begin
         jump_amount = sign_I_im;
         jump = 1;
         jump_addition = 1;
     end
-    else if(BGEZAL == 1 && r_s >= 0)begin
+    else if(BGEZAL == 1 && r_s < 2147483648)begin
         jump_amount = sign_I_im;
         jump = 1;
         link = 1;
         jump_addition = 1;
     end
-    else if(BGTZ == 1 && r_s > 0)begin
+    else if(BGTZ == 1 && (r_s < 2147483648 && r_s != 0))begin
         jump_amount = sign_I_im;
         jump =1;
         jump_addition = 1;
     end
-    else if(BLEZ == 1 && r_s <= 0)begin
+    else if(BLEZ == 1 && (r_s == 0 || r_s > 2147483647))begin
         jump_amount = sign_I_im;
         jump =1;
         jump_addition = 1;
     end
-    else if(BLTZ == 1 && r_s < 0)begin
+    else if(BLTZ == 1 && r_s > 2147483647)begin
         jump_amount = sign_I_im;
         jump =1;
         jump_addition = 1;
