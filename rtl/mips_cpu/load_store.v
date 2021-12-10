@@ -151,19 +151,19 @@ module load_store(
                     mem_readenable = 0;
                     case (actual_address[1:0])
                         2'b00: begin 
-                        mem_writedata = {24'h000000, rt_data[7:0]};
+                        mem_writedata = {rt_data[7:0], 24'h000000};
                         mem_byteenable = 4'b0001;
                         end
                         2'b01: begin 
-                        mem_writedata = {16'h0000, rt_data[7:0], 8'h00};
+                        mem_writedata = {8'h00, rt_data[7:0], 16'h0000};
                         mem_byteenable = 4'b0010;
                         end
                         2'b10: begin 
-                        mem_writedata = {8'h00, rt_data[7:0], 16'h0000};
+                        mem_writedata = {16'h0000, rt_data[7:0], 8'h00};
                         mem_byteenable = 4'b0100;
                         end
                         2'b11: begin 
-                        mem_writedata = {rt_data[7:0], 24'h000000};
+                        mem_writedata = {24'h000000, rt_data[7:0]};
                         mem_byteenable = 4'b1000;
                         end
                     endcase
@@ -171,8 +171,8 @@ module load_store(
                 else if (sh == 1) begin //EXEC1 Store Halfword
                     mem_writeenable = 1;
                     mem_readenable = 0; 
-                    mem_writedata = (actual_address[1] == 0) ? {16'h0000, rt_data[15:0]} : {rt_data[15:0], 16'h0000};
-                    mem_byteenable = (actual_address[1] == 0) ? 4'b0011 : 4'b1100;
+                    mem_writedata = (actual_address[1] == 1) ? {16'h0000, rt_data[15:0]} : {rt_data[15:0], 16'h0000};
+                    mem_byteenable = (actual_address[1] == 1) ? 4'b0011 : 4'b1100;
                 end
             end
 
@@ -200,36 +200,36 @@ module load_store(
                         //Sign extended value of the required byte from mem_readdata
                         case (actual_address[1:0])
                             2'b00: begin
-                                if (mem_readdata[7] == 1) begin
-                                    reg_writedata = {24'hffffff, mem_readdata[7:0]};
+                                if (mem_readdata[31] == 1) begin
+                                    reg_writedata = {24'hffffff, mem_readdata[31:24]};
                                 end
                                 else begin
-                                    reg_writedata = {24'h000000, mem_readdata[7:0]};
+                                    reg_writedata = {24'h000000, mem_readdata[31:24]};
                                 end
                             end
                             2'b01: begin
-                                if (mem_readdata[15] == 1) begin
-                                    reg_writedata = {24'hffffff, mem_readdata[15:8]};
-                                end
-                                else begin
-                                    reg_writedata = {24'h000000, mem_readdata[15:8]};
-                                end
-                            end
-                            2'b10: begin
                                 if (mem_readdata[23] == 1) begin
                                     reg_writedata = {24'hffffff, mem_readdata[23:16]};
                                 end
                                 else begin
                                     reg_writedata = {24'h000000, mem_readdata[23:16]};
                                 end
+                            end
+                            2'b10: begin
+                                if (mem_readdata[15] == 1) begin
+                                    reg_writedata = {24'hffffff, mem_readdata[15:8]};
+                                end
+                                else begin
+                                    reg_writedata = {24'h000000, mem_readdata[15:8]};
+                                end
                                 
                             end
                             2'b11: begin
-                                if (mem_readdata[31] == 1) begin
-                                    reg_writedata = {24'hffffff, mem_readdata[31:24]};
+                                if (mem_readdata[7] == 1) begin
+                                    reg_writedata = {24'hffffff, mem_readdata[7:0]};
                                 end
                                 else begin
-                                    reg_writedata = {24'h000000, mem_readdata[31:24]};
+                                    reg_writedata = {24'h000000, mem_readdata[7:0]};
                                 end
                             end
                         endcase
@@ -240,10 +240,10 @@ module load_store(
                         reg_byteenable = 4'b1111;
                         //Zero extended value of the required byte from mem_readdata
                         case (actual_address[1:0])
-                            2'b00: reg_writedata = {24'h000000, mem_readdata[7:0]};
-                            2'b01: reg_writedata = {24'h000000, mem_readdata[15:8]};
-                            2'b10: reg_writedata = {24'h000000, mem_readdata[23:16]};
-                            2'b11: reg_writedata = {24'h000000, mem_readdata[31:24]};
+                            2'b00: reg_writedata = {24'h000000, mem_readdata[31:24]};
+                            2'b01: reg_writedata = {24'h000000, mem_readdata[23:16]};
+                            2'b10: reg_writedata = {24'h000000, mem_readdata[15:8]};
+                            2'b11: reg_writedata = {24'h000000, mem_readdata[7:0]};
                         endcase
                     end
                     else if (lh == 1) begin //EXEC2 Load Halfword 
@@ -251,21 +251,21 @@ module load_store(
                         //reg_address = rt;
                         reg_byteenable = 4'b1111;
                         //Sign extended value of the required halfword from mem_readdata
-                        case (actual_address[1:0])
-                            2'b00: begin
-                                if (mem_readdata[15] == 1) begin
-                                    reg_writedata = {16'hffff, mem_readdata[15:0]};
-                                end
-                                else begin
-                                    reg_writedata = {16'h0000, mem_readdata[15:0]};
-                                end
-                            end
-                            2'b10: begin
+                        case (actual_address[1])
+                            0: begin
                                 if (mem_readdata[31] == 1) begin
                                     reg_writedata = {16'hffff, mem_readdata[31:16]};
                                 end
                                 else begin
                                     reg_writedata = {16'h0000, mem_readdata[31:16]};
+                                end
+                            end
+                            1: begin
+                                if (mem_readdata[15] == 1) begin
+                                    reg_writedata = {16'hffff, mem_readdata[15:0]};
+                                end
+                                else begin
+                                    reg_writedata = {16'h0000, mem_readdata[15:0]};
                                 end
                             end
                         endcase
@@ -275,9 +275,9 @@ module load_store(
                         //reg_address = rt;
                         reg_byteenable = 4'b1111;
                         //Zero extended value of the required byte from mem_readdata
-                        case (actual_address[1:0])
-                            2'b00: reg_writedata = {16'h0000, mem_readdata[15:0]};
-                            2'b10: reg_writedata = {16'h0000, mem_readdata[31:16]};
+                        case (actual_address[1])
+                            0: reg_writedata = {16'h0000, mem_readdata[31:16]};
+                            1: reg_writedata = {16'h0000, mem_readdata[15:0]};
                         endcase
                         
                     end
@@ -288,19 +288,19 @@ module load_store(
                     else if (lwl == 1) begin
                         reg_writeenable = 1;
                         case(actual_address[1:0])
-                            2'b00: reg_writedata = {mem_readdata[7:0], rt_data[23:0]};
-                            2'b01: reg_writedata = {mem_readdata[15:0], rt_data[15:0]};
-                            2'b10: reg_writedata = {mem_readdata[23:0], rt_data[7:0]};
-                            2'b11: reg_writedata = mem_readdata;
+                            2'b00: reg_writedata = mem_readdata;
+                            2'b01: reg_writedata = {mem_readdata[23:0], rt_data[7:0]};
+                            2'b10: reg_writedata = {mem_readdata[15:0], rt_data[15:0]};
+                            2'b11: reg_writedata = {mem_readdata[7:0], rt_data[23:0]};
                         endcase
                     end
                     else if (lwr == 1) begin
                         reg_writeenable = 1;
                         case(actual_address[1:0])
-                            2'b00: reg_writedata = mem_readdata;
-                            2'b01: reg_writedata = {rt_data[31:24], mem_readdata[31:8]};
-                            2'b10: reg_writedata = {rt_data[31:16], mem_readdata[31:16]};
-                            2'b11: reg_writedata = {rt_data[31:8], mem_readdata[31:24]};
+                            2'b00: reg_writedata = {rt_data[31:8], mem_readdata[31:24]};
+                            2'b01: reg_writedata = {rt_data[31:16], mem_readdata[31:16]};
+                            2'b10: reg_writedata = {rt_data[31:24], mem_readdata[31:8]};
+                            2'b11: reg_writedata = mem_readdata;
                         endcase
                     end
                 end
