@@ -24,8 +24,10 @@ initial begin
 
     clk = 0;
 
+    reset = 1;
+
     repeat(1000) begin
-        #10; clk = !clk;
+        #10; reset = 0;; clk = !clk;
     end
 
     $fatal(1, "Timeout error");    
@@ -46,7 +48,7 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 16) begin
+    if (register_v0 == 1) begin
         $display("Test Passed");
         $finish;
     end
