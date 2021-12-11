@@ -1,10 +1,11 @@
 lui $t0, 0xBFC0
 lui $t1, 0x1111
-addiu $t1, $t1, 0x1111
-sw $t1, 0x0004($t0)
-sb $t1, 0x0008($t0)
-sb $t1, 0x000D($t0)
-sb $t1, 0x0012($t0)
-sb $t1, 0x0017($t0)
-sh $t1, 0x0018($t0)
-sh $t1, 0x001E($t0)
+addiu $t1, $t1, 0x8888
+sw $t1, 0x0100($t0)
+lw $v0, 0x0100($t0)
+lh $v0, 0x0100($t0)
+lw $v0, 0x0100($t0)
+lw $v0, 0x0100($t0)
+lw $v0, 0x0100($t0)
+lw $v0, 0x0100($t0)
+lw $v0, 0x0100($t0)
