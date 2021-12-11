@@ -51,7 +51,7 @@ initial begin
         $finish;
     end
     else begin
-        $fatal(1, "Failed.");
+        $fatal(1, "Test Failed.");
     end
 
 end
