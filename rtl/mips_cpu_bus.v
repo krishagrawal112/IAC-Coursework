@@ -161,6 +161,8 @@ module mips_cpu_bus(
 regfile r1(
     .clk(clk),
     .rst(reset),
+    .mthi(mthi),
+    .mtlo(mtlo),
     .addr_rs(rs),
     .addr_rt(rt),
     .addr_rd(rd),
