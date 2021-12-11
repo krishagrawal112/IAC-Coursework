@@ -46,7 +46,7 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 32'hBFC00000) begin
+    if (register_v0 == 2) begin
         $display("Test Passed");
         $finish;
     end
