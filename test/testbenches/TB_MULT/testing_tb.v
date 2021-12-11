@@ -15,12 +15,12 @@ logic [3:0] byteenable;
 //RAM
 logic[31:0] shifted_address;
 assign shifted_address = address - 32'hBFC00000;
-reg[31:0] memory [0:1000];
+reg[31:0] memory [1000:0];
 
 initial begin
     $dumpfile("result.vcd");
     $dumpvars(0, testing_tb);
-    $readmemb("ram.txt", memory, 0, 1);
+    $readmemb("ram.txt", memory);
 
     clk = 0;
 
@@ -46,7 +46,7 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 16) begin
+    if (register_v0 == 32'hBFC00000) begin
         $display("Test Passed");
         $finish;
     end

@@ -20,7 +20,7 @@ reg[31:0] memory [0:1000];
 initial begin
     $dumpfile("result.vcd");
     $dumpvars(0, testing_tb);
-    $readmemb("ram.txt", memory, 0, 1);
+    $readmemb("ram.txt", memory);
 
     clk = 0;
 
