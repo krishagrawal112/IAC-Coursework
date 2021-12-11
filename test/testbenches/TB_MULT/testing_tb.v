@@ -46,7 +46,7 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 2) begin
+    if (register_v0 == 1) begin
         $display("Test Passed");
         $finish;
     end
