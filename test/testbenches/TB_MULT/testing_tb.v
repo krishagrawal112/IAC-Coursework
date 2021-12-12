@@ -49,11 +49,11 @@ initial begin
     // Test Cases 
 
     if (register_v0 == 1) begin
-        $display("Test Passed");
+        $display("MULT Test Passed");
         $finish;
     end
     else begin
-        $fatal(1, "Test Failed.");
+        $fatal(1, "MULT Test Failed.");
     end
 
 end
