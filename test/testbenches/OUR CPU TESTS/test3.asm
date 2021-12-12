@@ -13,7 +13,7 @@ addiu $t1, $t1, 0x0004
 and $v0, $v0, $t1
 xor $v0, $v0, $t1
 addu $t2, $v0, $zero
-sll $v0, $v0, 0x1B
+sll $v0, $v0, 0x1E
 sra $v0, $v0, 0x2
 srav, $v0, $v0, $t2
 srl $v0, $v0, 0x4
