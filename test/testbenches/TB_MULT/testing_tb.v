@@ -15,7 +15,7 @@ logic [3:0] byteenable;
 //RAM
 logic[31:0] shifted_address;
 assign shifted_address = address - 32'hBFC00000;
-reg[31:0] memory [1000:0];
+reg[31:0] memory [0:1000];
 
 initial begin
     $dumpfile("result.vcd");
