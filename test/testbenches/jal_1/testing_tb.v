@@ -30,7 +30,7 @@ initial begin
         #10; reset = 0;; clk = !clk;
     end
 
-    $fatal(1, "Timeout error");    
+    $fatal(1);    
 end
 
 initial begin
@@ -42,19 +42,18 @@ initial begin
                 memory[shifted_address/4] <= writedata;
             end
 
-            readdata <= (address == 0) ? 0 : memory[shifted_address/4];
+            readdata <= (address == 0) ? 0 : (address == 12) ? memory[1] : (address == 16) ? memory[2] : memory[shifted_address/4];
         end
     end
 
     // Test Cases 
-    if (register_v0 == 28) begin
+
+    if (register_v0 == 32'hBFC00008) begin
         $finish;
     end
     else begin
         $fatal(2);
     end
-    
-    
 
 end
 
