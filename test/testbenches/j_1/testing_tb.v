@@ -48,7 +48,7 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 1) begin
+    if (register_v0 == 2) begin
         $finish;
     end
     else begin

@@ -42,12 +42,12 @@ initial begin
                 memory[shifted_address/4] <= writedata;
             end
 
-            readdata <= (address == 0) ? 0 : (address == 12) ? memory[1] : (address == 16) ? memory[2] : memory[shifted_address/4];
+            readdata <= (address == 0) ? 0 : memory[shifted_address/4];
         end
     end
 
     // Test Cases 
-
+    $display("%d", register_v0);
     if (register_v0 == 32'hBFC00008) begin
         $finish;
     end
