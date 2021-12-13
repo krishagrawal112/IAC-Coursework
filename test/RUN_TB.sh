@@ -29,11 +29,7 @@ iverilog -g2012 -Wall -s testing_tb -o $test_bench_DIRECTORY/testing_tb_out $tes
 
 if [ "$?" -eq "1" ]
 then
-    error="Timeout"
-    outcome="Fail"
-elif [ "$?" -eq "2" ]
-then
-    error="Incorrect Output Value"
+    error="Incorrect Output Value / Timeout"
     outcome="Fail"
 else 
     outcome="Pass"
