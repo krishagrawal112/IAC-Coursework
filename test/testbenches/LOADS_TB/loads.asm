@@ -3,40 +3,61 @@ lui $t1, 0x1111
 addiu $t1, $t1, 0x8888
 sw $t1, 0x0100($t0)
 lw $v0, 0x0100($t0)
+sw $v0, 0x0104($t0)
 lh $v0, 0x0100($t0)
+sw $v0, 0x0108($t0)
 lh $v0, 0x0102($t0)
+sw $v0, 0x010C($t0)
 lhu $v0, 0x0100($t0)
+sw $v0, 0x0110($t0)
 lhu $v0, 0x0102($t0)
+sw $v0, 0x0114($t0)
 lb $v0, 0x0100($t0)
+sw $v0, 0x0118($t0)
 lb $v0, 0x0101($t0)
+sw $v0, 0x011C($t0)
 lb $v0, 0x0102($t0)
+sw $v0, 0x0120($t0)
 lb $v0, 0x0103($t0)
+sw $v0, 0x0124($t0)
 lbu $v0, 0x0100($t0)
+sw $v0, 0x0128($t0)
 lbu $v0, 0x0101($t0)
+sw $v0, 0x012C($t0)
 lbu $v0, 0x0102($t0)
+sw $v0, 0x0130($t0)
 lbu $v0, 0x0103($t0)
+sw $v0, 0x0134($t0)
 lui $v0, 0xEEEE
 lwl $v0, 0x0103($t0)
+sw $v0, 0x0138($t0)
 lui $v0, 0xEEEE
 lwl $v0, 0x0102($t0)
+sw $v0, 0x013C($t0)
 lui $v0, 0xEEEE
 addiu $v0, $v0, 0xEEEE
 lwl $v0, 0x0101($t0)
+sw $v0, 0x0140($t0)
 lui $v0, 0xEEEE
 addiu $v0, $v0, 0xEEEE
 lwl $v0, 0x0100($t0)
+sw $v0, 0x0144($t0)
 lui $v0, 0xEEEE
 addiu $v0, $v0, 0xEEEE
 lwr $v0, 0x0100($t0)
+sw $v0, 0x0148($t0)
 lui $v0, 0xEEEE
 addiu $v0, $v0, 0xEEEE
 lwr $v0, 0x0101($t0)
+sw $v0, 0x014C($t0)
 lui $v0, 0xEEEE
 addiu $v0, $v0, 0xEEEE
 lwr $v0, 0x0102($t0)
+sw $v0, 0x0150($t0)
 lui $v0, 0xEEEE
 addiu $v0, $v0, 0xEEEE
 lwr $v0, 0x0103($t0)
+sw $v0, 0x0154($t0)
 j 0x000000
 
 

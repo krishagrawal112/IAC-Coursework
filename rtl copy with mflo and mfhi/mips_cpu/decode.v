@@ -39,6 +39,8 @@ module decode (
     output logic lwr,
     output logic mthi,
     output logic mtlo,
+    output logic mfhi, //ADDED
+    output logic mflo, //ADDED
     output logic mult,
     output logic multu,
     output logic orr,
@@ -110,6 +112,8 @@ assign lwl = (opcode == 6'b100010);
 assign lwr = (opcode == 6'b100110);
 assign mthi = ((rType == 1) && (funct == 6'b010001));
 assign mtlo = ((rType == 1) && (funct == 6'b010011));
+assign mfhi = ((rType == 1) && (funct == 6'b010000)); //ADDED
+assign mflo = ((rType == 1) && (funct == 6'b010010)); //ADDED
 assign mult = ((rType == 1) && (funct == 6'b011000));
 assign multu = ((rType == 1) && (funct == 6'b011001));
 assign orr = ((rType == 1) && (funct == 6'b100101));
