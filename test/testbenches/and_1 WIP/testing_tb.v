@@ -48,7 +48,7 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 0) begin
+    if (register_v0 == 131070) begin
         $finish;
     end
     else begin
