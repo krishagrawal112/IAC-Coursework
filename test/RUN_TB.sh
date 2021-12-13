@@ -3,15 +3,12 @@
 # USAGE : ./RUN_TB {TB_FOLDER_NAME} {path_to_rtl} {ECHO_EN}
 
 curr_TB=$1
+rtl_DIRECTORY=$2
 progress_msg=$3
 
 test_bench_DIRECTORY=`pwd`/testbenches/$curr_TB
-rtl_DIRECTORY=$2
 
 emptyChar=" "
-
-echo $test_bench_DIRECTORY
-echo rtl_DIRECTORY
 
 if [ -d "$rtl_DIRECTORY/mips_cpu" ]
 then
