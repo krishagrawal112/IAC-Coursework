@@ -121,8 +121,15 @@ always_comb begin
     if(link == 1) write_enable_PC = 1;
     else if(JALR == 1) write_enable_PC = 1;
     else write_enable_PC = 0;
-    if(jump == 1) PC_next_next = jump_addition ? PC + 4 + jump_amount : jump_amount;
-    else PC_next_next = PC_next + 4;
+
+    if((jump == 1)&&(jump_addition == 1)&&(state == 2)) begin
+         PC_next_next =  PC + 4 + jump_amount ;
+    end
+    else if(((jump == 1)&&(jump_addition == 0))&&(state == 2)) begin
+        PC_next =  jump_amount;
+        PC_next_next = jump_amount + 4;
+    end
+    else if(state == 2)PC_next_next = PC_next + 4;
  
 end
 always_ff @(posedge clk) begin
