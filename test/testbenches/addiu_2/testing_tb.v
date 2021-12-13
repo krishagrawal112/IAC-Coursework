@@ -30,7 +30,7 @@ initial begin
         #10; reset = 0;; clk = !clk;
     end
 
-    $fatal(1, "Timeout error");    
+    $fatal(1);    
 end
 
 initial begin
@@ -48,12 +48,11 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 1) begin
-        $display("MULT Test Passed");
+    if (register_v0 == 65535) begin
         $finish;
     end
     else begin
-        $fatal(1, "MULT Test Failed.");
+        $fatal(2);
     end
 
 end

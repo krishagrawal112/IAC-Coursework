@@ -3,6 +3,5 @@
 
 rtl_DIRECTORY=$1
 
-echo "Mult Test"
-./RUN_TB.sh TB_MULT $rtl_DIRECTORY 0
-#./RUN_TB.sh FIBONACCI_TB $rtl_DIRECTORY 0
+./RUN_TB.sh addiu_1 $1
+./RUN_TB.sh addiu_2 $1
