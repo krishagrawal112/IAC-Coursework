@@ -19,11 +19,8 @@ module ALU(
     input logic mult,
     input logic mthi,
     input logic mtlo,
-
-    //2 new instructions  to implement
-    //input logic mthi
-    //input logic mtlo
-
+    input logic mfhi, //ADDED
+    input logic mflo, //ADDED
     input logic orr,
     input logic ori,
     input logic sll,
@@ -229,10 +226,12 @@ always @* begin
         end
         reg_writeenable = 1;
     end
-    else if ((mthi==1) || (mtlo==1) )begin
+    else if ((mfhi==1) || (mflo==1)) begin
+        
     end
-   
-  
+    else if ((mtlo == 1) || (mthi == 1)) begin 
+        reg_writeenable = 0; //CHANGED
+    end
     else begin
         reg_writeenable=0;
     end
@@ -244,11 +243,17 @@ always_ff @(posedge clk) begin
         lo <= datalo;
         hi <= datahi;
     end
-      else if (mthi==1 && state == 1) begin
+      else if ((mthi==1) && (state == 1)) begin
+        hi <= Rsdata; //CHANGED
+    end
+    else if ((mtlo==1) && (state == 1)) begin
+        lo <= Rsdata; //CHANGED
+    end
+    else if (mfhi==1 && state == 1) begin
         data<=hi;
         reg_writeenable<=1;
     end
-    else if ((mtlo==1) && (state == 1)) begin
+    else if ((mflo==1) && (state == 1)) begin
         data<=lo;
         reg_writeenable<=1;
     end

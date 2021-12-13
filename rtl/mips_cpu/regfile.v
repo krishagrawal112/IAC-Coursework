@@ -7,8 +7,6 @@ When you want to write something you need to input write_data_ld, byteeenable_ld
 module regfile (
     input logic clk,
     input logic rst,
-    input logic mthi,
-    input logic mtlo,
     input logic[4:0] addr_rs,
     input logic[4:0] addr_rt,
     input logic write_enable_ld,
@@ -51,15 +49,9 @@ always_comb begin
     //Determining where to write, and what to write
     if(write_enable_ALU == 1 && state == 2)begin
         write_enable = 1;
-        if ((mthi==1) || (mtlo==1)) begin
-            write_addr= addr_rs;
-            write_data= write_data_ALU;
-        end
-        else begin
-            write_addr = rType ? addr_rd : addr_rt;
-            write_data = write_data_ALU;
-            byteenable = 4'b1111;
-        end
+        write_addr = rType ? addr_rd : addr_rt;
+        write_data = write_data_ALU;
+        byteenable = 4'b1111;
     end
     else if(write_enable_ld == 1)begin
         write_enable = 1;

@@ -67,6 +67,8 @@ module mips_cpu_bus(
      logic lwr;
      logic mthi;
      logic mtlo;
+     logic mfhi; //ADDED
+     logic mflo; //ADDED
      logic mult;
      logic multu;
      logic orr;
@@ -134,6 +136,8 @@ module mips_cpu_bus(
      .lwr(lwr),
      .mthi(mthi),
      .mtlo(mtlo),
+     .mfhi(mfhi), //ADDED
+     .mflo(mflo), //ADDED
      .mult(mult),
      .multu(multu),
      .orr(orr),
@@ -161,8 +165,6 @@ module mips_cpu_bus(
 regfile r1(
     .clk(clk),
     .rst(reset),
-    .mthi(mthi),
-    .mtlo(mtlo),
     .addr_rs(rs),
     .addr_rt(rt),
     .addr_rd(rd),
@@ -250,6 +252,8 @@ ALU a1(
     .data(write_data_ALU),
     .mtlo(mtlo),
     .mthi(mthi),
+    .mfhi(mfhi), //ADDED
+    .mflo(mflo), //ADDED
     .state(state),
     .clk(clk)
 );
