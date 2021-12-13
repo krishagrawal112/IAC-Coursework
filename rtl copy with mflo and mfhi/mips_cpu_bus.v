@@ -253,7 +253,7 @@ ALU a1(
     .mtlo(mtlo),
     .mthi(mthi),
     .mfhi(mfhi), //ADDED
-    .mflo(mflo) //ADDED
+    .mflo(mflo), //ADDED
     .state(state),
     .clk(clk)
 );
