@@ -80,8 +80,8 @@ JALR s3 s4
 BEQ s5 s4 0x002
 addiu v0 v0 0x0001 // JALR fails v0=27
 j 0
-addu v0 v0 0x0001
 JAL 0
+addu v0 v0 0x0001
 j 0 // Exit address
 sll zero zero 0x0000
 addiu t5 ra 0x0004 // Return test

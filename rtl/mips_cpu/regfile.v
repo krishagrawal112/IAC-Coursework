@@ -59,7 +59,7 @@ always_comb begin
         write_data = write_data_ld;
         byteenable = byteenable_ld;
     end
-    else if(write_enable_PC == 1)begin
+    else if(write_enable_PC == 1 && state == 2)begin
         write_enable = 1;
         write_data = write_data_PC;
         write_addr = link ? 31 : addr_rd;

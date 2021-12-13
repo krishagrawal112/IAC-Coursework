@@ -30,7 +30,7 @@ initial begin
         #10; reset = 0;; clk = !clk;
     end
 
-    $fatal(1, "Timeout error");    
+    $fatal(1);    
 end
 
 initial begin
@@ -47,14 +47,13 @@ initial begin
     end
 
     // Test Cases 
-    if (register_v0 == 28) begin
+
+    if (register_v0 == 2) begin
         $finish;
     end
     else begin
         $fatal(2);
     end
-    
-    
 
 end
 
