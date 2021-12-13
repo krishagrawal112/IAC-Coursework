@@ -1,15 +1,17 @@
 #!/bin/bash
 
-curr_TB=$1
-progress_msg=$2
+# USAGE : ./RUN_TB {TB_FOLDER_NAME} {path_to_rtl} {ECHO_EN}
 
-base_DIRECTORY=`dirname \`pwd\``
-test_bench_DIRECTORY=$base_DIRECTORY/test/testbenches/$curr_TB
-rtl_DIRECTORY=$base_DIRECTORY/rtl
+curr_TB=$1
+progress_msg=$3
+
+test_bench_DIRECTORY=`pwd`/testbenches/$curr_TB
+rtl_DIRECTORY=$2
 
 emptyChar=" "
 
-
+echo $test_bench_DIRECTORY
+echo rtl_DIRECTORY
 
 if [ -d "$rtl_DIRECTORY/mips_cpu" ]
 then
@@ -23,6 +25,7 @@ if [ "$progress_msg" = "1" ]
 then
     echo "Compiling: "${curr_TB}
 fi
+
 cd $test_bench_DIRECTORY 
 
 iverilog -g2012 -Wall -s testing_tb -o $test_bench_DIRECTORY/testing_tb_out $test_bench_DIRECTORY/testing_tb.v $files
