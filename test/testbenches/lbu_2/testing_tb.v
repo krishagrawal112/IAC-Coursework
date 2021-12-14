@@ -39,10 +39,32 @@ initial begin
         
         @ (posedge clk) begin
             if (write) begin
-                memory[shifted_address/4] <= writedata;
+                if (byteenable[3]==1) begin
+                    memory[shifted_address/4][31:24] <= writedata[31:24];
+                end
+                if (byteenable[2]==1) begin
+                    memory[shifted_address/4][23:16] <= writedata[23:16];
+                end
+                if (byteenable[1]==1) begin
+                    memory[shifted_address/4][15:8] <= writedata[15:8];
+                end
+                if (byteenable[0]==1) begin
+                    memory[shifted_address/4][7:0] <= writedata[7:0];
+                end
             end
 
-            readdata <= (address == 0) ? 0 : memory[shifted_address/4];
+            if (byteenable[3]==1) begin
+                readdata[31:24] <= (address == 0) ? 0 : memory[shifted_address/4][31:24];
+            end
+            if (byteenable[2]==1) begin
+                readdata[23:16] <= (address == 0) ? 0 : memory[shifted_address/4][23:16];
+            end
+            if (byteenable[1]==1) begin
+                readdata[15:8] <= (address == 0) ? 0 : memory[shifted_address/4][15:8];
+            end
+            if (byteenable[0]==1) begin
+                readdata[7:0] <= (address == 0) ? 0 : memory[shifted_address/4][7:0];
+            end
         end
     end
 
