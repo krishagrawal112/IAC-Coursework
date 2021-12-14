@@ -48,7 +48,7 @@ initial begin
 
     // Test Cases 
 
-    if (resgister_v0==)begin
+    if (register_v0 == 32'h0000fff0)begin
         $display("ALU Test Passed");
         $finish;
     end
