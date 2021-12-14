@@ -5,8 +5,6 @@
 curr_TB=$1
 rtl_DIRECTORY=$2
 
-inst=
-
 outcome=""
 error=""
 
