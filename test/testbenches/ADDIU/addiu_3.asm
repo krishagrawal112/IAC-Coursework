@@ -1,3 +1,1 @@
-lui $t0, 0xBFC0
-lui $v0, 0x1111
 addiu $v0, $v0, 0x2222
