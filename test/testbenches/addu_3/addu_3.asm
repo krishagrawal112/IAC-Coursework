@@ -1,5 +1,0 @@
-lui $t0, 0x1111
-addiu, $t0, $t0, 0x2222
-lui $t0, 0x2222
-addiu, $t0, $t0, 0x1111
-j 0x0
