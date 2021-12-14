@@ -41,14 +41,14 @@ initial begin
             if (write) begin
                 memory[shifted_address/4] <= writedata;
             end
-
+            
             readdata <= (address == 0) ? 0 : memory[shifted_address/4];
         end
     end
 
     // Test Cases 
 
-    if (register_v0 == 255) begin
+    if (register_v0 == 32'b11111111111111111000000100000010) begin
         $finish;
     end
     else begin
