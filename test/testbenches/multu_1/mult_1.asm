@@ -1,0 +1,11 @@
+lui $t0 0xBFC0
+lui $t1 0x1234
+addiu $t1 $t1 0x5678
+lui $t2 0x9876
+addiu $t2 $t2 0x5432
+mult $t1 $t2
+mfhi $t1
+mflo $t2
+sw $t1 0x100($t0)
+sw $t2 0x104($t0)
+j 0x0
