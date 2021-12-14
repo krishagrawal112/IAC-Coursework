@@ -48,7 +48,7 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 256) begin
+    if (memory[64] == 32'h11223344) begin
         $finish;
     end
     else begin

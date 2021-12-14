@@ -48,7 +48,7 @@ initial begin
 
     // Test Cases 
 
-    if ((memory[66]  == 32'h00000011) && (memory[66]  == 32'h00000011) && (memory[67]  == 32'h00000022) && (memory[68]  == 32'h00000033) && (memory[69]  == 32'h00000044) && (memory[70]  == 32'hFFFFFFFF) && (memory[71]  == 32'hFFFFFFEE) && (memory[72]  == 32'hFFFFFFDD) && (memory[73]  == 32'hFFFFFFCC)) begin
+    if ((memory[66]  == 32'h00000011) && (memory[67]  == 32'h00000022) && (memory[68]  == 32'h00000033) && (memory[69]  == 32'h00000044) && (memory[70]  == 32'hFFFFFFFF) && (memory[71]  == 32'hFFFFFFEE) && (memory[72]  == 32'hFFFFFFDD) && (memory[73]  == 32'hFFFFFFCC)) begin
         $finish;
     end
     else begin

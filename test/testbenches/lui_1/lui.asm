@@ -1,0 +1,2 @@
+lui $v0, 0xFFFF
+j 0x0

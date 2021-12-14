@@ -48,7 +48,7 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 256) begin
+    if (register_v0 == 32'hffff0000) begin
         $finish;
     end
     else begin
