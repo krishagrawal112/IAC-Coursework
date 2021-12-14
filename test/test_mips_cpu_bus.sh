@@ -3,7 +3,10 @@
 
 rtl_DIRECTORY=$1
 
-
+for foldername in ./testbenches/*
+do
+        echo "$foldername"
+done
 
 #./RUN_TB.sh addiu_1 $1
 #./RUN_TB.sh addiu_2 $1
