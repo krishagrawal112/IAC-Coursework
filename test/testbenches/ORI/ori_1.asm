@@ -1,0 +1,3 @@
+lui $t0, 0xffe1
+
+j 0x0
