@@ -1,0 +1,3 @@
+addiu $t0, $t0, 0xFF00
+andi $v0, $t1, 0xF0F0
+j 0x0

@@ -1,0 +1,4 @@
+lui $t0, 0x98fe
+addiu $t0, $t0, 0xF0F0
+andi $vo, $t0, 0xFF00
+j 0x0

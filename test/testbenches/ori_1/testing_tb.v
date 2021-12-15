@@ -48,12 +48,11 @@ initial begin
 
     // Test Cases 
 
-    if (resgister_v0==)begin
-        $display("ALU Test Passed");
+    if (resgister_v0==32'h0000fff0)begin
         $finish;
     end
     else begin
-        $fatal(1, "ALU Test Failed.");
+        $fatal(2);
     end
 
 end

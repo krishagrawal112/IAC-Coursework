@@ -48,7 +48,7 @@ initial begin
 
     // Test Cases 
 
-    if (resgister_v0==32'h00000ff0)begin
+    if ((resgister_v0==32'h00000001) && (memory[64] == 32'hfffffffe))begin
         $finish;
     end
     else begin

@@ -1,0 +1,23 @@
+lui $t0,0xBFC0
+
+lui $t1, 0x0f00
+addiu $t1, $t1 0x658f
+sltiu $v0, $t1, 0x8001
+sw $v0, 0x4($t0) //1
+
+lui $t2, 0xffff
+addiu $t2 0x8001
+sltiu $v0, $t2, 0x8000
+sw $v0, 0x8($t0) //0
+
+addiu $t3, $t3, 0xf340
+sltiu $v0, $t3, 0x7f8e
+sw $v0, 0xC ($t0) //0
+
+lui $t4 0xffff
+addui $t4, $t4, 0x8000
+sltui $v0,$t4, 0x8000
+sw $v0, 0x10($t0) //0  
+
+
+j 0x0

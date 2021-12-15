@@ -48,7 +48,7 @@ initial begin
 
     // Test Cases 
 
-    if (resgister_v0==32'h00000ff0)begin
+    if (resgister_v0==32'h0000000c)begin
         $finish;
     end
     else begin

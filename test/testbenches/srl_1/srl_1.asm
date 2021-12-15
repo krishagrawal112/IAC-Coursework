@@ -1,0 +1,3 @@
+lui $t0, 0xF000
+srl $v0, $t0, 0x1E
+j 0x0

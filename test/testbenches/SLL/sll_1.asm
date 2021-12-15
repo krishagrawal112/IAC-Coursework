@@ -1,0 +1,6 @@
+lui $t0, 0xBFC0
+addiu $v0, $v0, 0x0003
+sll $v0, $v0, 0xE
+sw $v0, 0x100($t0)
+sll $v0, $v0, 0x11
+j 0x0
