@@ -70,11 +70,19 @@ initial begin
 
     // Test Cases 
 
+<<<<<<< Updated upstream
     if (register_v0 == 32'h00002222)begin
         $finish;
     end
     else begin
         $fatal(1);
+=======
+    if (resgister_v0==32'h00002222)begin
+        $finish;
+    end
+    else begin
+        $fatal(2);
+>>>>>>> Stashed changes
     end
 
 end
