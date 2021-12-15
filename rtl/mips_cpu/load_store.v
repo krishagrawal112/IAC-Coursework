@@ -31,9 +31,9 @@ module load_store(
 
     // Avalon Bus Interface
 
-    input logic [31:0] mem_readdata, 
+    input logic [31:0] mem_readdata_flipped, 
     output logic [3:0] mem_byteenable,
-    output logic [31:0] mem_writedata,
+    output logic [31:0] mem_writedata_flipped,
     output logic [31:0] mem_address,
     
     input logic waitrequest,
@@ -41,14 +41,19 @@ module load_store(
     output logic mem_readenable
 
 );
-
+    logic [31:0] mem_readdata;
+    logic [31:0] mem_writedata;
+    
     logic [31:0] actual_address;
     logic [31:0] offset_sign_extended;
     reg [31:0] IR;
 
+    assign mem_writedata_flipped = {mem_writedata[7:0], mem_writedata[15:8], mem_writedata[23:16], mem_writedata[31:24]};
+    assign mem_readdata = {mem_readdata_flipped[7:0], mem_readdata_flipped[15:8], mem_readdata_flipped[23:16], mem_readdata_flipped[31:24]};
+
     initial begin
 
-        // Init Output Variables
+    // Init Output Variables
         IR = 0;
        reg_byteenable = 4'b1111;
        reg_writeenable = 0;
