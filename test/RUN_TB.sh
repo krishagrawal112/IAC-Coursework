@@ -22,15 +22,14 @@ fi
 
 cd $test_bench_DIRECTORY 
 
-iverilog -g2012 -Wall -s testing_tb -o $test_bench_DIRECTORY/testing_tb_out $test_bench_DIRECTORY/testing_tb.v $files >/dev/null
-./testing_tb_out >/dev/null
+iverilog -g2012 -Wall -s testing_tb -o $test_bench_DIRECTORY/testing_tb_out $test_bench_DIRECTORY/testing_tb.v $files >/dev/null && ./testing_tb_out >/dev/null
 
-if [ "$?" -eq "1" ]
+if [ "$?" -eq "0" ]
 then
+    outcome="Pass"
+else 
     error="Incorrect Output Value / Timeout"
     outcome="Fail"
-else 
-    outcome="Pass"
 fi
 
 echo ${curr_TB}" "${curr_TB%_*}" "${outcome}" "${error}
