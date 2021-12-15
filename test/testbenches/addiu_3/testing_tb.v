@@ -23,8 +23,15 @@ initial begin
     $readmemb("ram.txt", memory);
 
     clk = 0;
-
+    #10
+    clk = 1;
+    #10
+    clk = 0;
+    #10
+    clk = 1
     reset = 1;
+    #10
+    clk = 0;
 
     repeat(1000) begin
         #10; reset = 0; clk = !clk;
