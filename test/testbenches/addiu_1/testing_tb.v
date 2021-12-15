@@ -27,7 +27,7 @@ initial begin
     reset = 1;
 
     repeat(1000) begin
-        #10; reset = 0;; clk = !clk;
+        #10; reset = 0; clk = !clk;
     end
 
     $fatal(1);    

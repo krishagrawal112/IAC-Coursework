@@ -41,10 +41,10 @@ assign sign_I_im =  {{16{I_intermidiete[15]}}, I_intermidiete } << 2;
 //assign zero_I_im = {{16'h0000, I_intermidiete } << 2;
 initial begin 
     state = 0;
-        PC = 32'hBFC00000;
-        PC_next = 32'hBFC00004;
-        PC_next_next = 32'hBFC00008;
-        active = 1;
+    PC = 32'hBFC00000;
+    PC_next = 32'hBFC00004;
+    PC_next_next = 32'hBFC00008;
+    active = 0;
 end
 always_comb begin
     //Determining whether to jump or not and how much
@@ -123,7 +123,6 @@ always_comb begin
     else write_enable_PC = 0;
     if(jump == 1) PC_next_next = jump_addition ? PC + 4 + jump_amount : jump_amount;
     else PC_next_next = PC_next + 4;
- 
 end
 always_ff @(posedge clk) begin
     if(state == 2)begin
