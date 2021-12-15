@@ -15,3 +15,4 @@ sw $v0, 0x110($t0) //0
 sltiu $v0, $t1, 0xFF00
 sw $v0, 0x114($t0) //1
 sltiu $v0, $t1, 0xF000 //0
+(register_v0==0) && (memory[64] == 1) && (memory[65] == 0) && (memory[66] == 1) && (memory[67] == 0) && (memory[68] == 0) && (memory[69] == 1)

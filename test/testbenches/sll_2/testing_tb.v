@@ -70,7 +70,7 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 32'h00001110)begin
+    if ((register_v0 == 32'h80000000) && (memory[64] == 32'h0000c000))begin
         $finish;
     end
     else begin

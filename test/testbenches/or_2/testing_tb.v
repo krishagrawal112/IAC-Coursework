@@ -70,7 +70,7 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 32'h00001110)begin
+    if (register_v0 == 32'h0000fff0)begin
         $finish;
     end
     else begin
