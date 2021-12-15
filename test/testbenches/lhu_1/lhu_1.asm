@@ -12,4 +12,5 @@ sw $v0, 0x10C($t0) //memory[67]  == 32'h00003344
 lhu $v0, 0x104($t0) //Word 0
 sw $v0, 0x110($t0) //memory[68]  == 32'h0000FFEE
 lhu $v0, 0x106($t0) //Word 1
+j 0x0
 sw $v0, 0x114($t0) //memory[69]  == 32'h0000DDCC

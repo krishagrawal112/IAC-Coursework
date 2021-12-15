@@ -7,11 +7,11 @@ sw $v0, 0x104($t0) //0
 slti $v0, $t1, 0x8000
 sw $v0, 0x108($t0) //0
 slti $v0, $t1, 0x8000
-sw $v0, 0x10C($t0) //1
 lui $t1, 0xFFFF
 addiu, $t1, $t1, 0xF000
 slti $v0, $t1, 0x8000
 sw $v0, 0x110($t0) //0
 slti $v0, $t1, 0xFF00
 sw $v0, 0x114($t0) //1
+j 0x0
 slti $v0, $t1, 0xF000 //0

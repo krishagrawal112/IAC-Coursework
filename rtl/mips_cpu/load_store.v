@@ -174,6 +174,9 @@ module load_store(
                     mem_writedata = (actual_address[1] == 1) ? {16'h0000, rt_data[15:0]} : {rt_data[15:0], 16'h0000};
                     mem_byteenable = (actual_address[1] == 1) ? 4'b0011 : 4'b1100;
                 end
+                else begin
+                    mem_writeenable = 0;
+                end
             end
 
             2'b10: 

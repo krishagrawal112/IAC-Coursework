@@ -70,7 +70,7 @@ initial begin
 
     // Test Cases 
 
-    if ((memory[1]==1) && (memory[2]==1) && (memory[3]==0)&& (memory[4]==0) && (memory[5]==0) && (memory[6]==0) && (memory[7]==1))begin
+    if ((memory[1]==1) && (memory[2]==1) && (memory[3]==0)&& (memory[4]==1) && (memory[5]==0) && (memory[6]==0) && (memory[7]==1))begin
         $finish;
     end
     else begin

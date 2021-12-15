@@ -17,7 +17,7 @@ sw $v0, 0xC ($t0) //0
 
 addiu $t4, 0x5f62
 slti $v0, $t4, 0x6711
-sw $v0,0x10 ($t0) //0
+sw $v0,0x10 ($t0) //1
 
 addiu $t5, 0x0230
 slti $v0, $t5, 0x0230
