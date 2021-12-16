@@ -22,20 +22,25 @@ initial begin
     $dumpvars(0, testing_tb);
     $readmemb("ram.txt", memory);
 
-    clk = 0;
+    reset = 0;
 
-    reset = 1;
+    clk = 0; #10;
+    clk = 1; #10;
+    clk = 0; #10;
+    clk = 1; #10;
+    clk = 0; reset = 1; #10;
+    clk = 1; #10;
+    clk = 0; reset = 0;
 
     repeat(1000) begin
-        #10; reset = 0;; clk = !clk;
+        #10; clk = !clk;
     end
 
     $fatal(1);    
 end
 
 initial begin
-    
-    
+
     @ (posedge reset);
     @ (negedge reset);
     
@@ -74,7 +79,7 @@ initial begin
 
     // Test Cases 
 
-    if (register_v0 == 4) begin
+    if (register_v0 == 1) begin
         $finish;
     end
     else begin
