@@ -22,7 +22,7 @@ fi
 
 cd $test_bench_DIRECTORY 
 
-iverilog -g2012 -Wall -s testing_tb -o $test_bench_DIRECTORY/testing_tb_out $test_bench_DIRECTORY/testing_tb.v $files >/dev/null && ./testing_tb_out >/dev/null
+iverilog -g2012 -Wall -s testing_tb -o $test_bench_DIRECTORY/testing_tb_out $test_bench_DIRECTORY/testing_tb.v $files >/dev/null && ./testing_tb_out #>/dev/null
 
 if [ "$?" -eq "0" ]
 then

@@ -106,12 +106,12 @@ module load_store(
                     mem_writeenable = 0;
                 end
                 else if (lb == 1) begin //EXEC1 Load Byte
-                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b1000 : ( (actual_address[1:0] == 2'b01) ? 4'b0100 : ( (actual_address[1:0] == 2'b10) ? 4'b0010 : 4'b0001 ) );
+                    mem_byteenable = (actual_address[1:0] == 2'b11) ? 4'b1000 : ( (actual_address[1:0] == 2'b10) ? 4'b0100 : ( (actual_address[1:0] == 2'b01) ? 4'b0010 : 4'b0001 ) );
                     mem_readenable = 1;
                     mem_writeenable = 0;
                 end
                 else if (lbu == 1) begin //EXEC1 Load Byte Unsigned
-                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b1000 : (actual_address[1:0] == 2'b01) ? 4'b0100 : (actual_address[1:0] == 2'b10) ? 4'b0010 : 4'b0001;
+                    mem_byteenable = (actual_address[1:0] == 2'b11) ? 4'b1000 : (actual_address[1:0] == 2'b10) ? 4'b0100 : (actual_address[1:0] == 2'b01) ? 4'b0010 : 4'b0001;
                     mem_readenable = 1;
                     mem_writeenable = 0;
                 end
@@ -207,7 +207,7 @@ module load_store(
                         reg_byteenable = 4'b1111;
                         //Sign extended value of the required byte from mem_readdata
                         case (actual_address[1:0])
-                            2'b00: begin
+                            2'b11: begin
                                 if (mem_readdata[31] == 1) begin
                                     reg_writedata = {24'hffffff, mem_readdata[31:24]};
                                 end
@@ -215,7 +215,7 @@ module load_store(
                                     reg_writedata = {24'h000000, mem_readdata[31:24]};
                                 end
                             end
-                            2'b01: begin
+                            2'b10: begin
                                 if (mem_readdata[23] == 1) begin
                                     reg_writedata = {24'hffffff, mem_readdata[23:16]};
                                 end
@@ -223,7 +223,7 @@ module load_store(
                                     reg_writedata = {24'h000000, mem_readdata[23:16]};
                                 end
                             end
-                            2'b10: begin
+                            2'b01: begin
                                 if (mem_readdata[15] == 1) begin
                                     reg_writedata = {24'hffffff, mem_readdata[15:8]};
                                 end
@@ -232,7 +232,7 @@ module load_store(
                                 end
                                 
                             end
-                            2'b11: begin
+                            2'b00: begin
                                 if (mem_readdata[7] == 1) begin
                                     reg_writedata = {24'hffffff, mem_readdata[7:0]};
                                 end
@@ -248,10 +248,10 @@ module load_store(
                         reg_byteenable = 4'b1111;
                         //Zero extended value of the required byte from mem_readdata
                         case (actual_address[1:0])
-                            2'b00: reg_writedata = {24'h000000, mem_readdata[31:24]};
-                            2'b01: reg_writedata = {24'h000000, mem_readdata[23:16]};
-                            2'b10: reg_writedata = {24'h000000, mem_readdata[15:8]};
-                            2'b11: reg_writedata = {24'h000000, mem_readdata[7:0]};
+                            2'b11: reg_writedata = {24'h000000, mem_readdata[31:24]};
+                            2'b10: reg_writedata = {24'h000000, mem_readdata[23:16]};
+                            2'b01: reg_writedata = {24'h000000, mem_readdata[15:8]};
+                            2'b00: reg_writedata = {24'h000000, mem_readdata[7:0]};
                         endcase
                     end
                     else if (lh == 1) begin //EXEC2 Load Halfword 
