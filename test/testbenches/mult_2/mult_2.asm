@@ -1,11 +1,12 @@
-lui $t0 0xBFC0
-lui $t1 0x1234
-addiu $t1 $t1 0x5678
-lui $t2 0x9876
-addiu $t2 $t2 0x5432
-mult $t1 $t2
-mfhi $t1
-mflo $t2
-sw $t1 0x100($t0)
-sw $t2 0x104($t0)
+lui $t0, 0xBFC0
+lui $t1, 0xFe53
+addiu $t1, $t1 0xBAFE
+lui $t2, 0xE436
+addiu $t2, $t2 0xFF67
+mult $t2,$t1
+mflo $v0
+sw $v0 0x1 ($t0)
+mfhi $v0
 j 0x0
+sw $v0 0x4 ($t1)
+
