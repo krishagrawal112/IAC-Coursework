@@ -22,8 +22,6 @@ initial begin
     $dumpvars(0, testing_tb);
     $readmemb("ram.txt", memory);
 
-    $display(memory[3]);
-
     reset = 0;
 
     clk = 0; #10;

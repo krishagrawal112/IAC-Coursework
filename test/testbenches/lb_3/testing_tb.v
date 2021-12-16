@@ -40,8 +40,7 @@ initial begin
 end
 
 initial begin
-    
-    
+
     @ (posedge reset);
     @ (negedge reset);
     
