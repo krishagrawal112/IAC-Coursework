@@ -79,7 +79,7 @@ initial begin
 
     // Test Cases 
 
-    if (memory[1]==32'h80000001 && memory[2]==32'h7fffffff) begin
+    if (memory[64]==32'h80000001 && memory[65]==32'h7fffffff) begin
         $finish;
     end
     else begin
