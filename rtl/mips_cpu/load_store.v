@@ -106,12 +106,12 @@ module load_store(
                     mem_writeenable = 0;
                 end
                 else if (lb == 1) begin //EXEC1 Load Byte
-                    mem_byteenable = (actual_address[1:0] == 2'b11) ? 4'b1000 : ( (actual_address[1:0] == 2'b10) ? 4'b0100 : ( (actual_address[1:0] == 2'b01) ? 4'b0010 : 4'b0001 ) );
+                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b1000 : ( (actual_address[1:0] == 2'b01) ? 4'b0100 : ( (actual_address[1:0] == 2'b10) ? 4'b0010 : 4'b0001 ) );
                     mem_readenable = 1;
                     mem_writeenable = 0;
                 end
                 else if (lbu == 1) begin //EXEC1 Load Byte Unsigned
-                    mem_byteenable = (actual_address[1:0] == 2'b11) ? 4'b1000 : (actual_address[1:0] == 2'b10) ? 4'b0100 : (actual_address[1:0] == 2'b01) ? 4'b0010 : 4'b0001;
+                    mem_byteenable = (actual_address[1:0] == 2'b00) ? 4'b1000 : (actual_address[1:0] == 2'b01) ? 4'b0100 : (actual_address[1:0] == 2'b10) ? 4'b0010 : 4'b0001;
                     mem_readenable = 1;
                     mem_writeenable = 0;
                 end
