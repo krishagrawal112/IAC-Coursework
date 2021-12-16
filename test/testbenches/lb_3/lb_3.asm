@@ -1,10 +1,10 @@
 lui $t0, 0xBFC0
 lui $t1, 0x1122
 addiu $t1, $t1, 0x3344
-sw $t1, 0x0100($t0) //MSB == 0
+sw $t1, 0x0100($t0) //MSB == 0 //0xBFC00100 = 11223344
 lui $t2, 0xFFEE 
 addiu $t2, $t2, 0xDDCC 
-sw $t2, 0x104($t0) //MSB == 1 
+sw $t2, 0x104($t0) //MSB == 1 //0xBFC00104 = FFEEDDCC
 lb $v0, 0x0100($t0) //Bit 0
 sw $v0, 0x108($t0) //memory[66]  == 32'h00000011
 lb $v0, 0x101($t0) //Bit 1

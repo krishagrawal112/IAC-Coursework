@@ -48,16 +48,16 @@ initial begin
         
         @ (posedge clk) begin
             if (write) begin
-                if (byteenable[3]==1) begin
+                if (byteenable[0]==1) begin
                     memory[shifted_address/4][31:24] <= writedata[7:0];
                 end
-                if (byteenable[2]==1) begin
+                if (byteenable[1]==1) begin
                     memory[shifted_address/4][23:16] <= writedata[15:8];
                 end
-                if (byteenable[1]==1) begin
+                if (byteenable[2]==1) begin
                     memory[shifted_address/4][15:8] <= writedata[23:16];
                 end
-                if (byteenable[0]==1) begin
+                if (byteenable[3]==1) begin
                     memory[shifted_address/4][7:0] <= writedata[31:24];
                 end
             end
@@ -79,7 +79,7 @@ initial begin
 
     // Test Cases 
 
-    if ((memory[66]  == 32'h00000011) && (memory[67]  == 32'h00000022) && (memory[68]  == 32'h00000033) && (memory[69]  == 32'h00000044) && (memory[70]  == 32'hFFFFFFFF) && (memory[71]  == 32'hFFFFFFEE) && (memory[72]  == 32'hFFFFFFDD) && (memory[73]  == 32'hFFFFFFCC)) begin
+    if ((memory[66]  == 32'h00000011) && (memory[67]  == 32'h00000022) && (memory[68]  == 32'h00000033) && (memory[69]  == 32'h00000044) && (memory[70]  == 32'hffffffFF) && (memory[71]  == 32'hffffffEE) && (memory[72]  == 32'hffffffDD) && (memory[73]  == 32'hffffffCC)) begin
         $finish;
     end
     else begin

@@ -1,0 +1,32 @@
+0xBFC00100: 2508ff00
+byteenable = 4'0001
+avalon_readdata = xxxxxx25
+mem_readdata = 2508ff00
+
+0001 --> 25
+
+0 --> byteenble 1000
+
+READBYTE[0] --> 55
+Little endian : 3210
+Big endian : 0123
+
+3 -> 1000
+2 -> 0100
+1 -> 0010
+0 -> 0001
+
+readdata[7:0] refers to the byte at address+0
+readdata[15:8] refers to the byte at address+1
+readdata[23:16] refers to the byte at address+2
+readdata[31:24] refers to the byte at address+3
+
+writedata[7:0] refers to the byte at address+0
+writedata[15:8] refers to the byte at address+1
+writedata[23:16] refers to the byte at address+2
+writedata[31:24] refers to the byte at address+3
+
+byteenable[x]   writedata[x*8+7:x*8]    address+x
+
+
+byteenable[]

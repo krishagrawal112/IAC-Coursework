@@ -40,8 +40,7 @@ initial begin
 end
 
 initial begin
-    
-    
+
     @ (posedge reset);
     @ (negedge reset);
     
@@ -49,16 +48,16 @@ initial begin
         
         @ (posedge clk) begin
             if (write) begin
-                if (byteenable[3]==1) begin
+                if (byteenable[0]==1) begin
                     memory[shifted_address/4][31:24] <= writedata[7:0];
                 end
-                if (byteenable[2]==1) begin
+                if (byteenable[1]==1) begin
                     memory[shifted_address/4][23:16] <= writedata[15:8];
                 end
-                if (byteenable[1]==1) begin
+                if (byteenable[2]==1) begin
                     memory[shifted_address/4][15:8] <= writedata[23:16];
                 end
-                if (byteenable[0]==1) begin
+                if (byteenable[3]==1) begin
                     memory[shifted_address/4][7:0] <= writedata[31:24];
                 end
             end
