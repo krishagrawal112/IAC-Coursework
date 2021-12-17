@@ -15,12 +15,12 @@ logic [3:0] byteenable;
 //RAM
 logic[31:0] shifted_address;
 assign shifted_address = address - 32'hBFC00000;
-reg[31:0] memory [1000:0];
+reg[31:0] memory [0:1000];
 
 initial begin
-    $dumpfile("result.vcd");
+    $dumpfile("results.vcd");
     $dumpvars(0, testing_tb);
-    $readmemb("ram.txt", memory);
+    $readmemb("cools.txt", memory);
 
     reset = 0;
 
@@ -38,9 +38,9 @@ initial begin
 
     $fatal(1);    
 end
+
 initial begin
-    
-    
+
     @ (posedge reset);
     @ (negedge reset);
     
@@ -79,11 +79,11 @@ initial begin
 
     // Test Cases 
 
-    if (memory[64]==32'h64873e32 && memory[65]==32'h002e7b8a)begin
+    if (memory[64]==32'h64873e32 && memory[65]==32'h002e7b8a) begin
         $finish;
     end
     else begin
-        $fatal(1);
+        $fatal(2);
     end
 
 end
