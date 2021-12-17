@@ -32,7 +32,7 @@ initial begin
     clk = 1; #10;
     clk = 0; reset = 0;
 
-    repeat(1000) begin
+    repeat(10000) begin
         #10; clk = !clk;
     end
 
